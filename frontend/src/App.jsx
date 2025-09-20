@@ -8,11 +8,13 @@ import Discussion from './pages/Discussion';
 import NotFound from './pages/Notfound';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Loader from './components/Loader'; // 👈 Import the loader
 
 function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white">
+        <Loader /> {/* 👈 Show loader before content */}
         <Navbar />
         <main className="flex-grow">
           <Routes>
