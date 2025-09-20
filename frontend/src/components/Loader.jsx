@@ -5,7 +5,7 @@ export default function Loader() {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(false), 5000); // Adjust duration as needed
+    const timer = setTimeout(() => setIsVisible(false), 1000); // Adjust duration as needed
     return () => clearTimeout(timer);
   }, []);
 
@@ -14,9 +14,8 @@ export default function Loader() {
       {isVisible && (
         <motion.div
           initial={{ opacity: 1 }}
-          animate={{ opacity: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.8 } }} // Move exit transition here
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-[#0F0F0F] to-[#1A1A1A] backdrop-blur-xl"
         >
           <motion.div
