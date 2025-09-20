@@ -35,14 +35,12 @@ export default function Discussion() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch user info
   useEffect(() => {
     axios.get('/api/auth/me', { withCredentials: true })
       .then(res => setUser(res.data))
       .catch(() => setUser(null));
   }, []);
 
-  // Fetch messages from last 7 days
   useEffect(() => {
     axios.get('/api/discussion?days=7')
       .then(res => {
@@ -55,7 +53,6 @@ export default function Discussion() {
       });
   }, []);
 
-  // Scroll listener
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 300);
@@ -64,7 +61,6 @@ export default function Discussion() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Send message
   const handleSend = () => {
     if (!user) return navigate('/login');
     if (!newMessage.trim()) return;
@@ -118,11 +114,13 @@ export default function Discussion() {
       </header>
 
       {/* Message Feed */}
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 pb-32 space-y-6">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 pb-32">
         {messages.length > 0 ? (
-          messages.map((msg, idx) => (
-            <MessageCard key={idx} msg={msg} idx={idx} />
-          ))
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {messages.map((msg, idx) => (
+              <MessageCard key={idx} msg={msg} idx={idx} />
+            ))}
+          </div>
         ) : (
           <p className="text-white/50 text-center">No messages yet. Be the first to spark a conversation!</p>
         )}
@@ -155,18 +153,18 @@ export default function Discussion() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
-          className="fixed bottom-4 right-4 bg-gradient-to-br from-[#1a237e] via-[#3949ab] to-[#5c6bc0] text-white rounded-xl shadow-xl border border-white/10 backdrop-blur-md p-4 w-[250px] z-50"
+          className="fixed bottom-[100px] left-1/2 transform -translate-x-1/2 w-[90%] sm:w-[250px] bg-gradient-to-br from-[#ffffff0d] via-[#ffffff1a] to-[#ffffff0d] text-white rounded-xl shadow-xl border border-white/10 backdrop-blur-lg px-4 py-3 z-50"
         >
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-[#4285F4]/30 flex items-center justify-center font-bold text-white text-lg shadow-md">
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-[#4285F4]/30 flex items-center justify-center font-bold text-white text-base sm:text-lg shadow-md">
               {user.name?.[0]?.toUpperCase() || 'U'}
             </div>
-            <div>
-              <h2 className="font-semibold text-base">{user.name}</h2>
-              <p className="text-white/70 text-sm">{user.role || 'Member'}</p>
+            <div className="flex-1">
+              <h2 className="font-semibold text-sm sm:text-base">{user.name}</h2>
+              <p className="text-white/70 text-xs sm:text-sm">{user.role || 'Member'}</p>
             </div>
           </div>
-          <div className="mt-3 text-xs text-white/50">
+          <div className="mt-2 text-xs text-white/50">
             Welcome back, cosmic explorer 🌌
           </div>
         </motion.div>
