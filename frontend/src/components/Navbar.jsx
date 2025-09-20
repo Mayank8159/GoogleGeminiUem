@@ -50,16 +50,6 @@ export default function Navbar() {
             alt="Gemini"
             className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg hover:scale-105 transition cursor-pointer"
           />
-          <img
-            src="/logo45.svg"
-            alt="Innovation"
-            className="h-12 w-12 sm:h-12 sm:w-12 rounded-lg hover:scale-105 transition cursor-pointer"
-          />
-          <img
-            src="/uem.png"
-            alt="UEM"
-            className="h-12 w-12 sm:h-12 sm:w-12 rounded-lg hover:scale-105 transition cursor-pointer"
-          />
         </motion.div>
 
         {/* Mobile Toggle */}
