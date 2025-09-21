@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import GeminiClicks from "../components/GeminiClicks";
 
 // A simple component to render inline SVG icons.
 // This is an alternative to a library like lucide-react,
 // which requires a build setup not available in this environment.
-const Icon = ({ name, color = 'currentColor', size = 24, strokeWidth = 2 }) => {
+const Icon = ({ name, color = "currentColor", size = 24, strokeWidth = 2 }) => {
   const icons = {
     users: (
       <svg
@@ -61,7 +62,17 @@ const Icon = ({ name, color = 'currentColor', size = 24, strokeWidth = 2 }) => {
       </svg>
     ),
     info: (
-      <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <circle cx="12" cy="12" r="10" />
         <path d="M12 16v-4" />
         <path d="M12 8h.01" />
@@ -102,7 +113,7 @@ export default function Home() {
           transition={{
             duration: 20,
             repeat: Infinity,
-            repeatType: 'reverse',
+            repeatType: "reverse",
           }}
           className="absolute h-80 w-80 rounded-full bg-blue-500 blur-3xl -top-20 -left-20"
         />
@@ -115,25 +126,24 @@ export default function Home() {
           transition={{
             duration: 25,
             repeat: Infinity,
-            repeatType: 'reverse',
+            repeatType: "reverse",
           }}
           className="absolute h-96 w-96 rounded-full bg-indigo-500 blur-3xl -bottom-20 -right-20"
         />
       </div>
 
       <div className="max-w-6xl mx-auto text-center flex flex-col items-center gap-16 relative z-10">
-
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="flex flex-col items-center gap-8"
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 120, delay: 0.4 }}
+            transition={{ type: "spring", stiffness: 120, delay: 0.4 }}
             className="relative mt-6"
           >
             <div className="absolute inset-0 rounded-full bg-[#4285F4]/30 blur-2xl scale-125" />
@@ -142,14 +152,18 @@ export default function Home() {
               alt="Gemini Logo"
               className="relative h-24 w-24 sm:h-28 sm:w-28 rounded-xl z-10 shadow-xl"
               whileHover={{ scale: 1.1, rotate: 10 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
             />
           </motion.div>
-          <h1 className="text-3xl sm:text-4xl font-bold font-outfit tracking-wide" style={{ textShadow: '0 0 15px rgba(255, 255, 255, 0.8)' }}>
+          <h1
+            className="text-3xl sm:text-4xl font-bold font-outfit tracking-wide"
+            style={{ textShadow: "0 0 15px rgba(255, 255, 255, 0.8)" }}
+          >
             Google Gemini Student Community
           </h1>
           <p className="max-w-xl text-sm sm:text-base text-white/70">
-            A student-led initiative at UEM Kolkata, empowering learners through innovation, collaboration, and cosmic curiosity.
+            A student-led initiative at UEM Kolkata, empowering learners through
+            innovation, collaboration, and cosmic curiosity.
           </p>
         </motion.div>
 
@@ -161,14 +175,31 @@ export default function Home() {
           viewport={{ once: true }}
           className="max-w-4xl text-center"
         >
-          <motion.h2 className="text-xl font-semibold mb-2 text-[#F4B400] flex items-center justify-center gap-2" style={{ textShadow: '0 0 10px rgba(244, 180, 0, 0.8)' }}>
-            <Icon name="info" color="#F4B400" />About Us
+          <motion.h2
+            className="text-xl font-semibold mb-2 text-[#F4B400] flex items-center justify-center gap-2"
+            style={{ textShadow: "0 0 10px rgba(244, 180, 0, 0.8)" }}
+          >
+            <Icon name="info" color="#F4B400" />
+            About Us
           </motion.h2>
           <p className="text-sm sm:text-base text-white/70">
-            GGSC is a vibrant community of tech enthusiasts, designers, and dreamers. We explore the power of Google Gemini and AI to build meaningful experiences, foster leadership, and spark innovation across campus.
+            GGSC is a vibrant community of tech enthusiasts, designers, and
+            dreamers. We explore the power of Google Gemini and AI to build
+            meaningful experiences, foster leadership, and spark innovation
+            across campus.
           </p>
         </motion.section>
+        {/* Gemini Click Challenge */}
+        <motion.section
+          variants={itemVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="max-w-6xl w-full text-center"
+        >
 
+          <GeminiClicks />
+        </motion.section>
         {/* Events Preview */}
         <motion.section
           variants={containerVariants}
@@ -177,35 +208,45 @@ export default function Home() {
           viewport={{ once: true }}
           className="w-full"
         >
-          <motion.h2 className="text-xl font-semibold mb-6 text-[#0F9D58] flex items-center justify-center gap-2" style={{ textShadow: '0 0 10px rgba(15, 157, 88, 0.8)' }}>
-            <Icon name="calendar" color="#0F9D58" />Upcoming Events
+          <motion.h2
+            className="text-xl font-semibold mb-6 text-[#0F9D58] flex items-center justify-center gap-2"
+            style={{ textShadow: "0 0 10px rgba(15, 157, 88, 0.8)" }}
+          >
+            <Icon name="calendar" color="#0F9D58" />
+            Upcoming Events
           </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               {
-                title: 'Gemini Hackathon',
-                desc: 'Build AI-powered apps with Gemini APIs.',
-                color: '#4285F4'
+                title: "Gemini Hackathon",
+                desc: "Build AI-powered apps with Gemini APIs.",
+                color: "#4285F4",
               },
               {
-                title: 'Design Jam',
-                desc: 'Craft stunning UIs with Framer Motion & Tailwind.',
-                color: '#F4B400'
+                title: "Design Jam",
+                desc: "Craft stunning UIs with Framer Motion & Tailwind.",
+                color: "#F4B400",
               },
               {
-                title: 'AI & Ethics Panel',
-                desc: 'Discuss the future of responsible AI.',
-                color: '#DB4437'
-              }
+                title: "AI & Ethics Panel",
+                desc: "Discuss the future of responsible AI.",
+                color: "#DB4437",
+              },
             ].map(({ title, desc, color }) => (
               <motion.div
                 key={title}
                 variants={itemVariants}
-                whileHover={{ scale: 1.05, y: -5, boxShadow: '0 0 20px rgba(255,255,255,0.2)' }}
-                transition={{ type: 'spring', stiffness: 300 }}
+                whileHover={{
+                  scale: 1.05,
+                  y: -5,
+                  boxShadow: "0 0 20px rgba(255,255,255,0.2)",
+                }}
+                transition={{ type: "spring", stiffness: 300 }}
                 className="bg-white/5 border border-white/10 rounded-xl p-6 text-left"
               >
-                <h3 className="text-lg font-semibold mb-2" style={{ color }}>{title}</h3>
+                <h3 className="text-lg font-semibold mb-2" style={{ color }}>
+                  {title}
+                </h3>
                 <p className="text-sm text-white/70">{desc}</p>
               </motion.div>
             ))}
@@ -220,11 +261,17 @@ export default function Home() {
           viewport={{ once: true }}
           className="max-w-4xl text-center"
         >
-          <motion.h2 className="text-xl font-semibold mb-2 text-[#DB4437] flex items-center justify-center gap-2" style={{ textShadow: '0 0 10px rgba(219, 68, 55, 0.8)' }}>
-            <Icon name="users" color="#DB4437" />Meet the Team
+          <motion.h2
+            className="text-xl font-semibold mb-2 text-[#DB4437] flex items-center justify-center gap-2"
+            style={{ textShadow: "0 0 10px rgba(219, 68, 55, 0.8)" }}
+          >
+            <Icon name="users" color="#DB4437" />
+            Meet the Team
           </motion.h2>
           <p className="text-sm sm:text-base text-white/70">
-            Led by passionate students from UEM Kolkata, our team blends technical mastery with emotional design to create immersive, community-driven digital experiences.
+            Led by passionate students from UEM Kolkata, our team blends
+            technical mastery with emotional design to create immersive,
+            community-driven digital experiences.
           </p>
         </motion.section>
 
@@ -236,11 +283,16 @@ export default function Home() {
           viewport={{ once: true }}
           className="max-w-4xl text-center"
         >
-          <motion.h2 className="text-xl font-semibold mb-2 text-[#0F9D58] flex items-center justify-center gap-2" style={{ textShadow: '0 0 10px rgba(15, 157, 88, 0.8)' }}>
-            <Icon name="messageCircle" color="#0F9D58" />Join the Conversation
+          <motion.h2
+            className="text-xl font-semibold mb-2 text-[#0F9D58] flex items-center justify-center gap-2"
+            style={{ textShadow: "0 0 10px rgba(15, 157, 88, 0.8)" }}
+          >
+            <Icon name="messageCircle" color="#0F9D58" />
+            Join the Conversation
           </motion.h2>
           <p className="text-sm sm:text-base text-white/70 mb-4">
-            Dive into discussions, share ideas, and help shape the future of AI and design. Explore our{' '}
+            Dive into discussions, share ideas, and help shape the future of AI
+            and design. Explore our{" "}
             <motion.span
               whileHover={{ scale: 1.1 }}
               className="text-[#4285F4] underline hover:text-[#F4B400] transition inline-block"
