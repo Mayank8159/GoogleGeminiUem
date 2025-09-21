@@ -5,7 +5,7 @@ import { verifyToken } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 // Get latest 100 messages
-router.get('/messages', verifyToken, async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   try {
     const messages = await Message.find().sort({ timestamp: -1 }).limit(100);
     res.json(messages.reverse());
