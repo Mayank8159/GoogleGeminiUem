@@ -3,8 +3,6 @@ import { motion } from "framer-motion";
 import GeminiClicks from "../components/GeminiClicks";
 
 // A simple component to render inline SVG icons.
-// This is an alternative to a library like lucide-react,
-// which requires a build setup not available in this environment.
 const Icon = ({ name, color = "currentColor", size = 24, strokeWidth = 2 }) => {
   const icons = {
     users: (
@@ -87,9 +85,7 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
+    transition: { staggerChildren: 0.2 },
   },
 };
 
@@ -105,29 +101,13 @@ export default function Home() {
       {/* Background glowing effect */}
       <div className="absolute inset-0 z-0 opacity-10">
         <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 360],
-            opacity: [0.1, 0.3, 0.1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 360], opacity: [0.1, 0.3, 0.1] }}
+          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
           className="absolute h-80 w-80 rounded-full bg-blue-500 blur-3xl -top-20 -left-20"
         />
         <motion.div
-          animate={{
-            scale: [1, 1.1, 1],
-            rotate: [0, -360],
-            opacity: [0.1, 0.3, 0.1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
+          animate={{ scale: [1, 1.1, 1], rotate: [0, -360], opacity: [0.1, 0.3, 0.1] }}
+          transition={{ duration: 25, repeat: Infinity, repeatType: "reverse" }}
           className="absolute h-96 w-96 rounded-full bg-indigo-500 blur-3xl -bottom-20 -right-20"
         />
       </div>
@@ -173,22 +153,39 @@ export default function Home() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="max-w-4xl text-center"
+          className="w-full max-w-5xl mx-auto"
         >
-          <motion.h2
-            className="text-xl font-semibold mb-2 text-[#F4B400] flex items-center justify-center gap-2"
-            style={{ textShadow: "0 0 10px rgba(244, 180, 0, 0.8)" }}
-          >
-            <Icon name="info" color="#F4B400" />
-            About Us
-          </motion.h2>
-          <p className="text-sm sm:text-base text-white/70">
-            GGSC is a vibrant community of tech enthusiasts, designers, and
-            dreamers. We explore the power of Google Gemini and AI to build
-            meaningful experiences, foster leadership, and spark innovation
-            across campus.
-          </p>
+          <div className="bg-white/5 border border-white/10 rounded-2xl shadow-lg p-8 sm:p-12 backdrop-blur-md flex flex-col sm:flex-row items-center gap-8 hover:shadow-2xl transition">
+            {/* Icon / Illustration */}
+            <motion.div
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              transition={{ type: "spring", stiffness: 200 }}
+              className="flex-shrink-0"
+            >
+              <div className="h-28 w-28 flex items-center justify-center rounded-full bg-gradient-to-br from-[#4285F4] via-[#F4B400] to-[#0F9D58] shadow-lg">
+                <Icon name="info" color="white" size={40} />
+              </div>
+            </motion.div>
+
+            {/* Text */}
+            <div className="text-center sm:text-left">
+              <motion.h2
+                className="text-2xl font-bold mb-3 text-[#F4B400]"
+                style={{ textShadow: "0 0 10px rgba(244, 180, 0, 0.7)" }}
+              >
+                About Us
+              </motion.h2>
+              <p className="text-sm sm:text-base text-white/70 leading-relaxed">
+                GGSC is a vibrant community of tech enthusiasts, designers, and dreamers. 
+                We explore the power of Google Gemini and AI to build meaningful experiences, 
+                foster leadership, and spark innovation across campus. <br /><br />
+                🌌 Together, we aim to empower students with skills, creativity, and collaboration — 
+                pushing the boundaries of what’s possible with AI.
+              </p>
+            </div>
+          </div>
         </motion.section>
+
         {/* Gemini Click Challenge */}
         <motion.section
           variants={itemVariants}
@@ -197,9 +194,9 @@ export default function Home() {
           viewport={{ once: true }}
           className="max-w-6xl w-full text-center"
         >
-
           <GeminiClicks />
         </motion.section>
+
         {/* Events Preview */}
         <motion.section
           variants={containerVariants}
