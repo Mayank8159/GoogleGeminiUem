@@ -30,7 +30,7 @@ export default function Register() {
       localStorage.setItem('user', JSON.stringify(res.data.user));
 
       setLoading(false);
-      navigate('/discussion');
+      navigate('/');
     } catch (err) {
       setLoading(false);
       setErrorMsg(err.response?.data?.error || 'Registration failed');
