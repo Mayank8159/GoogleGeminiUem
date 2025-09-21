@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const socket = io('http://localhost:5000'); // Update to your deployed backend URL if needed
+const socket = io('https://googlegeminiuem.onrender.com'); // Update to your deployed backend URL if needed
 
 export default function Discussion() {
   const [messages, setMessages] = useState([]);
