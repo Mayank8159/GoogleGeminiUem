@@ -28,7 +28,7 @@ export default function Login() {
       localStorage.setItem('user', JSON.stringify(res.data.user));
 
       setLoading(false);
-      navigate('/discussion');
+      navigate('/');
     } catch (err) {
       setLoading(false);
       setErrorMsg(err.response?.data?.error || 'Login failed');
