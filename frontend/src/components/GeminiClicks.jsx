@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const links = [
@@ -10,16 +9,9 @@ const links = [
 ];
 
 export default function GeminiClicks() {
-  const [clicks, setClicks] = useState(Array(links.length).fill(0));
-
-  const handleClick = (index, url) => {
-    const updated = [...clicks];
-    updated[index] += 1;
-    setClicks(updated);
+  const handleClick = (url) => {
     window.open(url, '_blank');
   };
-
-  const totalClicks = clicks.reduce((a, b) => a + b, 0);
 
   return (
     <section className="mt-20 px-4 sm:px-8">
@@ -38,28 +30,20 @@ export default function GeminiClicks() {
         <p className="text-white/70 mt-3 text-base sm:text-lg">
           Help us reach 10,000 clicks — every tap fuels the mission ✨
         </p>
-
-        <p className="mt-5 text-white/60 text-base">
-          Total Clicks: <span className="font-bold text-[#F4B400] text-lg">{totalClicks}</span> / 10,000
-        </p>
       </div>
 
       {/* Link Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {links.map((link, index) => (
+        {links.map((link) => (
           <motion.div
             key={link.id}
             whileHover={{ scale: 1.03, boxShadow: '0 0 20px rgba(255,255,255,0.1)' }}
             whileTap={{ scale: 0.97 }}
             className="bg-white/5 border border-white/10 rounded-2xl p-6 shadow-lg backdrop-blur-md transition-all"
           >
-            <div className="mb-4">
-              <h3 className="text-xl font-semibold text-white mb-1">Link #{link.id}</h3>
-              <p className="text-sm text-white/60">Clicks: {clicks[index]}</p>
-            </div>
-
+            <h3 className="text-xl font-semibold text-white mb-4">Link #{link.id}</h3>
             <button
-              onClick={() => handleClick(index, link.url)}
+              onClick={() => handleClick(link.url)}
               className="w-full px-4 py-2 bg-gradient-to-r from-[#4285F4] to-[#0F9D58] hover:from-[#F4B400] hover:to-[#DB4437] text-white rounded-lg font-semibold transition-all duration-300"
             >
               Click & Boost
