@@ -9,7 +9,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const navLinks = [
   { name: "Home", href: "/", icon: Home, color: "#4285F4" },
@@ -27,13 +27,17 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
+  // Sync user state on route change
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
+    } else {
+      setUser(null);
     }
-  }, []);
+  }, [location]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -103,15 +107,12 @@ export default function Navbar() {
           {/* Auth Section */}
           {user ? (
             <div className="flex items-center gap-4">
-              {/* Avatar */}
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 className="bg-[#F4B400] text-black font-bold rounded-full h-10 w-10 flex items-center justify-center shadow-md"
               >
                 {userInitial}
               </motion.div>
-
-              {/* Logout Button */}
               <motion.button
                 onClick={handleLogout}
                 whileHover={{
