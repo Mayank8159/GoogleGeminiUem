@@ -8,15 +8,11 @@ import {
   X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom"; // ✅ Added for navigation
 
 const navLinks = [
   { name: "Home", href: "/", icon: Home, color: "#4285F4" },
-  {
-    name: "Discussion",
-    href: "/discussion",
-    icon: MessageSquare,
-    color: "#DB4437",
-  },
+  { name: "Discussion", href: "/discussion", icon: MessageSquare, color: "#DB4437" },
   { name: "Events", href: "/events", icon: CalendarDays, color: "#F4B400" },
   { name: "Team", href: "/team", icon: Users, color: "#0F9D58" },
 ];
@@ -38,7 +34,7 @@ export default function Navbar() {
     >
       {/* Top Row */}
       <div className="flex items-center justify-between">
-        {/* Logos */}
+        {/* Logo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -84,18 +80,23 @@ export default function Navbar() {
               {name}
             </motion.a>
           ))}
-          <motion.a
-            href="/get-started"
+
+          {/* ✅ Updated Get Started Button */}
+          <motion.div
             whileHover={{
               scale: 1.05,
               boxShadow: "0 0 15px #F4B400",
               backgroundColor: "#0F9D58",
               color: "#fff",
             }}
-            className="bg-[#F4B400] text-black px-5 py-2 rounded-lg font-semibold transition"
           >
-            Get Started
-          </motion.a>
+            <Link
+              to="/login"
+              className="bg-[#F4B400] text-black px-5 py-2 rounded-lg font-semibold transition block"
+            >
+              Get Started
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
 
@@ -123,18 +124,23 @@ export default function Navbar() {
                 {name}
               </motion.a>
             ))}
-            <motion.a
-              href="/get-started"
+
+            {/* ✅ Updated Mobile Get Started Button */}
+            <motion.div
               whileHover={{
                 scale: 1.05,
                 boxShadow: "0 0 15px #F4B400",
                 backgroundColor: "#0F9D58",
                 color: "#fff",
               }}
-              className="bg-[#F4B400] text-black px-4 py-2 rounded-lg font-semibold transition"
             >
-              Get Started
-            </motion.a>
+              <Link
+                to="/login"
+                className="bg-[#F4B400] text-black px-4 py-2 rounded-lg font-semibold transition block"
+              >
+                Get Started
+              </Link>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

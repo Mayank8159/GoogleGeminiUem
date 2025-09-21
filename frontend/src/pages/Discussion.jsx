@@ -13,8 +13,6 @@ export default function Discussion() {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const navigate = useNavigate();
-
-  // Replace with actual auth context or global state
   const user = JSON.parse(localStorage.getItem('user')) || null;
 
   useEffect(() => {
@@ -29,7 +27,6 @@ export default function Discussion() {
     };
   }, []);
 
-  // Keyboard detection
   useEffect(() => {
     const handleViewportChange = () => {
       const vh = window.visualViewport?.height || window.innerHeight;
@@ -64,6 +61,8 @@ export default function Discussion() {
     if (e.key === 'Enter') handleSend();
   };
 
+  const googleColors = ['#4285F4', '#DB4437', '#F4B400', '#0F9D58'];
+
   return (
     <main className="flex flex-col h-screen pt-32 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white">
       
@@ -84,26 +83,36 @@ export default function Discussion() {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 space-y-4 pb-28">
-        {messages.map((msg, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.02 }}
-            className="bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm backdrop-blur-md"
-          >
-            <div className="flex justify-between items-center mb-1">
-              <span className="font-semibold text-sm text-[#F4B400]">{msg.author}</span>
-              <span className="text-xs text-white/50">
-                {new Date(msg.timestamp).toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </span>
-            </div>
-            <p className="text-white/80 text-sm">{msg.content}</p>
-          </motion.div>
-        ))}
+        {messages.map((msg, idx) => {
+          const accent = googleColors[idx % googleColors.length];
+          return (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.02 }}
+              className="rounded-xl p-4 shadow-md border border-white/10 backdrop-blur-md bg-white/10"
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                boxShadow: `0 0 12px ${accent}40`,
+                borderLeft: `4px solid ${accent}`,
+              }}
+            >
+              <div className="flex justify-between items-center mb-1">
+                <span className="font-semibold text-sm" style={{ color: accent }}>
+                  {msg.author}
+                </span>
+                <span className="text-xs text-white/50">
+                  {new Date(msg.timestamp).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </span>
+              </div>
+              <p className="text-white/80 text-sm">{msg.content}</p>
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Composer */}
