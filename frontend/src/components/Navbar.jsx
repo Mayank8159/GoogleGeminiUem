@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Home,
   MessageSquare,
@@ -6,9 +6,10 @@ import {
   Users,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom"; // ✅ Added for navigation
+import { Link, useNavigate } from "react-router-dom";
 
 const navLinks = [
   { name: "Home", href: "/", icon: Home, color: "#4285F4" },
@@ -24,6 +25,24 @@ const linkVariants = {
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
+
+  const userInitial = user?.name?.charAt(0).toUpperCase() || "";
 
   return (
     <motion.nav
@@ -81,22 +100,48 @@ export default function Navbar() {
             </motion.a>
           ))}
 
-          {/* ✅ Updated Get Started Button */}
-          <motion.div
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 0 15px #F4B400",
-              backgroundColor: "#0F9D58",
-              color: "#fff",
-            }}
-          >
-            <Link
-              to="/login"
-              className="bg-[#F4B400] text-black px-5 py-2 rounded-lg font-semibold transition block"
+          {/* Auth Section */}
+          {user ? (
+            <div className="flex items-center gap-4">
+              {/* Avatar */}
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                className="bg-[#F4B400] text-black font-bold rounded-full h-10 w-10 flex items-center justify-center shadow-md"
+              >
+                {userInitial}
+              </motion.div>
+
+              {/* Logout Button */}
+              <motion.button
+                onClick={handleLogout}
+                whileHover={{
+                  scale: 1.05,
+                  backgroundColor: "#DB4437",
+                  boxShadow: "0 0 10px #DB4437",
+                }}
+                className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg transition"
+              >
+                <LogOut size={16} />
+                Logout
+              </motion.button>
+            </div>
+          ) : (
+            <motion.div
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 0 15px #F4B400",
+                backgroundColor: "#0F9D58",
+                color: "#fff",
+              }}
             >
-              Get Started
-            </Link>
-          </motion.div>
+              <Link
+                to="/login"
+                className="bg-[#F4B400] text-black px-5 py-2 rounded-lg font-semibold transition block"
+              >
+                Get Started
+              </Link>
+            </motion.div>
+          )}
         </motion.div>
       </div>
 
@@ -125,22 +170,45 @@ export default function Navbar() {
               </motion.a>
             ))}
 
-            {/* ✅ Updated Mobile Get Started Button */}
-            <motion.div
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 0 15px #F4B400",
-                backgroundColor: "#0F9D58",
-                color: "#fff",
-              }}
-            >
-              <Link
-                to="/login"
-                className="bg-[#F4B400] text-black px-4 py-2 rounded-lg font-semibold transition block"
+            {/* Mobile Auth Section */}
+            {user ? (
+              <div className="flex items-center gap-4 mt-2">
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  className="bg-[#F4B400] text-black font-bold rounded-full h-10 w-10 flex items-center justify-center shadow-md"
+                >
+                  {userInitial}
+                </motion.div>
+                <motion.button
+                  onClick={handleLogout}
+                  whileHover={{
+                    scale: 1.05,
+                    backgroundColor: "#DB4437",
+                    boxShadow: "0 0 10px #DB4437",
+                  }}
+                  className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg transition"
+                >
+                  <LogOut size={16} />
+                  Logout
+                </motion.button>
+              </div>
+            ) : (
+              <motion.div
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 0 15px #F4B400",
+                  backgroundColor: "#0F9D58",
+                  color: "#fff",
+                }}
               >
-                Get Started
-              </Link>
-            </motion.div>
+                <Link
+                  to="/login"
+                  className="bg-[#F4B400] text-black px-4 py-2 rounded-lg font-semibold transition block"
+                >
+                  Get Started
+                </Link>
+              </motion.div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
