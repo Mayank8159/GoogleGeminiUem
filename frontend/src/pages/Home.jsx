@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import GeminiClicks from "../components/GeminiClicks";
+import Sections from "../components/ActionSection";
 
 // A simple component to render inline SVG icons.
 const Icon = ({ name, color = "currentColor", size = 24, strokeWidth = 2 }) => {
@@ -101,12 +102,20 @@ export default function Home() {
       {/* Background glowing effect */}
       <div className="absolute inset-0 z-0 opacity-10">
         <motion.div
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 360], opacity: [0.1, 0.3, 0.1] }}
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 360],
+            opacity: [0.1, 0.3, 0.1],
+          }}
           transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
           className="absolute h-80 w-80 rounded-full bg-blue-500 blur-3xl -top-20 -left-20"
         />
         <motion.div
-          animate={{ scale: [1, 1.1, 1], rotate: [0, -360], opacity: [0.1, 0.3, 0.1] }}
+          animate={{
+            scale: [1, 1.1, 1],
+            rotate: [0, -360],
+            opacity: [0.1, 0.3, 0.1],
+          }}
           transition={{ duration: 25, repeat: Infinity, repeatType: "reverse" }}
           className="absolute h-96 w-96 rounded-full bg-indigo-500 blur-3xl -bottom-20 -right-20"
         />
@@ -176,11 +185,14 @@ export default function Home() {
                 About Us
               </motion.h2>
               <p className="text-sm sm:text-base text-white/70 leading-relaxed">
-                GGSC is a vibrant community of tech enthusiasts, designers, and dreamers. 
-                We explore the power of Google Gemini and AI to build meaningful experiences, 
-                foster leadership, and spark innovation across campus. <br /><br />
-                🌌 Together, we aim to empower students with skills, creativity, and collaboration — 
-                pushing the boundaries of what’s possible with AI.
+                GGSC is a vibrant community of tech enthusiasts, designers, and
+                dreamers. We explore the power of Google Gemini and AI to build
+                meaningful experiences, foster leadership, and spark innovation
+                across campus. <br />
+                <br />
+                🌌 Together, we aim to empower students with skills, creativity,
+                and collaboration — pushing the boundaries of what’s possible
+                with AI.
               </p>
             </div>
           </div>
@@ -197,108 +209,7 @@ export default function Home() {
           <GeminiClicks />
         </motion.section>
 
-        {/* Events Preview */}
-        <motion.section
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="w-full"
-        >
-          <motion.h2
-            className="text-xl font-semibold mb-6 text-[#0F9D58] flex items-center justify-center gap-2"
-            style={{ textShadow: "0 0 10px rgba(15, 157, 88, 0.8)" }}
-          >
-            <Icon name="calendar" color="#0F9D58" />
-            Upcoming Events
-          </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Gemini Hackathon",
-                desc: "Build AI-powered apps with Gemini APIs.",
-                color: "#4285F4",
-              },
-              {
-                title: "Design Jam",
-                desc: "Craft stunning UIs with Framer Motion & Tailwind.",
-                color: "#F4B400",
-              },
-              {
-                title: "AI & Ethics Panel",
-                desc: "Discuss the future of responsible AI.",
-                color: "#DB4437",
-              },
-            ].map(({ title, desc, color }) => (
-              <motion.div
-                key={title}
-                variants={itemVariants}
-                whileHover={{
-                  scale: 1.05,
-                  y: -5,
-                  boxShadow: "0 0 20px rgba(255,255,255,0.2)",
-                }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="bg-white/5 border border-white/10 rounded-xl p-6 text-left"
-              >
-                <h3 className="text-lg font-semibold mb-2" style={{ color }}>
-                  {title}
-                </h3>
-                <p className="text-sm text-white/70">{desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Team Spotlight */}
-        <motion.section
-          variants={itemVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="max-w-4xl text-center"
-        >
-          <motion.h2
-            className="text-xl font-semibold mb-2 text-[#DB4437] flex items-center justify-center gap-2"
-            style={{ textShadow: "0 0 10px rgba(219, 68, 55, 0.8)" }}
-          >
-            <Icon name="users" color="#DB4437" />
-            Meet the Team
-          </motion.h2>
-          <p className="text-sm sm:text-base text-white/70">
-            Led by passionate students from UEM Kolkata, our team blends
-            technical mastery with emotional design to create immersive,
-            community-driven digital experiences.
-          </p>
-        </motion.section>
-
-        {/* Community Call-to-Action */}
-        <motion.section
-          variants={itemVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="max-w-4xl text-center"
-        >
-          <motion.h2
-            className="text-xl font-semibold mb-2 text-[#0F9D58] flex items-center justify-center gap-2"
-            style={{ textShadow: "0 0 10px rgba(15, 157, 88, 0.8)" }}
-          >
-            <Icon name="messageCircle" color="#0F9D58" />
-            Join the Conversation
-          </motion.h2>
-          <p className="text-sm sm:text-base text-white/70 mb-4">
-            Dive into discussions, share ideas, and help shape the future of AI
-            and design. Explore our{" "}
-            <motion.span
-              whileHover={{ scale: 1.1 }}
-              className="text-[#4285F4] underline hover:text-[#F4B400] transition inline-block"
-            >
-              <Link to="/discussion">Discussion Board</Link>
-            </motion.span>
-            .
-          </p>
-        </motion.section>
+        <Sections/>
       </div>
     </main>
   );
