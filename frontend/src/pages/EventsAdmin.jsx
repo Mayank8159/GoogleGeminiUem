@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
-import { motion } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function EventAdmin() {
   const [form, setForm] = useState({
@@ -9,10 +10,7 @@ export default function EventAdmin() {
     eventDate: "",
     imageUrl: "",
   });
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
 
-  // Replace with your actual Render backend URL
   const BACKEND_URL = "https://googlegeminiuem.onrender.com";
 
   const handleChange = (e) => {
@@ -27,41 +25,27 @@ export default function EventAdmin() {
           Authorization: `Bearer ${token}`,
         },
       });
-      setSuccess(true);
-      setError("");
+
+      toast.success("✅ Event published successfully!");
       setForm({ title: "", description: "", eventDate: "", imageUrl: "" });
     } catch (err) {
       console.error(err);
-      setError("Failed to publish event");
-      setSuccess(false);
+      toast.error("❌ Failed to publish event");
     }
   };
 
   return (
-    <main className="px-4 pt-36 pb-20 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] min-h-screen text-white relative">
+    <main className="px-4 pt-24 sm:pt-32 pb-16 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] min-h-screen text-white overflow-x-hidden relative">
       {/* Background glow */}
       <div className="absolute inset-0 z-0 opacity-10">
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 360], opacity: [0.1, 0.3, 0.1] }}
-          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-80 w-80 rounded-full bg-pink-500 blur-3xl -top-20 -left-20"
-        />
-        <motion.div
-          animate={{ scale: [1, 1.1, 1], rotate: [0, -360], opacity: [0.1, 0.3, 0.1] }}
-          transition={{ duration: 25, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-96 w-96 rounded-full bg-purple-500 blur-3xl -bottom-20 -right-20"
-        />
+        <div className="absolute h-64 w-64 sm:h-80 sm:w-80 rounded-full bg-pink-500 blur-3xl -top-20 -left-20" />
+        <div className="absolute h-72 w-72 sm:h-96 sm:w-96 rounded-full bg-purple-500 blur-3xl -bottom-20 -right-20" />
       </div>
 
-      <div className="max-w-xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/10 shadow-xl"
-        >
+      <div className="max-w-lg w-full mx-auto relative z-10">
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 sm:p-8 border border-white/10 shadow-xl">
           <h2
-            className="text-2xl sm:text-3xl font-bold text-center text-indigo-300 mb-6"
+            className="text-xl sm:text-3xl font-bold text-center text-indigo-300 mb-6"
             style={{ textShadow: "0 0 12px rgba(99,102,241,0.7)" }}
           >
             Create New Event
@@ -74,14 +58,14 @@ export default function EventAdmin() {
               placeholder="Event Title"
               value={form.title}
               onChange={handleChange}
-              className="w-full p-3 rounded bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-3 rounded bg-white/10 text-white placeholder-gray-400 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <textarea
               name="description"
               placeholder="Event Description"
               value={form.description}
               onChange={handleChange}
-              className="w-full p-3 rounded bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-3 rounded bg-white/10 text-white placeholder-gray-400 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
               rows={4}
             />
             <input
@@ -89,7 +73,7 @@ export default function EventAdmin() {
               name="eventDate"
               value={form.eventDate}
               onChange={handleChange}
-              className="w-full p-3 rounded bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-3 rounded bg-white/10 text-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <input
               type="text"
@@ -97,25 +81,21 @@ export default function EventAdmin() {
               placeholder="Image URL (optional)"
               value={form.imageUrl}
               onChange={handleChange}
-              className="w-full p-3 rounded bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-3 rounded bg-white/10 text-white placeholder-gray-400 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
 
             <button
               onClick={submitEvent}
-              className="w-full py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded transition"
+              className="w-full py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded transition text-sm sm:text-base"
             >
               Publish Event
             </button>
-
-            {success && (
-              <p className="text-green-400 mt-2 text-sm text-center">✅ Event published successfully!</p>
-            )}
-            {error && (
-              <p className="text-red-400 mt-2 text-sm text-center">{error}</p>
-            )}
           </div>
-        </motion.div>
+        </div>
       </div>
+
+      {/* Toast container */}
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
     </main>
   );
 }
