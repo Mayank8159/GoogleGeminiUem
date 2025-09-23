@@ -1,26 +1,46 @@
-import { getRecentMessages, saveMessage } from '../controllers/messageController.js';
+import { getRecentMessages, saveMessage } from "../controllers/messageController.js";
+import jwt from "jsonwebtoken";
 
 export const setupSocket = (io) => {
-  io.on('connection', async (socket) => {
-    console.log('🟢 User connected:', socket.id);
+  io.on("connection", async (socket) => {
+    console.log("🟢 Connected:", socket.id);
 
-    // Send recent messages
+    // 🔐 Verify admin token from handshake query
+    const token = socket.handshake.auth?.token;
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        socket.isAdmin = true;
+        socket.adminId = decoded.id;
+        console.log("🔐 Admin authenticated:", decoded.id);
+      } catch (err) {
+        console.log("⚠️ Invalid admin token");
+        socket.isAdmin = false;
+      }
+    }
+
+    // 📨 Send recent messages
     const messages = await getRecentMessages();
-    socket.emit('initMessages', messages);
+    socket.emit("initMessages", messages);
 
-    // Handle new message
-    socket.on('newMessage', async (msg) => {
+    // 💬 Handle new message
+    socket.on("newMessage", async (msg) => {
       const saved = await saveMessage(msg);
-      io.emit('messageBroadcast', saved);
+      io.emit("messageBroadcast", saved);
     });
 
-    // Optional: Listen for event-specific sockets
-    socket.on('newEvent', (event) => {
-      io.emit('eventBroadcast', event); // 👈 Real-time event push
+    // 📡 Admin-only event broadcast
+    socket.on("newEvent", (event) => {
+      if (socket.isAdmin) {
+        io.emit("eventBroadcast", event);
+        console.log("📢 Event broadcasted by admin");
+      } else {
+        console.log("⛔ Unauthorized event attempt");
+      }
     });
 
-    socket.on('disconnect', () => {
-      console.log('🔴 User disconnected:', socket.id);
+    socket.on("disconnect", () => {
+      console.log("🔴 Disconnected:", socket.id);
     });
   });
 };

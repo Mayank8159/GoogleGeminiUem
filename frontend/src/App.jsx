@@ -6,9 +6,12 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Discussion from './pages/Discussion';
 import NotFound from './pages/Notfound';
+import EventAdmin from './pages/EventsAdmin';
+import AdminLogin from './pages/AdminLogin';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Loader from './components/Loader';
+
 
 function AppContent() {
   const location = useLocation();
@@ -27,6 +30,8 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/discussion" element={<Discussion />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/events" element={<EventAdmin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
