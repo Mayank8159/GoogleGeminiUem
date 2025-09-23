@@ -13,6 +13,8 @@ import Footer from './components/Footer';
 import Loader from './components/Loader';
 
 
+import ProtectedRoute from './components/ProtectedRoutes'; // 👈 Import it
+
 function AppContent() {
   const location = useLocation();
   const hideFooterRoutes = ['/discussion'];
@@ -31,7 +33,14 @@ function AppContent() {
           <Route path="/register" element={<Register />} />
           <Route path="/discussion" element={<Discussion />} />
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/events" element={<EventAdmin />} />
+          <Route
+            path="/admin/events"
+            element={
+              <ProtectedRoute>
+                <EventAdmin />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

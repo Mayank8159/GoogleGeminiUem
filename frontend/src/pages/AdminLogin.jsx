@@ -2,11 +2,14 @@ import { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 
 export default function AdminLogin() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const BACKEND_URL = "https://googlegeminiuem.onrender.com";
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -14,11 +17,31 @@ export default function AdminLogin() {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("/api/auth/admin/login", form);
-      localStorage.setItem("adminToken", res.data.token);
+      const res = await axios.post(`${BACKEND_URL}/api/admin/login`, form);
+      const token = res.data.token;
+
+      // Store token for protected routes
+      localStorage.setItem("adminToken", token);
       setError("");
-      navigate("/admin/dashboard");
+
+      // Connect to WebSocket with token
+      const socket = io(BACKEND_URL, {
+        auth: { token },
+      });
+
+      // Optional: Listen for confirmation or errors
+      socket.on("connect", () => {
+        console.log("🟢 Admin socket connected:", socket.id);
+      });
+
+      socket.on("connect_error", (err) => {
+        console.error("⚠️ Socket connection failed:", err.message);
+      });
+
+      // Redirect to admin event panel
+      navigate("/admin/events");
     } catch (err) {
+      console.error(err);
       setError("Invalid credentials");
     }
   };
@@ -31,7 +54,10 @@ export default function AdminLogin() {
         transition={{ duration: 0.6 }}
         className="max-w-md mx-auto bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/10 shadow-xl"
       >
-        <h2 className="text-2xl sm:text-3xl font-bold text-center text-indigo-300 mb-6" style={{ textShadow: "0 0 12px rgba(99,102,241,0.7)" }}>
+        <h2
+          className="text-2xl sm:text-3xl font-bold text-center text-indigo-300 mb-6"
+          style={{ textShadow: "0 0 12px rgba(99,102,241,0.7)" }}
+        >
           Admin Login
         </h2>
 

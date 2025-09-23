@@ -12,13 +12,21 @@ export default function EventAdmin() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  // Replace with your actual Render backend URL
+  const BACKEND_URL = "https://googlegeminiuem.onrender.com";
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const submitEvent = async () => {
     try {
-      await axios.post("/api/events/admin/events", form);
+      const token = localStorage.getItem("adminToken");
+      await axios.post(`${BACKEND_URL}/api/events/admin/events`, form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setSuccess(true);
       setError("");
       setForm({ title: "", description: "", eventDate: "", imageUrl: "" });
@@ -52,7 +60,10 @@ export default function EventAdmin() {
           transition={{ duration: 0.6 }}
           className="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/10 shadow-xl"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-indigo-300 mb-6" style={{ textShadow: "0 0 12px rgba(99,102,241,0.7)" }}>
+          <h2
+            className="text-2xl sm:text-3xl font-bold text-center text-indigo-300 mb-6"
+            style={{ textShadow: "0 0 12px rgba(99,102,241,0.7)" }}
+          >
             Create New Event
           </h2>
 
