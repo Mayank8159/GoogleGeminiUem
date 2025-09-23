@@ -35,7 +35,7 @@ export default function EventAdmin() {
   };
 
   return (
-    <main className="px-4 pt-24 sm:pt-32 pb-16 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] min-h-screen text-white overflow-x-hidden relative">
+    <main className="px-4 pt-32 sm:pt-32 pb-16 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] min-h-screen text-white overflow-x-hidden relative">
       {/* Background glow */}
       <div className="absolute inset-0 z-0 opacity-10">
         <div className="absolute h-64 w-64 sm:h-80 sm:w-80 rounded-full bg-pink-500 blur-3xl -top-20 -left-20" />
