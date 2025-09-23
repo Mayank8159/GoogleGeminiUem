@@ -30,6 +30,9 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.get("/api", (req, res) => {
+  res.send("API is running...");
+});
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", authAdminRoutes); // 👈 NEW
 app.use("/api/messages", messageRoutes);
