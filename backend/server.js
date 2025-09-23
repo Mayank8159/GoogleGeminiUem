@@ -4,8 +4,10 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
+
 import authRoutes from './routes/authRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
+import eventRoutes from './routes/eventRoutes.js'; // 👈 NEW
 import { setupSocket } from './socket/socketHandler.js';
 
 dotenv.config();
@@ -22,6 +24,10 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/events', eventRoutes); // 👈 NEW
+
+// Attach io to app for controller access
+app.set('io', io);
 
 // DB + Socket
 connectDB();
