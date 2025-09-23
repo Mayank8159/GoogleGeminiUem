@@ -23,6 +23,7 @@ const Icon = ({ name, color = "currentColor", size = 24, strokeWidth = 2 }) => {
   return icons[name] || null;
 };
 
+// Connect to backend socket server
 const socket = io("https://googlegeminiuem.onrender.com");
 
 const EventCard = ({ event }) => (
@@ -50,8 +51,8 @@ export default function Events() {
   const fetchEvents = async () => {
     try {
       const [up, comp] = await Promise.all([
-        axios.get("/api/events/upcoming"),
-        axios.get("/api/events/completed"),
+        axios.get("https://googlegeminiuem.onrender.com/api/events/events/upcoming"),
+        axios.get("https://googlegeminiuem.onrender.com/api/events/events/completed"),
       ]);
       setUpcoming(Array.isArray(up.data) ? up.data : []);
       setCompleted(Array.isArray(comp.data) ? comp.data : []);
