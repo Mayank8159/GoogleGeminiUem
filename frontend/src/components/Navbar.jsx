@@ -88,20 +88,20 @@ export default function Navbar() {
           variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
         >
           {navLinks.map(({ name, href, icon: Icon, color }) => (
-            <motion.a
+            <motion.div
               key={name}
-              href={href}
               variants={linkVariants}
               whileHover={{
                 scale: 1.1,
                 textShadow: `0 0 8px ${color}`,
                 color,
               }}
-              className="flex items-center gap-1 transition"
             >
-              <Icon className="h-4 w-4" />
-              {name}
-            </motion.a>
+              <Link to={href} className="flex items-center gap-1 transition">
+                <Icon className="h-4 w-4" />
+                {name}
+              </Link>
+            </motion.div>
           ))}
 
           {/* Auth Section */}
@@ -156,19 +156,19 @@ export default function Navbar() {
             className="mt-4 flex flex-col gap-4 sm:hidden text-sm font-medium"
           >
             {navLinks.map(({ name, href, icon: Icon, color }) => (
-              <motion.a
+              <motion.div
                 key={name}
-                href={href}
                 whileHover={{
                   scale: 1.05,
                   textShadow: `0 0 10px ${color}`,
                   color,
                 }}
-                className="flex items-center gap-2 transition"
               >
-                <Icon className="h-4 w-4" />
-                {name}
-              </motion.a>
+                <Link to={href} className="flex items-center gap-2 transition">
+                  <Icon className="h-4 w-4" />
+                  {name}
+                </Link>
+              </motion.div>
             ))}
 
             {/* Mobile Auth Section */}
