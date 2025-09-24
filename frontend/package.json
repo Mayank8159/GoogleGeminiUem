@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.12.2",
     "framer-motion": "^12.23.16",
     "gsap": "^3.13.0",
@@ -21,7 +23,8 @@
     "react-router-dom": "^7.9.1",
     "react-toastify": "^11.0.5",
     "socket.io-client": "^4.8.1",
-    "tailwindcss": "^4.1.13"
+    "tailwindcss": "^4.1.13",
+    "terser": "^5.44.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",

@@ -32,13 +32,13 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 600, // Slightly increase the warning limit
     // Additional optimizations
-    // minify: 'terser',
-    // terserOptions: {
-    //   compress: {
-    //     drop_console: true, // Remove console.log in production
-    //     drop_debugger: true,
-    //   },
-    // },
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console.log in production
+        drop_debugger: true,
+      },
+    },
     sourcemap: false, // Disable sourcemaps for smaller bundles
   },
 })

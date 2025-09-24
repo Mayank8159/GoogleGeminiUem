@@ -5,6 +5,8 @@ import Footer from './components/Footer';
 import Loader from './components/Loader';
 import { MessagesProvider } from './MessagesContext';
 import ProtectedRoute from './components/ProtectedRoutes';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // Lazy load page components for code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -59,6 +61,8 @@ function App() {
       <Router>
         <AppContent />
       </Router>
+      <Analytics />
+      <SpeedInsights />
     </MessagesProvider>
   );
 }
