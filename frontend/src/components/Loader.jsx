@@ -10,50 +10,44 @@ export default function Loader() {
   const particlesRef = useRef([]);
 
   useEffect(() => {
-    // Enhanced GSAP timeline for logo and rings
-    const tl = gsap.timeline({ repeat: -1 });
-    
+    // Hardware-accelerated transforms and lighter animations
     if (logoRef.current) {
-      // Logo breathing animation
-      tl.to(logoRef.current, {
-        scale: 1.1,
-        duration: 1.5,
-        ease: "power2.inOut",
+      gsap.to(logoRef.current, {
+        scale: 1.07,
+        duration: 1.2,
+        ease: "power1.inOut",
         yoyo: true,
-        repeat: -1
+        repeat: -1,
+        force3D: true
       });
     }
 
-    // Rotating rings with different speeds and directions
     ringsRef.current.forEach((ring, index) => {
       if (ring) {
         gsap.to(ring, {
-          rotation: index % 2 === 0 ? 360 : -360,
-          duration: 3 + index * 0.5,
-          ease: "none",
-          repeat: -1
+          rotation: index % 2 === 0 ? 180 : -180,
+          duration: 4 + index * 0.5,
+          ease: "linear",
+          repeat: -1,
+          force3D: true
         });
       }
     });
 
-    // Floating particles animation
     particlesRef.current.forEach((particle, index) => {
       if (particle) {
         gsap.to(particle, {
-          y: -window.innerHeight - 50,
-          opacity: 0.8,
-          duration: 4 + Math.random() * 2,
-          delay: Math.random() * 3,
-          ease: "power2.out",
+          y: -window.innerHeight * 0.7,
+          opacity: 0.6,
+          duration: 3 + Math.random(),
+          delay: Math.random() * 2,
+          ease: "power1.out",
           repeat: -1,
-          repeatDelay: Math.random() * 2
+          repeatDelay: Math.random(),
+          force3D: true
         });
       }
     });
-
-    return () => {
-      tl.kill();
-    };
   }, []);
 
   useEffect(() => {
@@ -90,21 +84,22 @@ export default function Loader() {
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-[#0F0F0F] via-[#1A1A1A] to-[#0F2027] backdrop-blur-xl overflow-hidden"
         >
           {/* Enhanced floating particles */}
-          <div className="absolute inset-0 pointer-events-none">
-            {[...Array(25)].map((_, i) => (
+          <div className="absolute inset-0 pointer-events-none will-change-transform">
+            {[...Array(12)].map((_, i) => (
               <div
                 key={i}
                 ref={el => particlesRef.current[i] = el}
-                className={`absolute w-1 h-1 rounded-full opacity-0`}
+                className="absolute w-1.5 h-1.5 rounded-full opacity-0"
                 style={{
-                  left: `${10 + Math.random() * 80}%`,
-                  top: `${window.innerHeight + Math.random() * 100}px`,
+                  left: `${15 + Math.random() * 70}%`,
+                  top: `${window.innerHeight * 0.8 + Math.random() * 60}px`,
                   backgroundColor: [
-                    '#4285F4', '#F4B400', '#0F9D58', '#DB4437', '#9AA0A6'
-                  ][i % 5],
-                  boxShadow: `0 0 10px ${[
-                    '#4285F4', '#F4B400', '#0F9D58', '#DB4437', '#9AA0A6'
-                  ][i % 5]}60`
+                    '#4285F4', '#F4B400', '#0F9D58', '#DB4437'
+                  ][i % 4],
+                  boxShadow: `0 0 6px ${[
+                    '#4285F4', '#F4B400', '#0F9D58', '#DB4437'
+                  ][i % 4]}40`,
+                  willChange: 'transform'
                 }}
               />
             ))}
@@ -113,19 +108,19 @@ export default function Loader() {
           {/* Background gradient orbs */}
           <motion.div
             animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.1, 0.2, 0.1],
+              scale: [1, 1.08, 1],
+              opacity: [0.08, 0.15, 0.08],
             }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-[#4285F4]/20 blur-3xl"
+            className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#4285F4]/20 blur-xl will-change-transform"
           />
           <motion.div
             animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.1, 0.15, 0.1],
+              scale: [1.08, 1, 1.08],
+              opacity: [0.08, 0.12, 0.08],
             }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-[#F4B400]/20 blur-3xl"
+            className="absolute bottom-1/4 right-1/4 w-56 h-56 rounded-full bg-[#F4B400]/20 blur-xl will-change-transform"
           />
 
           <motion.div
@@ -156,11 +151,11 @@ export default function Loader() {
                 {/* Pulsing glow effects - perfectly centered */}
                 <motion.div
                   animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [0.3, 0.6, 0.3],
+                    scale: [1, 1.15, 1],
+                    opacity: [0.18, 0.32, 0.18],
                   }}
                   transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4285F4]/30 to-[#F4B400]/30 blur-2xl"
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4285F4]/30 to-[#F4B400]/30 blur-lg will-change-transform"
                 />
 
                 {/* Main logo - perfectly centered */}
