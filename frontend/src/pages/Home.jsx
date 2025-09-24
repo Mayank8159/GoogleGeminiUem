@@ -106,29 +106,33 @@ export default function Home() {
     // Always scroll to top on mount
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 
-    // GSAP animations for logo floating
+    // GSAP logo floating with hardware acceleration
     if (logoRef.current) {
       gsap.to(logoRef.current, {
         y: -8,
-        duration: 2,
-        ease: "power2.inOut",
+        duration: 1.2,
+        ease: "power1.inOut",
         yoyo: true,
-        repeat: -1
+        repeat: -1,
+        force3D: true,
+        willChange: "transform"
       });
     }
 
-    // Animate particles
+    // Animate particles with hardware acceleration
     particlesRef.current.forEach((particle, index) => {
       if (particle) {
         gsap.to(particle, {
-          y: -100,
-          x: Math.sin(index) * 50,
-          opacity: 0.8,
-          duration: 3 + Math.random() * 2,
-          delay: Math.random() * 2,
+          y: -60,
+          x: Math.sin(index) * 32,
+          opacity: 0.7,
+          duration: 2.2 + Math.random() * 1.2,
+          delay: Math.random() * 1.2,
           repeat: -1,
           yoyo: true,
-          ease: "power2.inOut"
+          ease: "power1.inOut",
+          force3D: true,
+          willChange: "transform"
         });
       }
     });
@@ -136,46 +140,47 @@ export default function Home() {
   return (
     <main className="px-6 py-20 sm:py-32 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white overflow-hidden relative">
       {/* Enhanced background with floating particles */}
-      <div className="absolute inset-0 z-0 opacity-15">
-        {/* Floating particles */}
+      <div className="absolute inset-0 z-0 opacity-15 will-change-transform">
+        {/* Floating particles - reduced blur, optimized shadow */}
         <div className="absolute inset-0">
           {[...Array(12)].map((_, i) => (
             <div
               key={i}
               ref={el => particlesRef.current[i] = el}
-              className="absolute w-3 h-3 rounded-full"
+              className="absolute w-3 h-3 rounded-full will-change-transform"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 backgroundColor: [
                   '#4286f4a3', '#f4b3008b', '#0f9d5890', '#db45378b'
                 ][i % 4],
-                opacity: 0.45,
-                boxShadow: `0 0 32px ${[
+                opacity: 0.38,
+                boxShadow: `0 0 16px ${[
                   '#4286f4a3', '#f4b3008b', '#0f9d5890', '#db45378b'
-                ][i % 4]}80`,
-                filter: 'blur(1600px)'
+                ][i % 4]}60`,
+                filter: 'blur(320px)',
+                willChange: 'transform'
               }}
             />
           ))}
         </div>
         <motion.div
           animate={{
-            scale: [1, 1.3, 1],
+            scale: [1, 1.18, 1],
             rotate: [0, 360],
-            opacity: [0.12, 0.32, 0.12],
+            opacity: [0.10, 0.22, 0.10],
           }}
-          transition={{ duration: 45, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-80 w-80 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 blur-[120px] -top-20 -left-20"
+          transition={{ duration: 28, repeat: Infinity, repeatType: "reverse" }}
+          className="absolute h-80 w-80 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 blur-[60px] -top-20 -left-20 will-change-transform"
         />
         <motion.div
           animate={{
-            scale: [1.2, 1, 1.2],
+            scale: [1.1, 1, 1.1],
             rotate: [0, -360],
-            opacity: [0.12, 0.28, 0.12],
+            opacity: [0.10, 0.18, 0.10],
           }}
-          transition={{ duration: 55, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-96 w-96 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 blur-[100px] -bottom-20 -right-20"
+          transition={{ duration: 32, repeat: Infinity, repeatType: "reverse" }}
+          className="absolute h-96 w-96 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 blur-[50px] -bottom-20 -right-20 will-change-transform"
         />
       </div>
 
@@ -201,23 +206,24 @@ export default function Home() {
                 key={i}
                 animate={{
                   opacity: [0, 1, 0],
-                  x: [0, Math.cos((i/4)*2*Math.PI)*48, 0],
-                  y: [0, Math.sin((i/4)*2*Math.PI)*48, 0],
-                  scale: [1, 1.25, 1]
+                  x: [0, Math.cos((i/4)*2*Math.PI)*38, 0],
+                  y: [0, Math.sin((i/4)*2*Math.PI)*38, 0],
+                  scale: [1, 1.18, 1]
                 }}
-                transition={{ duration: 3.5, repeat: Infinity, delay: i*0.5, ease: "easeInOut" }}
-                className="absolute"
+                transition={{ duration: 2.2, repeat: Infinity, delay: i*0.3, ease: "easeInOut" }}
+                className="absolute will-change-transform"
                 style={{
                   left: '50%',
                   top: '50%',
-                  width: '14px',
-                  height: '14px',
-                  marginLeft: '-7px',
-                  marginTop: '-7px',
+                  width: '12px',
+                  height: '12px',
+                  marginLeft: '-6px',
+                  marginTop: '-6px',
                   borderRadius: '50%',
                   background: ["#4285F4", "#F4B400", "#0F9D58", "#DB4437"][i],
-                  boxShadow: `0 0 24px ${["#4285F4", "#F4B400", "#0F9D58", "#DB4437"][i]}80`,
-                  filter: 'blur(8px)'
+                  boxShadow: `0 0 12px ${["#4285F4", "#F4B400", "#0F9D58", "#DB4437"][i]}60`,
+                  filter: 'blur(4px)',
+                  willChange: 'transform'
                 }}
               />
             ))}
@@ -239,11 +245,12 @@ export default function Home() {
             <motion.img
               src="/main.png"
               alt="Gemini Logo"
-              className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-xl z-10 shadow-2xl ring-2 ring-white/20"
+              className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-xl z-10 shadow-2xl ring-2 ring-white/20 will-change-transform"
+              style={{ willChange: 'transform' }}
               whileHover={{ 
-                scale: 1.12,
-                rotate: [0, -5, 5, 0],
-                transition: { duration: 0.6, ease: "easeInOut" }
+                scale: 1.08,
+                rotate: [0, -3, 3, 0],
+                transition: { duration: 0.38, ease: "easeInOut" }
               }}
               whileTap={{ scale: 0.97 }}
             />
