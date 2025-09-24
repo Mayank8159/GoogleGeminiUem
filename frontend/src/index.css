@@ -1,12 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Outfit:wght@100..900&family=Poppins:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap");
-
 @import "tailwindcss";
 
-/* Configure custom fonts for Tailwind */
+/* Enhanced Google Fonts Configuration */
 @layer base {
   .font-outfit { font-family: 'Outfit', system-ui, -apple-system, sans-serif; }
   .font-inter { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-  .font-poppins { font-family: 'Poppins', system-ui, -apple-system, sans-serif; }
+  .font-space-grotesk { font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif; }
   .font-mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
 }
 

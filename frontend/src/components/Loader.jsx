@@ -1,23 +1,74 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { gsap } from 'gsap';
 
 export default function Loader() {
   const [isVisible, setIsVisible] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const logoRef = useRef(null);
+  const ringsRef = useRef([]);
+  const particlesRef = useRef([]);
 
   useEffect(() => {
-    // Simulate loading progress
+    // Enhanced GSAP timeline for logo and rings
+    const tl = gsap.timeline({ repeat: -1 });
+    
+    if (logoRef.current) {
+      // Logo breathing animation
+      tl.to(logoRef.current, {
+        scale: 1.1,
+        duration: 1.5,
+        ease: "power2.inOut",
+        yoyo: true,
+        repeat: -1
+      });
+    }
+
+    // Rotating rings with different speeds and directions
+    ringsRef.current.forEach((ring, index) => {
+      if (ring) {
+        gsap.to(ring, {
+          rotation: index % 2 === 0 ? 360 : -360,
+          duration: 3 + index * 0.5,
+          ease: "none",
+          repeat: -1
+        });
+      }
+    });
+
+    // Floating particles animation
+    particlesRef.current.forEach((particle, index) => {
+      if (particle) {
+        gsap.to(particle, {
+          y: -window.innerHeight - 50,
+          opacity: 0.8,
+          duration: 4 + Math.random() * 2,
+          delay: Math.random() * 3,
+          ease: "power2.out",
+          repeat: -1,
+          repeatDelay: Math.random() * 2
+        });
+      }
+    });
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
+  useEffect(() => {
+    // Simulate loading progress with more realistic increments
     const progressTimer = setInterval(() => {
       setLoadingProgress(prev => {
         if (prev >= 100) {
           clearInterval(progressTimer);
           return 100;
         }
-        return prev + Math.random() * 15;
+        return Math.min(prev + Math.random() * 12 + 2, 100);
       });
-    }, 100);
+    }, 150);
 
-    const timer = setTimeout(() => setIsVisible(false), 2000);
+    const timer = setTimeout(() => setIsVisible(false), 3000);
     
     return () => {
       clearTimeout(timer);
@@ -26,179 +77,209 @@ export default function Loader() {
   }, []);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isVisible && (
         <motion.div
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.8 } }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gradient-to-br from-[#0F0F0F] via-[#1A1A1A] to-[#0F2027] backdrop-blur-xl"
+          exit={{ 
+            opacity: 0,
+            scale: 0.95,
+            transition: { duration: 0.8, ease: "easeInOut" }
+          }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-[#0F0F0F] via-[#1A1A1A] to-[#0F2027] backdrop-blur-xl overflow-hidden"
         >
-          {/* Animated background particles */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-            {[...Array(12)].map((_, i) => (
-              <motion.div
+          {/* Enhanced floating particles */}
+          <div className="absolute inset-0 pointer-events-none">
+            {[...Array(25)].map((_, i) => (
+              <div
                 key={i}
-                animate={{
-                  y: [-10, window.innerHeight + 10],
-                  opacity: [0, 0.6, 0],
-                }}
-                transition={{
-                  duration: 4 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: Math.random() * 3,
-                  ease: "easeInOut"
-                }}
-                className="absolute w-0.5 h-0.5 bg-white/30 rounded-full"
+                ref={el => particlesRef.current[i] = el}
+                className={`absolute w-1 h-1 rounded-full opacity-0`}
                 style={{
-                  left: `${20 + Math.random() * 60}%`,
+                  left: `${10 + Math.random() * 80}%`,
+                  top: `${window.innerHeight + Math.random() * 100}px`,
+                  backgroundColor: [
+                    '#4285F4', '#F4B400', '#0F9D58', '#DB4437', '#9AA0A6'
+                  ][i % 5],
+                  boxShadow: `0 0 10px ${[
+                    '#4285F4', '#F4B400', '#0F9D58', '#DB4437', '#9AA0A6'
+                  ][i % 5]}60`
                 }}
               />
             ))}
           </div>
 
+          {/* Background gradient orbs */}
           <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 100, damping: 15 }}
-            className="relative flex flex-col items-center"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.1, 0.2, 0.1],
+            }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-[#4285F4]/20 blur-3xl"
+          />
+          <motion.div
+            animate={{
+              scale: [1.2, 1, 1.2],
+              opacity: [0.1, 0.15, 0.1],
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-[#F4B400]/20 blur-3xl"
+          />
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.2 }}
+            className="flex flex-col items-center justify-center relative z-10"
           >
-            {/* Enhanced Logo Container */}
-            <div className="relative mb-8 pb-8 sm:pb-12 w-32 h-32 mx-auto">
-              {/* Pulsing glow layers - positioned behind everything */}
-              <motion.div
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.2, 0.4, 0.2],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute inset-0 rounded-full bg-[#4285F4]/20 blur-2xl -z-10"
-              />
-              <motion.div
-                animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.5, 0.3],
-                }}
-                transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
-                className="absolute inset-0 rounded-full bg-[#F4B400]/20 blur-xl -z-10"
-              />
-              
-              {/* Multiple rotating rings - contained within bounds */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-2 rounded-full border-2 border-transparent border-t-[#4285F4] border-r-[#F4B400]"
-              />
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-4 rounded-full border-2 border-transparent border-b-[#0F9D58] border-l-[#DB4437]"
-              />
-              
-              {/* Main Logo - centered and stable */}
-              <motion.div
-                animate={{
-                  scale: [1, 1.02, 1]
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="relative w-full h-full flex items-center justify-center z-10"
-              >
-                <img
-                  src="/main.png"
-                  alt="Gemini Logo"
-                  className="h-16 w-16 rounded-xl shadow-2xl ring-2 ring-white/30"
+            {/* Perfect centered logo container with proper dimensions */}
+            <div className="relative mb-8 flex items-center justify-center">
+              {/* Container ensures perfect centering */}
+              <div className="relative w-32 h-32 flex items-center justify-center">
+                
+                {/* Animated rotating rings - perfectly centered */}
+                <div
+                  ref={el => ringsRef.current[0] = el}
+                  className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#4285F4] border-r-[#F4B400]"
                 />
-              </motion.div>
+                <div
+                  ref={el => ringsRef.current[1] = el}
+                  className="absolute inset-2 rounded-full border-2 border-transparent border-b-[#0F9D58] border-l-[#DB4437]"
+                />
+                <div
+                  ref={el => ringsRef.current[2] = el}
+                  className="absolute inset-4 rounded-full border border-transparent border-t-[#9AA0A6] border-b-[#4285F4]"
+                />
+
+                {/* Pulsing glow effects - perfectly centered */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.3, 1],
+                    opacity: [0.3, 0.6, 0.3],
+                  }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4285F4]/30 to-[#F4B400]/30 blur-2xl"
+                />
+
+                {/* Main logo - perfectly centered */}
+                <div 
+                  ref={logoRef}
+                  className="relative z-10 flex items-center justify-center w-20 h-20"
+                >
+                  <img
+                    src="/main.png"
+                    alt="Gemini Logo"
+                    className="w-full h-full object-contain rounded-xl shadow-2xl ring-2 ring-white/20"
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Enhanced Loading Text */}
+            {/* Enhanced loading text with better animations */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="text-center space-y-3 relative z-20"
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="text-center space-y-4 relative z-10"
             >
               <motion.h1
-                animate={{
-                  backgroundPosition: ['0%', '100%'],
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="text-2xl sm:text-3xl font-bold font-outfit tracking-wide bg-gradient-to-r from-[#4285F4] via-[#F4B400] via-[#0F9D58] to-[#DB4437] bg-clip-text text-transparent relative"
-                style={{ 
-                  backgroundSize: '200% 100%',
-                  textShadow: '0 0 20px rgba(66, 133, 244, 0.3)'
-                }}
+                className="text-3xl sm:text-4xl font-bold font-space-grotesk tracking-wide"
               >
-                <span className="relative z-10">Google Gemini</span>
+                <motion.span
+                  animate={{
+                    background: [
+                      'linear-gradient(45deg, #4285F4, #F4B400)',
+                      'linear-gradient(45deg, #F4B400, #0F9D58)',
+                      'linear-gradient(45deg, #0F9D58, #DB4437)',
+                      'linear-gradient(45deg, #DB4437, #4285F4)',
+                    ],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                  style={{
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    textShadow: '0 0 30px rgba(66, 133, 244, 0.5)'
+                  }}
+                >
+                  Google Gemini
+                </motion.span>
               </motion.h1>
+              
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                className="text-white/80 font-medium text-sm relative z-10"
-                style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}
+                transition={{ delay: 1 }}
+                className="text-white/90 font-inter font-medium text-sm sm:text-base tracking-wide"
+                style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.7)' }}
               >
-                Google Gemini Student Community UEMK
+                Student Community • UEM Kolkata
               </motion.p>
             </motion.div>
 
-            {/* Enhanced Progress Bar */}
+            {/* Enhanced progress bar with glassmorphism */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1 }}
-              className="mt-6 w-56 relative z-10"
+              transition={{ delay: 1.2, duration: 0.6 }}
+              className="mt-8 w-72 relative z-10"
             >
-              <div className="h-1 bg-white/15 rounded-full overflow-hidden backdrop-blur-sm">
+              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm border border-white/20 shadow-lg">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-[#4285F4] via-[#F4B400] to-[#0F9D58] rounded-full relative overflow-hidden"
-                  animate={{ width: `${loadingProgress}%` }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="h-full relative overflow-hidden rounded-full"
+                  style={{
+                    background: 'linear-gradient(90deg, #4285F4, #F4B400, #0F9D58)',
+                    width: `${loadingProgress}%`,
+                  }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                 >
                   <motion.div
-                    animate={{ x: ['-100%', '100%'] }}
-                    transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                    animate={{ x: ['-100%', '200%'] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                    style={{ width: '50%' }}
                   />
                 </motion.div>
               </div>
               
-              {/* Loading percentage */}
+              {/* Progress percentage with enhanced styling */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1.2 }}
-                className="text-center mt-3 text-white/70 text-xs font-mono tracking-wider relative z-10"
-                style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)' }}
+                transition={{ delay: 1.4 }}
+                className="text-center mt-4 text-white/80 text-xs font-mono tracking-wider relative z-10 font-semibold"
+                style={{ textShadow: '0 1px 4px rgba(0, 0, 0, 0.8)' }}
               >
-                {Math.round(loadingProgress)}%
+                Loading... {Math.round(loadingProgress)}%
               </motion.div>
             </motion.div>
 
-            {/* Loading dots animation */}
+            {/* Enhanced loading dots with better spacing and colors */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.5 }}
-              className="mt-4 flex gap-1.5 justify-center relative z-10"
+              transition={{ delay: 1.6 }}
+              className="mt-6 flex gap-2 justify-center relative z-10"
             >
               {[0, 1, 2].map((i) => (
                 <motion.div
                   key={i}
                   animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [0.4, 1, 0.4],
+                    scale: [1, 1.4, 1],
+                    opacity: [0.6, 1, 0.6],
                   }}
                   transition={{
                     duration: 1.2,
                     repeat: Infinity,
-                    delay: i * 0.15,
+                    delay: i * 0.2,
                     ease: "easeInOut"
                   }}
-                  className="w-1.5 h-1.5 rounded-full shadow-lg"
+                  className="w-2 h-2 rounded-full shadow-lg"
                   style={{ 
                     backgroundColor: ['#4285F4', '#F4B400', '#0F9D58'][i],
-                    boxShadow: `0 0 8px ${['#4285F4', '#F4B400', '#0F9D58'][i]}40`
+                    boxShadow: `0 0 12px ${['#4285F4', '#F4B400', '#0F9D58'][i]}70`
                   }}
                 />
               ))}
