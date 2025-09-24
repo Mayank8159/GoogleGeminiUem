@@ -11,7 +11,7 @@ import AdminLogin from './pages/AdminLogin';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Loader from './components/Loader';
-
+import { MessagesProvider } from './MessagesContext';
 
 import ProtectedRoute from './components/ProtectedRoutes'; // 👈 Import it
 
@@ -51,9 +51,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <MessagesProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </MessagesProvider>
   );
 }
 

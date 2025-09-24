@@ -4,9 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
+import { useMessages } from '../MessagesContext';
 
 export default function Discussion() {
-  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -16,19 +16,7 @@ export default function Discussion() {
 
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user')) || null;
-
-  useEffect(() => {
-    socket.connect(); // Ensure connection is alive
-    socket.on('initMessages', (msgs) => setMessages(msgs));
-    socket.on('messageBroadcast', (msg) => {
-      setMessages(prev => [...prev.slice(-99), msg]);
-    });
-
-    return () => {
-      socket.off('initMessages');
-      socket.off('messageBroadcast');
-    };
-  }, []);
+  const { messages } = useMessages();
 
   useEffect(() => {
     const handleViewportChange = () => {
