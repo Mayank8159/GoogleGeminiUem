@@ -187,21 +187,18 @@ export default function Loader() {
               <motion.h1
                 className="text-3xl sm:text-4xl font-bold font-space-grotesk tracking-wide"
               >
+                {/* Animated gradient clipped to text (no rectangular background) */}
                 <motion.span
-                  animate={{
-                    background: [
-                      'linear-gradient(45deg, #4285F4, #F4B400)',
-                      'linear-gradient(45deg, #F4B400, #0F9D58)',
-                      'linear-gradient(45deg, #0F9D58, #DB4437)',
-                      'linear-gradient(45deg, #DB4437, #4285F4)',
-                    ],
-                  }}
-                  transition={{ duration: 4, repeat: Infinity }}
+                  aria-hidden={false}
+                  initial={{ backgroundPosition: '0% 50%' }}
+                  animate={{ backgroundPosition: ['0% 50%', '100% 50%'] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                  className="inline-block bg-clip-text text-transparent"
                   style={{
-                    backgroundClip: 'text',
+                    backgroundImage: 'linear-gradient(90deg, #4285F4 0%, #F4B400 25%, #0F9D58 50%, #DB4437 75%, #4285F4 100%)',
                     WebkitBackgroundClip: 'text',
-                    color: 'transparent',
-                    textShadow: '0 0 30px rgba(66, 133, 244, 0.5)'
+                    backgroundSize: '200% 100%',
+                    textShadow: '0 0 18px rgba(66, 133, 244, 0.35)'
                   }}
                 >
                   Google Gemini
