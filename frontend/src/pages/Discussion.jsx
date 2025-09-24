@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { io } from 'socket.io-client';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { gsap } from 'gsap';
 
 const socket = io('https://googlegeminiuem.onrender.com'); // Update to your deployed backend URL if needed
 
@@ -11,6 +12,9 @@ export default function Discussion() {
   const [newMessage, setNewMessage] = useState('');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const messagesRef = useRef([]);
+  const inputRef = useRef(null);
+  const headerRef = useRef(null);
 
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user')) || null;
