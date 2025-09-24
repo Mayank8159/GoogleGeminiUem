@@ -1,115 +1,29 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Outfit:wght@100..900&family=Poppins:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap");
 
 @import "tailwindcss";
 
-/* ===== ENHANCED GOOGLE DESIGN SYSTEM ===== */
+/* Configure custom fonts for Tailwind */
+@layer base {
+  .font-outfit { font-family: 'Outfit', system-ui, -apple-system, sans-serif; }
+  .font-inter { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+  .font-poppins { font-family: 'Poppins', system-ui, -apple-system, sans-serif; }
+  .font-mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+}
+
+/* Essential Google Brand Colors */
 :root {
-  /* Google Material Design 3.0 Color Palette */
   --gemini-blue: #4285F4;
   --gemini-red: #EA4335;
   --gemini-yellow: #FBBC05;
   --gemini-green: #34A853;
-  
-  /* Extended Google Brand Palette */
   --gemini-blue-light: #669DF6;
-  --gemini-blue-dark: #1A73E8;
-  --gemini-blue-darker: #1557B7;
-  --gemini-red-light: #EE5A52;
-  --gemini-red-dark: #C5221F;
-  --gemini-yellow-light: #FCC934;
-  --gemini-yellow-dark: #F09300;
   --gemini-green-light: #5BB974;
-  --gemini-green-dark: #137333;
-  
-  /* AI/Neural Network Inspired Colors */
-  --neural-purple: #9C27B0;
-  --neural-cyan: #00E5FF;
-  --neural-pink: #FF1744;
-  --cosmic-indigo: #3F51B5;
-  --quantum-violet: #673AB7;
-  --ai-teal: #009688;
-  
-  /* Premium Background Gradients */
-  --bg-primary: linear-gradient(135deg, #0C0C14 0%, #1A1A2E 25%, #16213E 50%, #0F2027 75%, #203A43 100%);
-  --bg-secondary: linear-gradient(135deg, #1A1A1A 0%, #2A2A2A 50%, #1E1E1E 100%);
-  --bg-cosmic: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  --bg-neural: radial-gradient(circle at 20% 50%, #120078 0%, #9d0208 30%, #240046 70%, #000000 100%);
-  --bg-gradient-blue: linear-gradient(135deg, var(--gemini-blue-dark), var(--gemini-blue-light));
-  --bg-gradient-multicolor: linear-gradient(135deg, var(--gemini-blue) 0%, var(--gemini-green) 25%, var(--gemini-yellow) 50%, var(--gemini-red) 75%, var(--neural-purple) 100%);
-  
-  /* Enhanced Glass Morphism */
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-bg-strong: rgba(255, 255, 255, 0.08);
-  --glass-bg-ultra: rgba(255, 255, 255, 0.12);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-border-strong: rgba(255, 255, 255, 0.15);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
-  --glass-shadow-strong: 0 16px 48px rgba(0, 0, 0, 0.5);
-  --glass-backdrop: blur(24px);
-  --glass-backdrop-strong: blur(32px);
-  
-  /* Advanced Shadow System */
-  --shadow-soft: 0 2px 16px rgba(0, 0, 0, 0.08);
-  --shadow-medium: 0 8px 32px rgba(0, 0, 0, 0.12);
-  --shadow-strong: 0 16px 64px rgba(0, 0, 0, 0.24);
-  --shadow-ultra: 0 32px 128px rgba(0, 0, 0, 0.4);
-  --shadow-glow-blue: 0 0 32px rgba(66, 133, 244, 0.4);
-  --shadow-glow-red: 0 0 32px rgba(234, 67, 53, 0.4);
-  --shadow-glow-yellow: 0 0 32px rgba(251, 188, 5, 0.4);
-  --shadow-glow-green: 0 0 32px rgba(52, 168, 83, 0.4);
-  --shadow-glow-multicolor: 0 0 48px rgba(66, 133, 244, 0.3), 0 0 96px rgba(52, 168, 83, 0.2);
-  
-  /* Typography */
-  --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
-  --font-body: 'Poppins', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  
-  /* Spacing Scale */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
-  --space-3xl: 4rem;
-  
-  /* Border Radius */
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 2rem;
-  
-  /* Transitions */
-  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Z-Index Scale */
-  --z-dropdown: 1000;
-  --z-sticky: 1020;
-  --z-fixed: 1030;
-  --z-modal-backdrop: 1040;
-  --z-modal: 1050;
-  --z-popover: 1060;
-  --z-tooltip: 1070;
 }
 
-
-/* ===== ANIMATIONS ===== */
+/* Essential animations for loader and interactive elements */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { 
-    box-shadow: 0 0 5px rgba(66, 133, 244, 0.4);
-  }
-  50% { 
-    box-shadow: 0 0 25px rgba(66, 133, 244, 0.8), 
-                0 0 35px rgba(66, 133, 244, 0.4);
-  }
 }
 
 @keyframes shimmer {
@@ -117,12 +31,9 @@
   100% { transform: translateX(100%); }
 }
 
+/* Custom utility classes */
 .animate-float {
   animation: float 3s ease-in-out infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
 }
 
 .shimmer-effect {
@@ -137,14 +48,26 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(255, 255, 255, 0.1), 
-    transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
   animation: shimmer 2s infinite;
 }
 
-/* ===== SCROLLBAR STYLING ===== */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px currentColor;
+}
+
+.bg-gradient-gemini {
+  background: linear-gradient(135deg, var(--gemini-blue) 0%, var(--gemini-green) 25%, var(--gemini-yellow) 50%, var(--gemini-red) 75%);
+}
+
+/* Optimized scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -162,96 +85,13 @@
   background: linear-gradient(135deg, var(--gemini-blue-light), var(--gemini-green-light));
 }
 
-/* ===== BACKGROUND PATTERNS ===== */
-.bg-grid-pattern {
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
-}
 
-.bg-dots-pattern {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-/* ===== LOADING ANIMATIONS ===== */
-.loading-skeleton {
-  background: linear-gradient(90deg, 
-    rgba(255, 255, 255, 0.1) 25%, 
-    rgba(255, 255, 255, 0.2) 50%, 
-    rgba(255, 255, 255, 0.1) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-/* ===== PREMIUM EFFECTS ===== */
-.text-shadow-glow {
-  text-shadow: 0 0 10px currentColor;
-}
-
-.backdrop-blur-strong {
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-}
-
-.gradient-border {
-  position: relative;
-  background: var(--glass-bg);
-  border-radius: var(--radius-lg);
-}
-
-.gradient-border::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 2px;
-  background: linear-gradient(135deg, var(--gemini-blue), var(--gemini-green), var(--gemini-yellow), var(--gemini-red));
-  border-radius: inherit;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: xor;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-}
-
-
-
-
-
-/* ===== MOBILE OPTIMIZATIONS ===== */
-@media (hover: none) {
-  .card-premium:hover {
-    transform: none;
-  }
-  
-  .interactive-glow:hover::before {
-    opacity: 0;
-  }
-}
-
-/* ===== PERFORMANCE OPTIMIZATIONS ===== */
-.will-change-transform {
-  will-change: transform;
-}
-
-.will-change-opacity {
-  will-change: opacity;
-}
-
-.gpu-accelerated {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
-
-
-/* ===== FOCUS STYLING ===== */
+/* Essential focus and selection styling */
 :focus-visible {
   outline: 2px solid var(--gemini-blue);
   outline-offset: 2px;
 }
 
-/* ===== SELECTION STYLING ===== */
 ::selection {
   background: var(--gemini-blue);
   color: white;
@@ -261,7 +101,3 @@
   background: var(--gemini-blue);
   color: white;
 }
-
-
-
-
