@@ -91,6 +91,7 @@ export default function Navbar() {
             <motion.div
               key={name}
               variants={linkVariants}
+              animate={location.pathname === href ? { color } : {}}
               whileHover={{
                 scale: 1.1,
                 textShadow: `0 0 8px ${color}`,
@@ -158,6 +159,7 @@ export default function Navbar() {
             {navLinks.map(({ name, href, icon: Icon, color }) => (
               <motion.div
                 key={name}
+                animate={location.pathname === href ? { color } : {}}
                 whileHover={{
                   scale: 1.05,
                   textShadow: `0 0 10px ${color}`,
