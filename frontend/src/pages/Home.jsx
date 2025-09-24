@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
+import { useTheme } from "../context/ThemeContext";
 import { gsap } from "gsap";
 import GeminiClicks from "../components/GeminiClicks";
 import Sections from "../components/ActionSection";
@@ -99,6 +100,7 @@ const itemVariants = {
 };
 
 export default function Home() {
+  const { theme } = useTheme();
   const logoRef = useRef(null);
   const particlesRef = useRef([]);
 
@@ -138,7 +140,13 @@ export default function Home() {
     });
   }, []);
   return (
-    <main className="px-6 py-20 sm:py-32 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white overflow-hidden relative">
+    <main
+      className={`px-6 py-20 sm:py-32 overflow-hidden relative transition-colors duration-500
+        ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+          ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
+          : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+      `}
+    >
       {/* Enhanced background with floating particles */}
       <div className="absolute inset-0 z-0 opacity-15 will-change-transform">
         {/* Floating particles - reduced blur, optimized shadow */}
@@ -184,7 +192,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="max-w-6xl mx-auto text-center flex flex-col items-center gap-16 relative z-10">
+  <div className="max-w-6xl mx-auto text-center flex flex-col items-center gap-16 relative z-10">
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -256,24 +264,31 @@ export default function Home() {
             />
           </motion.div>
           <motion.h1
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold font-space-grotesk tracking-wide leading-tight"
-            style={{ 
-              background: "linear-gradient(45deg, #4285F4, #F4B400, #0F9D58, #DB4437)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              color: "transparent",
-              textShadow: "0 0 30px rgba(255, 255, 255, 0.5)",
-              backgroundSize: "300% 300%"
-            }}
-            animate={{
-              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-            }}
+            className={`text-5xl sm:text-6xl lg:text-7xl font-bold font-space-grotesk tracking-wide leading-tight ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "" : "text-black"}`}
+            style={theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ? {
+                  background: "linear-gradient(45deg, #4285F4, #F4B400, #0F9D58, #DB4437)",
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  color: "transparent",
+                  textShadow: "0 0 30px rgba(255, 255, 255, 0.5)",
+                  backgroundSize: "300% 300%"
+                }
+              : {
+                  color: "#222",
+                  textShadow: "0 0 10px #fff"
+                }
+            }
+            animate={theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ? { backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }
+              : {}
+            }
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
             Google Gemini Student Community
           </motion.h1>
           <motion.p
-            className="max-w-2xl text-base sm:text-lg text-white/80 leading-relaxed font-inter"
+            className={`max-w-2xl text-base sm:text-lg leading-relaxed font-inter ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/80" : "text-black/80"}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.8 }}
@@ -292,7 +307,11 @@ export default function Home() {
           className="w-full max-w-5xl mx-auto"
         >
           <motion.div
-            className="glass-morphism rounded-3xl shadow-2xl p-8 sm:p-12 flex flex-col sm:flex-row items-center gap-10 hover:shadow-[0_0_50px_rgba(66,133,244,0.3)] transition-all duration-500 border border-white/20"
+            className={`glass-morphism rounded-3xl shadow-2xl p-8 sm:p-12 flex flex-col sm:flex-row items-center gap-10 hover:shadow-[0_0_50px_rgba(66,133,244,0.3)] transition-all duration-500 border
+              ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "border-white/20"
+                : "border-gray-300 bg-white/60 backdrop-blur-xl"}
+            `}
             whileHover={{ 
               y: -5,
               transition: { type: "spring", stiffness: 300 }
@@ -326,12 +345,12 @@ export default function Home() {
             {/* Text */}
             <div className="text-center sm:text-left">
               <motion.h2
-                className="text-2xl font-bold mb-3 text-[#F4B400]"
-                style={{ textShadow: "0 0 10px rgba(244, 180, 0, 0.7)" }}
+                className={`text-2xl font-bold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-[#F4B400]" : "text-[#4285F4]"}`}
+                style={{ textShadow: theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "0 0 10px rgba(244, 180, 0, 0.7)" : "0 0 10px rgba(66,133,244,0.2)" }}
               >
                 About Us
               </motion.h2>
-              <p className="text-sm sm:text-base text-white/70 leading-relaxed">
+              <p className={`text-sm sm:text-base leading-relaxed ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/80"}`}>
                 GGSC is a vibrant community of tech enthusiasts, designers, and
                 dreamers. We explore the power of Google Gemini and AI to build
                 meaningful experiences, foster leadership, and spark innovation

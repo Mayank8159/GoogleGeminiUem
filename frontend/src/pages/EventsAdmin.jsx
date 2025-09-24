@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function EventAdmin() {
+  const { theme } = useTheme();
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -35,7 +37,11 @@ export default function EventAdmin() {
   };
 
   return (
-    <main className="px-4 pt-32 sm:pt-32 pb-16 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] min-h-screen text-white overflow-x-hidden relative">
+    <main className={`px-4 pt-32 sm:pt-32 pb-16 min-h-screen overflow-x-hidden relative transition-colors duration-500
+      ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
+        : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+    `}>
       {/* Background glow */}
       <div className="absolute inset-0 z-0 opacity-10">
         <div className="absolute h-64 w-64 sm:h-80 sm:w-80 rounded-full bg-pink-500 blur-3xl -top-20 -left-20" />
@@ -43,10 +49,18 @@ export default function EventAdmin() {
       </div>
 
       <div className="max-w-lg w-full mx-auto relative z-10">
-        <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 sm:p-8 border border-white/10 shadow-xl">
+        <div className={`backdrop-blur-md rounded-2xl p-5 sm:p-8 shadow-xl
+          ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ? "bg-white/5 border border-white/10"
+            : "bg-white/80 border border-gray-300"}
+        `}>
           <h2
-            className="text-xl sm:text-3xl font-bold text-center text-indigo-300 mb-6"
-            style={{ textShadow: "0 0 12px rgba(99,102,241,0.7)" }}
+            className={`text-xl sm:text-3xl font-bold text-center mb-6
+              ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "text-indigo-300"
+                : "text-indigo-700"}
+            `}
+            style={{ textShadow: theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "0 0 12px rgba(99,102,241,0.7)" : "none" }}
           >
             Create New Event
           </h2>

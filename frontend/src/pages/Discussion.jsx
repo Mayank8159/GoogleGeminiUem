@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useTheme } from '../context/ThemeContext';
 import socket from '../socket';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
@@ -7,6 +8,7 @@ import { gsap } from 'gsap';
 import { useMessages } from '../MessagesContext';
 
 export default function Discussion() {
+  const { theme } = useTheme();
   const [newMessage, setNewMessage] = useState('');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -55,7 +57,11 @@ export default function Discussion() {
   const googleColors = ['#4285F4', '#DB4437', '#F4B400', '#0F9D58'];
 
   return (
-  <main className="flex flex-col h-screen pt-24 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white font-inter">
+    <main className={`flex flex-col h-screen pt-24 font-inter transition-colors duration-500
+      ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
+        : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+    `}>
       
       <motion.header
         initial={{ opacity: 0, y: -16 }}
@@ -78,7 +84,7 @@ export default function Discussion() {
             Gemini Discussion Board
           </h1>
         </div>
-        <p className="text-white/70 text-xs sm:text-sm text-center mt-1">
+  <p className={`text-xs sm:text-sm text-center mt-1 pl-13 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}>
           Real-time thoughts from cosmic minds ✨
         </p>
       </motion.header>
@@ -127,7 +133,7 @@ export default function Discussion() {
                     })}
                   </span>
                 </div>
-                <p className="text-white/90 text-base font-inter break-words">
+                <p className={`text-base font-inter break-words ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/90" : "text-black/90"}`}>
                   {msg.content}
                 </p>
               </div>
@@ -149,13 +155,14 @@ export default function Discussion() {
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type your message..."
-          className="flex-1 bg-transparent text-white placeholder-white/50 outline-none font-inter text-base"
+          className={`flex-1 bg-transparent outline-none font-inter text-base ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white placeholder-white/50" : "text-black placeholder-black/50"}`}
         />
         <motion.button
           onClick={handleSend}
           whileHover={{ scale: 1.08, backgroundColor: '#4285F4', color: '#fff' }}
           whileTap={{ scale: 0.97 }}
-          className="px-4 py-2 rounded-full font-semibold transition flex items-center gap-1 bg-gradient-to-r from-[#0F9D58] to-[#F4B400] text-white shadow-lg"
+          className={`px-4 py-2 rounded-full font-semibold transition flex items-center gap-1 bg-gradient-to-r from-[#0F9D58] to-[#F4B400] shadow-lg
+            ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
         >
           Send <ArrowUpRight size={18} />
         </motion.button>
@@ -171,7 +178,7 @@ export default function Discussion() {
             className="bg-gradient-to-br from-[#4285F4] via-[#F4B400] to-[#0F9D58] text-white rounded-2xl shadow-2xl border border-white/10 p-6 w-[90%] sm:w-[400px]"
           >
             <h2 className="text-lg font-semibold mb-2">Login Required</h2>
-            <p className="text-sm text-white/80 mb-4">
+            <p className={`text-sm mb-4 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/80" : "text-black/80"}`}>
               You need to be logged in to send messages on the Gemini Discussion Board.
             </p>
             <div className="flex justify-end gap-3">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTheme } from "../context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { io } from "socket.io-client";
@@ -20,6 +21,7 @@ const socket = io("https://googlegeminiuem.onrender.com");
 
 const EventCard = ({ event, index }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { theme } = useTheme();
   
   const cardVariants = {
     hidden: { opacity: 0, y: 50, scale: 0.9 },
@@ -55,9 +57,13 @@ const EventCard = ({ event, index }) => {
       onClick={() => setIsExpanded(!isExpanded)}
     >
       <motion.div
-        className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 shadow-lg h-full relative overflow-hidden"
+        className={`backdrop-blur-md rounded-xl p-6 shadow-lg h-full relative overflow-hidden
+          ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ? "bg-white/10 border border-white/20"
+            : "bg-white/80 border border-gray-300"}
+        `}
         animate={{ 
-          borderColor: isExpanded ? accentColor : "rgba(255,255,255,0.2)",
+          borderColor: isExpanded ? accentColor : theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)",
           boxShadow: isExpanded 
             ? `0 0 30px ${accentColor}40` 
             : "0 0 0 rgba(0,0,0,0.1)"
@@ -88,15 +94,15 @@ const EventCard = ({ event, index }) => {
 
         <div className="relative z-10">
           <motion.h3 
-            className="text-xl font-semibold text-white mb-3"
-            animate={{ color: isExpanded ? accentColor : "white" }}
+            className={`text-xl font-semibold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
+            animate={{ color: isExpanded ? accentColor : theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "white" : "black" }}
             transition={{ duration: 0.3 }}
           >
             {event.title}
           </motion.h3>
           
           <motion.p 
-            className="text-sm text-white/80 mb-4 leading-relaxed"
+            className={`text-sm mb-4 leading-relaxed ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/80" : "text-black/80"}`}
             animate={{ opacity: isExpanded ? 1 : 0.8 }}
           >
             {event.description}
@@ -104,7 +110,7 @@ const EventCard = ({ event, index }) => {
 
           <div className="space-y-2">
             <motion.div 
-              className="flex items-center gap-2 text-xs text-white/60"
+              className={`flex items-center gap-2 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}
               whileHover={{ x: 5 }}
             >
               <Clock className="h-4 w-4" />
@@ -120,14 +126,14 @@ const EventCard = ({ event, index }) => {
                   className="space-y-2 pt-2 border-t border-white/10"
                 >
                   <motion.div 
-                    className="flex items-center gap-2 text-xs text-white/60"
+                    className={`flex items-center gap-2 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}
                     whileHover={{ x: 5 }}
                   >
                     <MapPin className="h-4 w-4" />
                     <span>UEM Kolkata Campus</span>
                   </motion.div>
                   <motion.div 
-                    className="flex items-center gap-2 text-xs text-white/60"
+                    className={`flex items-center gap-2 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}
                     whileHover={{ x: 5 }}
                   >
                     <Users className="h-4 w-4" />
@@ -139,7 +145,7 @@ const EventCard = ({ event, index }) => {
           </div>
 
           <motion.div 
-            className="mt-4 text-xs text-white/50"
+            className={`mt-4 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/50" : "text-black/50"}`}
             animate={{ opacity: isExpanded ? 0.5 : 1 }}
           >
             {isExpanded ? "Click to collapse" : "Click for details"}
@@ -151,6 +157,7 @@ const EventCard = ({ event, index }) => {
 };
 
 export default function Events() {
+  const { theme } = useTheme();
   const [upcoming, setUpcoming] = useState([]);
   const [completed, setCompleted] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -180,7 +187,11 @@ export default function Events() {
 
   if (loading) {
     return (
-      <main className="px-4 pt-36 pb-20 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white min-h-screen flex items-center justify-center">
+      <main className={`px-4 pt-36 pb-20 min-h-screen flex items-center justify-center transition-colors duration-500
+        ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+          ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
+          : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+      `}>
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -207,7 +218,11 @@ export default function Events() {
   }
 
   return (
-    <main className="px-4 pt-36 pb-20 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white min-h-screen overflow-hidden relative">
+    <main className={`px-4 pt-36 pb-20 min-h-screen overflow-hidden relative transition-colors duration-500
+      ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
+        : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+    `}>
       {/* Enhanced Glowing background orbs */}
       <div className="absolute inset-0 z-0 opacity-20">
         <motion.div
@@ -270,7 +285,11 @@ export default function Events() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, type: "spring" }}
-          className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-2xl relative overflow-hidden"
+          className={`backdrop-blur-md rounded-2xl p-8 shadow-2xl relative overflow-hidden
+            ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ? "bg-white/5 border border-white/10"
+              : "bg-white/80 border border-gray-300"}
+          `}
         >
           {/* Section background animation */}
           <motion.div
@@ -314,7 +333,7 @@ export default function Events() {
                     Upcoming Events
                   </motion.h2>
                   <motion.p 
-                    className="text-white/70 mt-2"
+                    className={`mt-2 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.6 }}
@@ -354,7 +373,7 @@ export default function Events() {
                   >
                     <Calendar className="h-16 w-16 text-white/30 mx-auto mb-4" />
                   </motion.div>
-                  <p className="text-white/60 text-lg">No upcoming events yet. Stay tuned!</p>
+                  <p className={`text-lg ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}>No upcoming events yet. Stay tuned!</p>
                 </motion.div>
               )}
             </motion.div>
@@ -366,7 +385,11 @@ export default function Events() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, type: "spring", delay: 0.2 }}
-          className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-2xl relative overflow-hidden"
+          className={`backdrop-blur-md rounded-2xl p-8 shadow-2xl relative overflow-hidden
+            ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ? "bg-white/5 border border-white/10"
+              : "bg-white/80 border border-gray-300"}
+          `}
         >
           {/* Section background animation */}
           <motion.div
@@ -410,7 +433,7 @@ export default function Events() {
                     Completed Events
                   </motion.h2>
                   <motion.p 
-                    className="text-white/70 mt-2"
+                    className={`mt-2 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8 }}
@@ -451,7 +474,7 @@ export default function Events() {
                   >
                     <CheckCircle className="h-16 w-16 text-white/30 mx-auto mb-4" />
                   </motion.div>
-                  <p className="text-white/60 text-lg">No completed events yet. Exciting things coming soon!</p>
+                  <p className={`text-lg ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}>No completed events yet. Exciting things coming soon!</p>
                 </motion.div>
               )}
             </motion.div>

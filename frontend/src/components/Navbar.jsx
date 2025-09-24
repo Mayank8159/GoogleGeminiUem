@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
 const navLinks = [
   { name: "Home", href: "/", icon: Home, color: "#4285F4" },
@@ -28,6 +29,7 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { theme } = useTheme();
 
   // Sync user state on route change
   useEffect(() => {
@@ -53,10 +55,14 @@ export default function Navbar() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 bg-gradient-to-br from-[#1A1A1A]/80 to-[#2A2A2A]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_25px_rgba(255,255,255,0.2)] px-6 py-4 text-white"
+      className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 backdrop-blur-xl border rounded-2xl px-6 py-4 transition-colors duration-500 ${
+        theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+          ? "bg-gradient-to-br from-[#1A1A1A]/80 to-[#2A2A2A]/80 border-white/10 shadow-[0_0_25px_rgba(255,255,255,0.2)] text-white"
+          : "bg-gradient-to-br from-white/80 to-gray-100/80 border-gray-300 shadow-[0_0_25px_rgba(0,0,0,0.1)] text-gray-800"
+      }`}
     >
       {/* Top Row */}
-      <div className="flex items-center justify-between">
+  <div className="flex items-center justify-between">
         {/* Logo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -91,14 +97,21 @@ export default function Navbar() {
             <motion.div
               key={name}
               variants={linkVariants}
-              animate={location.pathname === href ? { color } : {}}
               whileHover={{
                 scale: 1.1,
                 textShadow: `0 0 8px ${color}`,
                 color,
               }}
             >
-              <Link to={href} className="flex items-center gap-1 transition">
+              <Link 
+                to={href} 
+                className={`flex items-center gap-1 transition ${
+                  theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                    ? "text-white"
+                    : "text-gray-800"
+                }`}
+                style={location.pathname === href ? { color } : {}}
+              >
                 <Icon className="h-4 w-4" />
                 {name}
               </Link>
@@ -121,7 +134,11 @@ export default function Navbar() {
                   backgroundColor: "#DB4437",
                   boxShadow: "0 0 10px #DB4437",
                 }}
-                className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg transition"
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+                  theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                    ? "bg-white/10"
+                    : "bg-gray-200/80"
+                }`}
               >
                 <LogOut size={16} />
                 Logout
@@ -154,19 +171,31 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="mt-4 flex flex-col gap-4 sm:hidden text-sm font-medium"
+            className={`mt-4 flex flex-col gap-4 sm:hidden text-sm font-medium ${
+              theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "text-white"
+                : "text-gray-800"
+            }`}
           >
             {navLinks.map(({ name, href, icon: Icon, color }) => (
               <motion.div
                 key={name}
-                animate={location.pathname === href ? { color } : {}}
                 whileHover={{
                   scale: 1.05,
                   textShadow: `0 0 10px ${color}`,
                   color,
                 }}
               >
-                <Link to={href} className="flex items-center gap-2 transition">
+                <Link 
+                  to={href} 
+                  className={`flex items-center gap-2 transition ${
+                    theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                      ? "text-white"
+                      : "text-gray-800"
+                  }`}
+                  style={location.pathname === href ? { color } : {}}
+                  onClick={() => setIsOpen(false)}
+                >
                   <Icon className="h-4 w-4" />
                   {name}
                 </Link>
@@ -183,13 +212,20 @@ export default function Navbar() {
                   {userInitial}
                 </motion.div>
                 <motion.button
-                  onClick={handleLogout}
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
                   whileHover={{
                     scale: 1.05,
                     backgroundColor: "#DB4437",
                     boxShadow: "0 0 10px #DB4437",
                   }}
-                  className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg transition"
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+                    theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                      ? "bg-white/10"
+                      : "bg-gray-200/80"
+                  }`}
                 >
                   <LogOut size={16} />
                   Logout
@@ -207,6 +243,7 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   className="bg-[#F4B400] text-black px-4 py-2 rounded-lg font-semibold transition block"
+                  onClick={() => setIsOpen(false)}
                 >
                   Get Started
                 </Link>

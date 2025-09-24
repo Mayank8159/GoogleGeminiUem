@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTheme } from "../context/ThemeContext";
 
 // Inline Icon component with glow
 const Icon = ({ name, color = "currentColor", size = 24, strokeWidth = 2, glow = true }) => {
@@ -36,8 +37,13 @@ const Icon = ({ name, color = "currentColor", size = 24, strokeWidth = 2, glow =
 };
 
 export default function NotFound() {
+  const { theme } = useTheme();
   return (
-    <main className="px-6 py-20 sm:py-32 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white overflow-hidden relative h-screen flex items-center justify-center">
+    <main className={`px-6 py-20 sm:py-32 overflow-hidden relative h-screen flex items-center justify-center transition-colors duration-500
+      ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
+        : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+    `}>
       {/* Background Glow */}
       <div className="absolute inset-0 z-0 opacity-10">
         <motion.div
@@ -70,10 +76,13 @@ export default function NotFound() {
           </div>
         </motion.div>
 
-        <h1 className="text-4xl sm:text-5xl font-bold font-outfit mb-4" style={{ textShadow: "0 0 15px rgba(255,255,255,0.8)" }}>
+        <h1 className={`text-4xl sm:text-5xl font-bold font-outfit mb-4
+          ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
+          style={{ textShadow: theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "0 0 15px rgba(255,255,255,0.8)" : "none" }}
+        >
           404: Lost in the Cosmos
         </h1>
-        <p className="text-white/70 text-sm sm:text-base mb-6">
+        <p className={`text-sm sm:text-base mb-6 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}>
           The page you're looking for isn't here. Maybe it drifted into a black hole or never existed at all.
         </p>
 

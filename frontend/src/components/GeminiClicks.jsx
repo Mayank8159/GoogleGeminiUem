@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { useTheme } from '../context/ThemeContext';
 
 const links = [
   { id: 1, url: 'https://aiskillshouse.com/student/qr-mediator.html?uid=7295&promptId=17', color: '#4285F4' },
@@ -36,6 +37,7 @@ const cardVariants = {
 };
 
 export default function GeminiClicks() {
+  const { theme } = useTheme();
   const cardsRef = useRef([]);
   const headerRef = useRef(null);
 
@@ -110,7 +112,11 @@ export default function GeminiClicks() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="text-white/80 text-base sm:text-lg font-inter"
+          className={`text-base sm:text-lg font-inter ${
+            theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ? "text-white/80"
+              : "text-black/80"
+          }`}
         >
           Help us reach 10,000 clicks — every tap fuels the mission ✨
         </motion.p>
@@ -135,7 +141,11 @@ export default function GeminiClicks() {
               transition: { type: "spring", stiffness: 400, damping: 25 }
             }}
             whileTap={{ scale: 0.95 }}
-            className="glass-morphism rounded-2xl p-6 shadow-2xl border border-white/20 relative overflow-hidden group cursor-pointer"
+            className={`glass-morphism rounded-2xl p-6 shadow-2xl relative overflow-hidden group cursor-pointer ${
+              theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "border border-white/20"
+                : "border border-gray-300"
+            }`}
             style={{
               background: `linear-gradient(135deg, ${link.color}08, ${link.color}03)`,
             }}
@@ -159,7 +169,11 @@ export default function GeminiClicks() {
                 >
                   {link.id}
                 </motion.div>
-                <h3 className="text-lg font-semibold text-white font-space-grotesk">
+                <h3 className={`text-lg font-semibold font-space-grotesk ${
+                  theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                    ? "text-white"
+                    : "text-black"
+                }`}>
                   Link #{link.id}
                 </h3>
               </div>
@@ -218,7 +232,11 @@ export default function GeminiClicks() {
         transition={{ delay: 0.6, duration: 0.8 }}
         className="mt-12 text-center"
       >
-        <div className="inline-flex items-center gap-4 px-6 py-3 glass-morphism rounded-full border border-white/20">
+        <div className={`inline-flex items-center gap-4 px-6 py-3 glass-morphism rounded-full ${
+          theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ? "border border-white/20"
+            : "border border-gray-300"
+        }`}>
           <motion.span
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
@@ -226,7 +244,11 @@ export default function GeminiClicks() {
           >
             🎯
           </motion.span>
-          <span className="text-white/80 font-inter">
+          <span className={`font-inter ${
+            theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ? "text-white/80"
+              : "text-black/80"
+          }`}>
             Goal: <span className="font-bold text-[#F4B400]">10,000 clicks</span>
           </span>
         </div>

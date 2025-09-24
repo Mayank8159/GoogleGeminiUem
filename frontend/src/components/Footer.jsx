@@ -1,10 +1,11 @@
 import { Linkedin, Instagram, MessageCircle, Home, CalendarDays, Users, MessageSquare, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import ThemeToggle from './ThemeToggle';
 
 export default function Footer() {
   return (
-    <footer className="mt-20 px-4 py-8 bg-gradient-to-br from-[#1A1A1A]/90 to-[#2A2A2A]/90 backdrop-blur-xl border-t border-white/10 text-white">
+    <footer className="mt-20 px-4 py-8 pb-16 md:pb-8 bg-gradient-to-br from-[#1A1A1A]/90 to-[#2A2A2A]/90 backdrop-blur-xl border-t border-white/10 text-white relative">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
         
         {/* Left: Logos + Title */}
@@ -88,7 +89,7 @@ export default function Footer() {
           </div>
 
           {/* Social Icons */}
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <motion.a
               href="https://www.linkedin.com/in/google-gemini-student-community-uemk-119733385/"
               target="_blank"
@@ -96,7 +97,7 @@ export default function Footer() {
               className="hover:text-[#4285F4] hover:drop-shadow-[0_0_4px_#4285F4] transition"
               whileHover={{ scale: 1.1 }}
             >
-              <Linkedin className="h-4 w-4" />
+              <Linkedin className="h-5 w-5" />
             </motion.a>
             <motion.a
               href="https://www.instagram.com/ggsc_officialuemk?igsh=eGpvMXdqejk2NXk4"
@@ -105,7 +106,7 @@ export default function Footer() {
               className="hover:text-[#DB4437] hover:drop-shadow-[0_0_4px_#DB4437] transition"
               whileHover={{ scale: 1.1 }}
             >
-              <Instagram className="h-4 w-4" />
+              <Instagram className="h-5 w-5" />
             </motion.a>
             <motion.a
               href="https://www.whatsapp.com/channel/0029Vb6OWFpB4hdTD7YMU029"
@@ -114,10 +115,15 @@ export default function Footer() {
               className="hover:text-[#25D366] hover:drop-shadow-[0_0_4px_#25D366] transition"
               whileHover={{ scale: 1.1 }}
             >
-              <MessageCircle className="h-4 w-4" />
+              <MessageCircle className="h-5 w-5" />
             </motion.a>
           </div>
         </div>
+      </div>
+
+      {/* Theme Toggle - Bottom Right */}
+      <div className="absolute bottom-6 right-4 md:bottom-6 md:right-6">
+        <ThemeToggle />
       </div>
 
       {/* Bottom: Copyright */}
