@@ -103,6 +103,9 @@ export default function Home() {
   const particlesRef = useRef([]);
 
   useEffect(() => {
+    // Always scroll to top on mount
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
     // GSAP animations for logo floating
     if (logoRef.current) {
       gsap.to(logoRef.current, {
@@ -140,16 +143,18 @@ export default function Home() {
             <div
               key={i}
               ref={el => particlesRef.current[i] = el}
-              className="absolute w-1 h-1 rounded-full"
+              className="absolute w-3 h-3 rounded-full"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 backgroundColor: [
-                  '#4285F4', '#F4B400', '#0F9D58', '#DB4437'
+                  '#4286f4a3', '#f4b3008b', '#0f9d5890', '#db45378b'
                 ][i % 4],
-                boxShadow: `0 0 10px ${[
-                  '#4285F4', '#F4B400', '#0F9D58', '#DB4437'
-                ][i % 4]}60`
+                opacity: 0.45,
+                boxShadow: `0 0 32px ${[
+                  '#4286f4a3', '#f4b3008b', '#0f9d5890', '#db45378b'
+                ][i % 4]}80`,
+                filter: 'blur(1600px)'
               }}
             />
           ))}
@@ -158,19 +163,19 @@ export default function Home() {
           animate={{
             scale: [1, 1.3, 1],
             rotate: [0, 360],
-            opacity: [0.1, 0.3, 0.1],
+            opacity: [0.12, 0.32, 0.12],
           }}
-          transition={{ duration: 25, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-80 w-80 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 blur-3xl -top-20 -left-20"
+          transition={{ duration: 45, repeat: Infinity, repeatType: "reverse" }}
+          className="absolute h-80 w-80 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 blur-[120px] -top-20 -left-20"
         />
         <motion.div
           animate={{
             scale: [1.2, 1, 1.2],
             rotate: [0, -360],
-            opacity: [0.1, 0.25, 0.1],
+            opacity: [0.12, 0.28, 0.12],
           }}
-          transition={{ duration: 30, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-96 w-96 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 blur-3xl -bottom-20 -right-20"
+          transition={{ duration: 55, repeat: Infinity, repeatType: "reverse" }}
+          className="absolute h-96 w-96 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 blur-[100px] -bottom-20 -right-20"
         />
       </div>
 
@@ -188,37 +193,59 @@ export default function Home() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 120, delay: 0.4 }}
             className="relative mt-6"
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.07 }}
           >
-            {/* Enhanced glow effects */}
+            {/* 4 floating particles orbiting the logo in a circle, Google colors, animated intensity */}
+            {[0, 1, 2, 3].map(i => (
+              <motion.div
+                key={i}
+                animate={{
+                  opacity: [0, 1, 0],
+                  x: [0, Math.cos((i/4)*2*Math.PI)*48, 0],
+                  y: [0, Math.sin((i/4)*2*Math.PI)*48, 0],
+                  scale: [1, 1.25, 1]
+                }}
+                transition={{ duration: 3.5, repeat: Infinity, delay: i*0.5, ease: "easeInOut" }}
+                className="absolute"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  width: '14px',
+                  height: '14px',
+                  marginLeft: '-7px',
+                  marginTop: '-7px',
+                  borderRadius: '50%',
+                  background: ["#4285F4", "#F4B400", "#0F9D58", "#DB4437"][i],
+                  boxShadow: `0 0 24px ${["#4285F4", "#F4B400", "#0F9D58", "#DB4437"][i]}80`,
+                  filter: 'blur(8px)'
+                }}
+              />
+            ))}
+            {/* Dynamic gradient border behind logo */}
             <motion.div
               animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.6, 0.3],
+                scale: [1, 1.12, 1],
+                opacity: [0.18, 0.32, 0.18],
               }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4285F4]/40 to-[#F4B400]/40 blur-2xl scale-150"
-            />
-            <motion.div
-              animate={{
-                scale: [1.1, 1, 1.1],
-                opacity: [0.2, 0.4, 0.2],
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: "conic-gradient(from 0deg, #4285F4, #F4B400, #0F9D58, #DB4437, #4285F4)",
+                filter: "blur(18px)",
+                opacity: 0.22
               }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="absolute inset-0 rounded-full bg-gradient-to-r from-[#0F9D58]/30 to-[#DB4437]/30 blur-xl scale-125"
             />
-            
-            <div className="absolute inset-0 rounded-full bg-[#4285F4]/30 blur-2xl scale-125" />
+            {/* Main logo */}
             <motion.img
               src="/main.png"
               alt="Gemini Logo"
               className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-xl z-10 shadow-2xl ring-2 ring-white/20"
               whileHover={{ 
-                scale: 1.1, 
+                scale: 1.12,
                 rotate: [0, -5, 5, 0],
                 transition: { duration: 0.6, ease: "easeInOut" }
               }}
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.97 }}
             />
           </motion.div>
           <motion.h1
