@@ -171,7 +171,7 @@ export default function Loader() {
                   <img
                     src="/main.png"
                     alt="Gemini Logo"
-                    className="w-full h-full object-contain rounded-xl shadow-2xl ring-2 ring-white/20"
+                    className="w-full h-full object-contain rounded-xl shadow-2xl ring-white/20"
                   />
                 </div>
               </div>
