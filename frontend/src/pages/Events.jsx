@@ -305,7 +305,7 @@ export default function Events() {
                 </motion.div>
                 <div>
                   <motion.h2
-                    className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent tracking-wide"
+                    className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent tracking-wide leading-tight"
                     animate={{ 
                       backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                     }}
@@ -401,7 +401,7 @@ export default function Events() {
                 </motion.div>
                 <div>
                   <motion.h2
-                    className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-green-400 to-teal-300 bg-clip-text text-transparent tracking-wide"
+                    className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-green-400 to-teal-300 bg-clip-text text-transparent tracking-wide leading-tight"
                     animate={{ 
                       backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                     }}

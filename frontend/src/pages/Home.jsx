@@ -222,7 +222,7 @@ export default function Home() {
             />
           </motion.div>
           <motion.h1
-            className="text-4xl sm:text-5xl font-bold font-space-grotesk tracking-wide"
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold font-space-grotesk tracking-wide leading-tight"
             style={{ 
               background: "linear-gradient(45deg, #4285F4, #F4B400, #0F9D58, #DB4437)",
               backgroundClip: "text",
