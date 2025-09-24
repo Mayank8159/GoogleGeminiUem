@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 import GeminiClicks from "../components/GeminiClicks";
 import Sections from "../components/ActionSection";
 
@@ -97,27 +99,78 @@ const itemVariants = {
 };
 
 export default function Home() {
+  const logoRef = useRef(null);
+  const particlesRef = useRef([]);
+
+  useEffect(() => {
+    // GSAP animations for logo floating
+    if (logoRef.current) {
+      gsap.to(logoRef.current, {
+        y: -8,
+        duration: 2,
+        ease: "power2.inOut",
+        yoyo: true,
+        repeat: -1
+      });
+    }
+
+    // Animate particles
+    particlesRef.current.forEach((particle, index) => {
+      if (particle) {
+        gsap.to(particle, {
+          y: -100,
+          x: Math.sin(index) * 50,
+          opacity: 0.8,
+          duration: 3 + Math.random() * 2,
+          delay: Math.random() * 2,
+          repeat: -1,
+          yoyo: true,
+          ease: "power2.inOut"
+        });
+      }
+    });
+  }, []);
   return (
     <main className="px-6 py-20 sm:py-32 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white overflow-hidden relative">
-      {/* Background glowing effect */}
-      <div className="absolute inset-0 z-0 opacity-10">
+      {/* Enhanced background with floating particles */}
+      <div className="absolute inset-0 z-0 opacity-15">
+        {/* Floating particles */}
+        <div className="absolute inset-0">
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              ref={el => particlesRef.current[i] = el}
+              className="absolute w-1 h-1 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                backgroundColor: [
+                  '#4285F4', '#F4B400', '#0F9D58', '#DB4437'
+                ][i % 4],
+                boxShadow: `0 0 10px ${[
+                  '#4285F4', '#F4B400', '#0F9D58', '#DB4437'
+                ][i % 4]}60`
+              }}
+            />
+          ))}
+        </div>
         <motion.div
           animate={{
-            scale: [1, 1.2, 1],
+            scale: [1, 1.3, 1],
             rotate: [0, 360],
             opacity: [0.1, 0.3, 0.1],
           }}
-          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-80 w-80 rounded-full bg-blue-500 blur-3xl -top-20 -left-20"
+          transition={{ duration: 25, repeat: Infinity, repeatType: "reverse" }}
+          className="absolute h-80 w-80 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 blur-3xl -top-20 -left-20"
         />
         <motion.div
           animate={{
-            scale: [1, 1.1, 1],
+            scale: [1.2, 1, 1.2],
             rotate: [0, -360],
-            opacity: [0.1, 0.3, 0.1],
+            opacity: [0.1, 0.25, 0.1],
           }}
-          transition={{ duration: 25, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-96 w-96 rounded-full bg-indigo-500 blur-3xl -bottom-20 -right-20"
+          transition={{ duration: 30, repeat: Infinity, repeatType: "reverse" }}
+          className="absolute h-96 w-96 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 blur-3xl -bottom-20 -right-20"
         />
       </div>
 
@@ -130,30 +183,70 @@ export default function Home() {
           className="flex flex-col items-center gap-8"
         >
           <motion.div
+            ref={logoRef}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 120, delay: 0.4 }}
             className="relative mt-6"
+            whileHover={{ scale: 1.05 }}
           >
+            {/* Enhanced glow effects */}
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4285F4]/40 to-[#F4B400]/40 blur-2xl scale-150"
+            />
+            <motion.div
+              animate={{
+                scale: [1.1, 1, 1.1],
+                opacity: [0.2, 0.4, 0.2],
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              className="absolute inset-0 rounded-full bg-gradient-to-r from-[#0F9D58]/30 to-[#DB4437]/30 blur-xl scale-125"
+            />
+            
             <div className="absolute inset-0 rounded-full bg-[#4285F4]/30 blur-2xl scale-125" />
             <motion.img
               src="/main.png"
               alt="Gemini Logo"
-              className="relative h-24 w-24 sm:h-28 sm:w-28 rounded-xl z-10 shadow-xl"
-              whileHover={{ scale: 1.1, rotate: 10 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-xl z-10 shadow-2xl ring-2 ring-white/20"
+              whileHover={{ 
+                scale: 1.1, 
+                rotate: [0, -5, 5, 0],
+                transition: { duration: 0.6, ease: "easeInOut" }
+              }}
+              whileTap={{ scale: 0.95 }}
             />
           </motion.div>
-          <h1
-            className="text-3xl sm:text-4xl font-bold font-outfit tracking-wide"
-            style={{ textShadow: "0 0 15px rgba(255, 255, 255, 0.8)" }}
+          <motion.h1
+            className="text-4xl sm:text-5xl font-bold font-space-grotesk tracking-wide"
+            style={{ 
+              background: "linear-gradient(45deg, #4285F4, #F4B400, #0F9D58, #DB4437)",
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              color: "transparent",
+              textShadow: "0 0 30px rgba(255, 255, 255, 0.5)",
+              backgroundSize: "300% 300%"
+            }}
+            animate={{
+              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
             Google Gemini Student Community
-          </h1>
-          <p className="max-w-xl text-sm sm:text-base text-white/70">
+          </motion.h1>
+          <motion.p
+            className="max-w-2xl text-base sm:text-lg text-white/80 leading-relaxed font-inter"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+          >
             A student-led initiative at UEM Kolkata, empowering learners through
             innovation, collaboration, and cosmic curiosity.
-          </p>
+          </motion.p>
         </motion.div>
 
         {/* About Section */}
@@ -164,16 +257,36 @@ export default function Home() {
           viewport={{ once: true }}
           className="w-full max-w-5xl mx-auto"
         >
-          <div className="bg-white/5 border border-white/10 rounded-2xl shadow-lg p-8 sm:p-12 backdrop-blur-md flex flex-col sm:flex-row items-center gap-8 hover:shadow-2xl transition">
+          <motion.div
+            className="glass-morphism rounded-3xl shadow-2xl p-8 sm:p-12 flex flex-col sm:flex-row items-center gap-10 hover:shadow-[0_0_50px_rgba(66,133,244,0.3)] transition-all duration-500 border border-white/20"
+            whileHover={{ 
+              y: -5,
+              transition: { type: "spring", stiffness: 300 }
+            }}
+          >
             {/* Icon / Illustration */}
             <motion.div
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              transition={{ type: "spring", stiffness: 200 }}
+              whileHover={{ 
+                scale: 1.1, 
+                rotate: [0, -10, 10, 0],
+                transition: { duration: 0.5 }
+              }}
               className="flex-shrink-0"
             >
-              <div className="h-28 w-28 flex items-center justify-center rounded-full bg-gradient-to-br from-[#4285F4] via-[#F4B400] to-[#0F9D58] shadow-lg">
-                <Icon name="info" color="white" size={40} />
-              </div>
+              <motion.div
+                className="h-32 w-32 flex items-center justify-center rounded-full bg-gradient-to-br from-[#4285F4] via-[#F4B400] to-[#0F9D58] shadow-2xl relative overflow-hidden"
+                whileHover={{
+                  boxShadow: "0 0 40px rgba(66, 133, 244, 0.6)",
+                }}
+              >
+                {/* Animated background shimmer */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                />
+                <Icon name="info" color="white" size={48} strokeWidth={2} />
+              </motion.div>
             </motion.div>
 
             {/* Text */}
@@ -195,7 +308,7 @@ export default function Home() {
                 with AI.
               </p>
             </div>
-          </div>
+          </motion.div>
         </motion.section>
 
         {/* Gemini Click Challenge */}
