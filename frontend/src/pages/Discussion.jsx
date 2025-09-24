@@ -1,11 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
-import { io } from 'socket.io-client';
+import socket from '../socket';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
-
-const socket = io('https://googlegeminiuem.onrender.com'); // Update to your deployed backend URL if needed
 
 export default function Discussion() {
   const [messages, setMessages] = useState([]);
@@ -20,6 +18,7 @@ export default function Discussion() {
   const user = JSON.parse(localStorage.getItem('user')) || null;
 
   useEffect(() => {
+    socket.connect(); // Ensure connection is alive
     socket.on('initMessages', (msgs) => setMessages(msgs));
     socket.on('messageBroadcast', (msg) => {
       setMessages(prev => [...prev.slice(-99), msg]);
