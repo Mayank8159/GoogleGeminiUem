@@ -57,8 +57,8 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 backdrop-blur-xl border rounded-2xl px-6 py-4 transition-colors duration-500 ${
         theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-          ? "bg-gradient-to-br from-[#1A1A1A]/20 to-[#2A2A2A]/20 border-white/10 shadow-[0_0_25px_rgba(255,255,255,0.2)] text-white"
-          : "bg-gradient-to-br from-white/20 to-gray-100/20 border-gray-300 shadow-[0_0_25px_rgba(0,0,0,0.1)] text-gray-800"
+          ? "bg-gradient-to-br from-[#1A1A1A]/50 to-[#2A2A2A]/50 border-white/10 shadow-[0_0_25px_rgba(255,255,255,0.2)] text-white"
+          : "bg-gradient-to-br from-white/50 to-gray-100/50 border-gray-300 shadow-[0_0_25px_rgba(0,0,0,0.1)] text-gray-800"
       }`}
     >
       {/* Top Row */}
