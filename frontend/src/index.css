@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Prevent elastic overscroll on mobile */
+html, body {
+  overscroll-behavior: none;
+}
+
 /* Enhanced Google Fonts Configuration */
 @layer base {
   .font-outfit { font-family: 'Outfit', system-ui, -apple-system, sans-serif; }
