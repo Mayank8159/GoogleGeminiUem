@@ -5,7 +5,7 @@ import ThemeToggle from './ThemeToggle';
 
 export default function Footer() {
   return (
-    <footer className="mt-4 px-4 py-8 pb-16 md:pb-8  relative">
+    <footer className="mt-4 px-4 py-8 pb-16 md:pb-8 bg-[#2B3C42] backdrop-blur-xl border-t border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.2)] text-white relative">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
         
         {/* Left: Logos + Title */}
@@ -126,7 +126,6 @@ export default function Footer() {
         <ThemeToggle />
       </div>
 
-      {/* Bottom: Copyright */}
       <div className="mt-6 text-center text-xs text-white/60">
         © {new Date().getFullYear()} Google Gemini Student Community @ UEM Kolkata. All rights reserved.
       </div>
