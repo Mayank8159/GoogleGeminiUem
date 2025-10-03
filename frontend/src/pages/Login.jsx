@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
 export default function Login() {
+  const { theme } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -36,12 +38,20 @@ export default function Login() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white px-4">
+    <main className={`min-h-screen flex items-center justify-center px-4 transition-colors duration-500
+      ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
+        : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+    `}>
       <motion.div
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="w-full max-w-md bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-[0_0_25px_rgba(255,255,255,0.2)]"
+        className={`w-full max-w-md bg-white/5 backdrop-blur-md rounded-2xl p-6 ${
+          theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ? "border border-white/10 shadow-[0_0_25px_rgba(255,255,255,0.2)]"
+            : "border border-black/10 shadow-[0_0_25px_rgba(0,0,0,0.2)]"
+        }`}
       >
         {/* Logo */}
         <motion.div
@@ -58,7 +68,9 @@ export default function Login() {
         </motion.div>
 
         {/* Title */}
-        <h2 className="text-2xl font-bold mb-4 text-center drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
+        <h2 className={`text-2xl font-bold mb-4 text-center
+          ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "drop-shadow-[0_0_8px_rgba(255,255,255,0.6)] text-white" : "text-black"}`}
+        >
           GGSC Login
         </h2>
 
@@ -80,14 +92,22 @@ export default function Login() {
             placeholder="Email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-white/50 outline-none focus:ring-2 focus:ring-[#4285F4]"
+            className={`w-full px-4 py-2 rounded-lg outline-none focus:ring-2 focus:ring-[#4285F4]
+              ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "bg-white/10 text-white placeholder-white/50"
+                : "bg-gray-100/60 text-black placeholder-gray-600"}
+            `}
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-white/50 outline-none focus:ring-2 focus:ring-[#DB4437]"
+            className={`w-full px-4 py-2 rounded-lg outline-none focus:ring-2 focus:ring-[#DB4437]
+              ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "bg-white/10 text-white placeholder-white/50"
+                : "bg-gray-100/60 text-black placeholder-gray-600"}
+            `}
           />
 
           {/* Animated Button */}
@@ -111,7 +131,7 @@ export default function Login() {
         </div>
 
         {/* Register Link */}
-        <p className="text-sm text-white/50 mt-4 text-center">
+  <p className={`text-sm mt-4 text-center ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/50" : "text-black/50"}`}>
           Don’t have an account?{' '}
           <span
             onClick={() => navigate('/register')}

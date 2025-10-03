@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 
 export default function AdminLogin() {
+  const { theme } = useTheme();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -47,7 +49,11 @@ export default function AdminLogin() {
   };
 
   return (
-    <main className="px-4 pt-36 pb-20 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] min-h-screen text-white relative">
+    <main className={`px-4 pt-36 pb-20 min-h-screen relative transition-colors duration-500
+      ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
+        : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+    `}>
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -55,8 +61,12 @@ export default function AdminLogin() {
         className="max-w-md mx-auto bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/10 shadow-xl"
       >
         <h2
-          className="text-2xl sm:text-3xl font-bold text-center text-indigo-300 mb-6"
-          style={{ textShadow: "0 0 12px rgba(99,102,241,0.7)" }}
+          className={`text-2xl sm:text-3xl font-bold text-center mb-6
+            ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ? "text-indigo-300"
+              : "text-indigo-700"}
+          `}
+          style={{ textShadow: theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "0 0 12px rgba(99,102,241,0.7)" : "none" }}
         >
           Admin Login
         </h2>
@@ -68,7 +78,11 @@ export default function AdminLogin() {
             placeholder="Admin Email"
             value={form.email}
             onChange={handleChange}
-            className="w-full p-3 rounded bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className={`w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500
+              ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "bg-white/10 text-white placeholder-gray-400"
+                : "bg-white/80 text-black placeholder-black/50"}
+            `}
           />
           <input
             type="password"
@@ -76,7 +90,11 @@ export default function AdminLogin() {
             placeholder="Password"
             value={form.password}
             onChange={handleChange}
-            className="w-full p-3 rounded bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className={`w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500
+              ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "bg-white/10 text-white placeholder-gray-400"
+                : "bg-white/80 text-black placeholder-black/50"}
+            `}
           />
           <button
             onClick={handleLogin}

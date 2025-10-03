@@ -1,19 +1,23 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Home from './pages/Home';
-import Events from './pages/Events';
-import Team from './pages/Team';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Discussion from './pages/Discussion';
-import NotFound from './pages/Notfound';
-import EventAdmin from './pages/EventsAdmin';
-import AdminLogin from './pages/AdminLogin';
+import { lazy, Suspense } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Loader from './components/Loader';
+import { MessagesProvider } from './MessagesContext';
+import ProtectedRoute from './components/ProtectedRoutes';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
-
-import ProtectedRoute from './components/ProtectedRoutes'; // 👈 Import it
+// Lazy load page components for code splitting
+const Home = lazy(() => import('./pages/Home'));
+const Events = lazy(() => import('./pages/Events'));
+const Team = lazy(() => import('./pages/Team'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Discussion = lazy(() => import('./pages/Discussion'));
+const NotFound = lazy(() => import('./pages/Notfound'));
+const EventAdmin = lazy(() => import('./pages/EventsAdmin'));
+const AdminLogin = lazy(() => import('./pages/AdminLogin'));
 
 function AppContent() {
   const location = useLocation();
@@ -25,24 +29,26 @@ function AppContent() {
       <Loader />
       <Navbar />
       <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/discussion" element={<Discussion />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route
-            path="/admin/events"
-            element={
-              <ProtectedRoute>
-                <EventAdmin />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><Loader /></div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/discussion" element={<Discussion />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route
+              path="/admin/events"
+              element={
+                <ProtectedRoute>
+                  <EventAdmin />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </main>
       {shouldShowFooter && <Footer />}
     </div>
@@ -51,9 +57,13 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <MessagesProvider>
+      <Router>
+        <AppContent />
+      </Router>
+      <Analytics />
+      <SpeedInsights />
+    </MessagesProvider>
   );
 }
 

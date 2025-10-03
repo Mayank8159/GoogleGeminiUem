@@ -1,31 +1,24 @@
-import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
-import { motion } from 'framer-motion';
+import { useEffect, useState, useRef } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import socket from '../socket';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-const socket = io('https://googlegeminiuem.onrender.com'); // Update to your deployed backend URL if needed
+import { gsap } from 'gsap';
+import { useMessages } from '../MessagesContext';
 
 export default function Discussion() {
-  const [messages, setMessages] = useState([]);
+  const { theme } = useTheme();
   const [newMessage, setNewMessage] = useState('');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const messagesRef = useRef([]);
+  const inputRef = useRef(null);
+  const headerRef = useRef(null);
 
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user')) || null;
-
-  useEffect(() => {
-    socket.on('initMessages', (msgs) => setMessages(msgs));
-    socket.on('messageBroadcast', (msg) => {
-      setMessages(prev => [...prev.slice(-99), msg]);
-    });
-
-    return () => {
-      socket.off('initMessages');
-      socket.off('messageBroadcast');
-    };
-  }, []);
+  const { messages } = useMessages();
 
   useEffect(() => {
     const handleViewportChange = () => {
@@ -64,52 +57,86 @@ export default function Discussion() {
   const googleColors = ['#4285F4', '#DB4437', '#F4B400', '#0F9D58'];
 
   return (
-    <main className="flex flex-col h-screen pt-32 bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white">
+    <main className={`flex flex-col h-screen pt-24 font-inter transition-colors duration-500
+      ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
+        : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+    `}>
       
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
+      <motion.header
+        initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center px-4 sm:px-6 mb-4"
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="sticky top-0 z-30 px-4 sm:px-8 py-4 rounded-b-2xl mb-4 mt-6"
+        // style={{ background: 'rgba(255,255,255,0.08)' }}
       >
-        <h1 className="text-2xl sm:text-3xl font-bold font-outfit drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]">
-          Gemini Discussion Board
-        </h1>
-        <p className="text-white/70 text-sm mt-1">
+        <div className="flex items-center justify-center gap-3">
+          <motion.img
+            src="/main.png"
+            alt="Gemini Logo"
+            className="h-8 w-8 rounded-lg shadow-md"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 120, delay: 0.2 }}
+            style={{ boxShadow: '0 0 12px #4285F4, 0 0 8px #F4B400' }}
+          />
+          <h1 className="text-xl sm:text-2xl font-bold font-outfit text-glow tracking-wide" style={{ color: '#4285F4' }}>
+            Gemini Discussion Board
+          </h1>
+        </div>
+  <p className={`text-xs sm:text-sm text-center mt-1 pl-13 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}>
           Real-time thoughts from cosmic minds ✨
         </p>
-      </motion.div>
+      </motion.header>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 space-y-4 pb-28">
+      <div className="flex-1 overflow-y-auto px-2 sm:px-8 space-y-5 pb-32">
         {messages.map((msg, idx) => {
           const accent = googleColors[idx % googleColors.length];
           return (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.02 }}
-              className="rounded-xl p-4 shadow-md border border-white/10 backdrop-blur-md bg-white/10"
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                boxShadow: `0 0 12px ${accent}40`,
-                borderLeft: `4px solid ${accent}`,
-              }}
+              className="flex items-center gap-3"
             >
-              <div className="flex justify-between items-center mb-1">
-                <span className="font-semibold text-sm" style={{ color: accent }}>
-                  {msg.author}
-                </span>
-                <span className="text-xs text-white/50">
-                  {new Date(msg.timestamp).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </span>
+              {/* Avatar circle with Google color border */}
+              <div className="flex-shrink-0">
+                <div
+                  className="w-9 h-9 rounded-full flex items-center justify-center bg-gradient-to-br from-white/10 to-white/5 border-2"
+                  style={{ borderColor: accent }}
+                >
+                  <span className="font-bold text-base" style={{ color: accent }}>
+                    {msg.author?.charAt(0)?.toUpperCase() || "?"}
+                  </span>
+                </div>
               </div>
-              <p className="text-white/80 text-sm">{msg.content}</p>
+              {/* Message bubble */}
+              <div
+                className="flex-1 rounded-2xl px-5 py-3 shadow-lg border border-white/10 glass-morphism"
+                style={{
+                  background: 'rgba(255,255,255,0.10)',
+                  boxShadow: `0 2px 16px ${accent}30`,
+                  borderLeft: `4px solid ${accent}`,
+                  willChange: 'transform',
+                }}
+              >
+                <div className="flex justify-between items-center mb-1">
+                  <span className="font-semibold text-sm" style={{ color: accent }}>
+                    {msg.author}
+                  </span>
+                  <span className="text-xs text-white/50">
+                    {new Date(msg.timestamp).toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </span>
+                </div>
+                <p className={`text-base font-inter break-words ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/90" : "text-black/90"}`}>
+                  {msg.content}
+                </p>
+              </div>
             </motion.div>
           );
         })}
@@ -117,9 +144,10 @@ export default function Discussion() {
 
       {/* Composer */}
       <div
-        className={`fixed left-1/2 transform -translate-x-1/2 w-[95%] sm:w-[600px] bg-white/5 backdrop-blur-md border border-white/10 rounded-xl px-4 py-3 flex gap-4 z-50 shadow-lg transition-all duration-300 ${
-          isKeyboardOpen ? 'bottom-[200px]' : 'bottom-4'
+        className={`fixed left-1/2 transform -translate-x-1/2 w-[97%] sm:w-[600px] glass-morphism border border-white/10 rounded-2xl px-4 py-3 flex gap-3 z-50 shadow-xl transition-all duration-300 ${
+          isKeyboardOpen ? 'bottom-[200px]' : 'bottom-6'
         }`}
+        style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(18px)' }}
       >
         <input
           type="text"
@@ -127,14 +155,17 @@ export default function Discussion() {
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type your message..."
-          className="flex-1 bg-transparent text-white placeholder-white/50 outline-none"
+          className={`flex-1 bg-transparent outline-none font-inter text-base ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white placeholder-white/50" : "text-black placeholder-black/50"}`}
         />
-        <button
+        <motion.button
           onClick={handleSend}
-          className="px-4 py-2 bg-[#0F9D58] hover:bg-[#F4B400] rounded-lg font-medium transition flex items-center gap-1"
+          whileHover={{ scale: 1.08, backgroundColor: '#4285F4', color: '#fff' }}
+          whileTap={{ scale: 0.97 }}
+          className={`px-4 py-2 rounded-full font-semibold transition flex items-center gap-1 bg-gradient-to-r from-[#0F9D58] to-[#F4B400] shadow-lg
+            ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
         >
-          Send <ArrowUpRight size={16} />
-        </button>
+          Send <ArrowUpRight size={18} />
+        </motion.button>
       </div>
 
       {/* Login Modal */}
@@ -144,10 +175,10 @@ export default function Discussion() {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.3 }}
-            className="bg-gradient-to-br from-[#1a237e] via-[#3949ab] to-[#5c6bc0] text-white rounded-xl shadow-xl border border-white/10 p-6 w-[90%] sm:w-[400px]"
+            className="bg-gradient-to-br from-[#4285F4] via-[#F4B400] to-[#0F9D58] text-white rounded-2xl shadow-2xl border border-white/10 p-6 w-[90%] sm:w-[400px]"
           >
             <h2 className="text-lg font-semibold mb-2">Login Required</h2>
-            <p className="text-sm text-white/70 mb-4">
+            <p className={`text-sm mb-4 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/80" : "text-black/80"}`}>
               You need to be logged in to send messages on the Gemini Discussion Board.
             </p>
             <div className="flex justify-end gap-3">

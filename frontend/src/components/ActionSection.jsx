@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Users, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 40 },
@@ -12,6 +13,7 @@ const itemVariants = {
 };
 
 export default function Sections() {
+  const { theme } = useTheme();
   return (
     <div className="space-y-16 max-w-5xl mx-auto">
       {/* Team Spotlight */}
@@ -22,7 +24,11 @@ export default function Sections() {
         viewport={{ once: true }}
         className="w-full"
       >
-        <div className="bg-white/5 border border-white/10 rounded-2xl shadow-lg p-8 sm:p-12 backdrop-blur-md flex flex-col sm:flex-row items-center gap-8 hover:shadow-2xl transition">
+        <div className={`backdrop-blur-md rounded-2xl shadow-lg p-8 sm:p-12 flex flex-col sm:flex-row items-center gap-8 hover:shadow-2xl transition
+          ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ? "bg-white/5 border border-white/10"
+            : "bg-white/80 border border-gray-300"}
+        `}>
           {/* Icon */}
           <motion.div
             whileHover={{ scale: 1.1, rotate: 5 }}
@@ -37,12 +43,12 @@ export default function Sections() {
           {/* Text */}
           <div className="text-center sm:text-left">
             <motion.h2
-              className="text-2xl font-bold mb-3 text-[#DB4437]"
-              style={{ textShadow: "0 0 10px rgba(219, 68, 55, 0.7)" }}
+              className={`text-2xl font-bold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-[#DB4437]" : "text-[#DB4437]"}`}
+              style={{ textShadow: theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "0 0 10px rgba(219, 68, 55, 0.7)" : "none" }}
             >
               Meet the Team
             </motion.h2>
-            <p className="text-sm sm:text-base text-white/70 leading-relaxed">
+            <p className={`text-sm sm:text-base leading-relaxed ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/80"}`}>
               Led by passionate students from{" "}
               <span className="font-semibold text-[#F4B400]">UEM Kolkata</span>,
               our team blends{" "}
@@ -62,7 +68,11 @@ export default function Sections() {
         viewport={{ once: true }}
         className="w-full"
       >
-        <div className="bg-white/5 border border-white/10 rounded-2xl shadow-lg p-8 sm:p-12 backdrop-blur-md flex flex-col sm:flex-row items-center gap-8 hover:shadow-2xl transition">
+        <div className={`backdrop-blur-md rounded-2xl shadow-lg p-8 sm:p-12 flex flex-col sm:flex-row items-center gap-8 hover:shadow-2xl transition
+          ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ? "bg-white/5 border border-white/10"
+            : "bg-white/80 border border-gray-300"}
+        `}>
           {/* Icon */}
           <motion.div
             whileHover={{ scale: 1.1, rotate: 5 }}
@@ -77,12 +87,12 @@ export default function Sections() {
           {/* Text */}
           <div className="text-center sm:text-left">
             <motion.h2
-              className="text-2xl font-bold mb-3 text-[#0F9D58]"
-              style={{ textShadow: "0 0 10px rgba(15, 157, 88, 0.7)" }}
+              className={`text-2xl font-bold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-[#0F9D58]" : "text-[#0F9D58]"}`}
+              style={{ textShadow: theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "0 0 10px rgba(15, 157, 88, 0.7)" : "none" }}
             >
               Join the Conversation
             </motion.h2>
-            <p className="text-sm sm:text-base text-white/70 leading-relaxed">
+            <p className={`text-sm sm:text-base leading-relaxed ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/80"}`}>
               Dive into discussions, share ideas, and help shape the future of{" "}
               <span className="font-semibold text-[#d1fe68]">AI and Design</span>.{" "}
               Explore our{" "}
