@@ -5,7 +5,7 @@ import ThemeToggle from './ThemeToggle';
 
 export default function Footer() {
   return (
-    <footer className="mt-20 px-4 py-8 pb-16 md:pb-8 bg-gradient-to-br from-[#1A1A1A]/90 to-[#2A2A2A]/90 backdrop-blur-xl border-t border-white/10 text-white relative">
+    <footer className="mt-4 px-4 py-8 pb-16 md:pb-8  relative">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
         
         {/* Left: Logos + Title */}
@@ -18,7 +18,7 @@ export default function Footer() {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
               <div className="absolute inset-0 rounded-full bg-[#4285F4]/40 blur-lg scale-110" />
-              <img src="/Welcome.jpg" alt="Gemini" className="relative h-10 w-10 rounded-md z-10" />
+              <img src="/Welcome.jpg" alt="Gemini" className="relative h-12 w-12 rounded-md z-10" />
             </motion.div>
 
             {/* IEM Logo */}
@@ -28,7 +28,7 @@ export default function Footer() {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             >
               <div className="absolute inset-0 rounded-full bg-[#F4B400]/40 blur-lg scale-110" />
-              <img src="/IEDC_LOGO.jpg" alt="IEM" className="relative h-10 w-10 rounded-md z-10" />
+              <img src="/IEDC_LOGO.jpg" alt="IEM" className="relative h-12 w-12 rounded-md z-10" />
             </motion.div>
 
             {/* UEM Logo */}
@@ -38,7 +38,7 @@ export default function Footer() {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             >
               <div className="absolute inset-0 rounded-full bg-[#0F9D58]/40 blur-lg scale-110" />
-              <img src="/uemlogo.png" alt="UEM" className="relative h-10 w-10 rounded-md z-10" />
+              <img src="/uemlogo.png" alt="UEM" className="relative h-12 w-12 rounded-md z-10" />
             </motion.div>
           </div>
 
