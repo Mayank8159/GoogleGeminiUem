@@ -1,12 +1,7 @@
 import { useTheme } from "../context/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  CalendarDaysIcon,
-  UsersIcon,
-  RocketLaunchIcon,
-  Cog6ToothIcon,
-} from "@heroicons/react/24/solid";
+import { CalendarDaysIcon, UsersIcon } from "@heroicons/react/24/solid";
 
 export default function AdminDashboard() {
   const { theme } = useTheme();
@@ -14,7 +9,8 @@ export default function AdminDashboard() {
 
   const isDark =
     theme === "dark" ||
-    (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    (theme === "system" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   return (
     <main
@@ -26,10 +22,16 @@ export default function AdminDashboard() {
     >
       {/* Cosmic SVG Glow */}
       <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
-        <svg className="absolute top-0 left-0 w-80 h-80 blur-3xl" viewBox="0 0 100 100">
+        <svg
+          className="absolute top-0 left-0 w-80 h-80 blur-3xl"
+          viewBox="0 0 100 100"
+        >
           <circle cx="50" cy="50" r="40" fill="#ec4899" />
         </svg>
-        <svg className="absolute bottom-0 right-0 w-96 h-96 blur-3xl" viewBox="0 0 100 100">
+        <svg
+          className="absolute bottom-0 right-0 w-96 h-96 blur-3xl"
+          viewBox="0 0 100 100"
+        >
           <circle cx="50" cy="50" r="45" fill="#8b5cf6" />
         </svg>
       </div>
@@ -51,14 +53,18 @@ export default function AdminDashboard() {
             <h2 className="text-lg sm:text-xl font-semibold">
               Welcome back, <span className="text-indigo-500">Admin</span>
             </h2>
-            <p className="text-sm text-gray-400">Manage your community with cosmic precision</p>
+            <p className="text-sm text-gray-400">
+              Manage your community with cosmic precision
+            </p>
           </div>
         </motion.div>
 
         {/* 🚀 Dashboard Card */}
         <div
           className={`backdrop-blur-md rounded-2xl p-8 shadow-xl text-center ${
-            isDark ? "bg-white/5 border border-white/10" : "bg-white/80 border border-gray-300"
+            isDark
+              ? "bg-white/5 border border-white/10"
+              : "bg-white/80 border border-gray-300"
           }`}
         >
           <h1
@@ -75,7 +81,10 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             {/* Events Button */}
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(99,102,241,0.6)" }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 0 20px rgba(99,102,241,0.6)",
+              }}
               transition={{ type: "spring", stiffness: 300 }}
               onClick={() => navigate("/admin/events")}
               className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white font-semibold text-lg transition"
@@ -86,7 +95,10 @@ export default function AdminDashboard() {
 
             {/* Teams Button */}
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(236,72,153,0.6)" }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 0 20px rgba(236,72,153,0.6)",
+              }}
               transition={{ type: "spring", stiffness: 300 }}
               onClick={() => navigate("/admin/teams")}
               className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-lg bg-pink-500 hover:bg-pink-600 text-white font-semibold text-lg transition"
@@ -97,7 +109,6 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
-
     </main>
   );
 }
