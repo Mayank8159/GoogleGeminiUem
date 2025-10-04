@@ -40,8 +40,8 @@ export default function AdminLogin() {
         console.error("⚠️ Socket connection failed:", err.message);
       });
 
-      // Redirect to admin event panel
-      navigate("/admin/events");
+      // Redirect to admin dashboard
+      navigate("/admin/dashboard");
     } catch (err) {
       console.error(err);
       setError("Invalid credentials");

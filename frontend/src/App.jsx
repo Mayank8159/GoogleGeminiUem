@@ -17,7 +17,9 @@ const Register = lazy(() => import('./pages/Register'));
 const Discussion = lazy(() => import('./pages/Discussion'));
 const NotFound = lazy(() => import('./pages/Notfound'));
 const EventAdmin = lazy(() => import('./pages/EventsAdmin'));
+const TeamsAdmin = lazy(() => import('./pages/TeamsAdmin'));
 const AdminLogin = lazy(() => import('./pages/AdminLogin'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 
 function AppContent() {
   const location = useLocation();
@@ -43,6 +45,22 @@ function AppContent() {
               element={
                 <ProtectedRoute>
                   <EventAdmin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/teams"
+              element={
+                <ProtectedRoute>
+                  <TeamsAdmin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
                 </ProtectedRoute>
               }
             />
