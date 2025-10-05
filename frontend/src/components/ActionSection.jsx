@@ -24,39 +24,119 @@ export default function Sections() {
         viewport={{ once: true }}
         className="w-full"
       >
-        <div className={`backdrop-blur-md rounded-2xl shadow-lg p-8 sm:p-12 flex flex-col sm:flex-row items-center gap-8 hover:shadow-2xl transition
-          ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-            ? "bg-white/5 border border-white/10"
-            : "bg-white/80 border border-gray-300"}
-        `}>
-          {/* Icon */}
-          <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            transition={{ type: "spring", stiffness: 200 }}
-            className="flex-shrink-0"
+        {/* Section Header */}
+        <div
+          className={`backdrop-blur-md rounded-2xl shadow-lg p-8 sm:p-12 text-center transition
+      ${
+        theme === "dark" ||
+        (theme === "system" &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+          ? "bg-white/5 border border-white/10"
+          : "bg-white/80 border border-gray-300"
+      }`}
+        >
+          <motion.h2
+            className={`text-3xl font-extrabold mb-4 ${
+              theme === "dark" ||
+              (theme === "system" &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "text-[#DB4437]"
+                : "text-[#DB4437]"
+            }`}
+            style={{
+              textShadow:
+                theme === "dark" ||
+                (theme === "system" &&
+                  window.matchMedia("(prefers-color-scheme: dark)").matches)
+                  ? "0 0 15px rgba(219, 68, 55, 0.6)"
+                  : "none",
+            }}
           >
-            <div className="h-28 w-28 flex items-center justify-center rounded-full bg-gradient-to-br from-[#DB4437] via-[#F4B400] to-[#4285F4] shadow-lg">
-              <Users size={40} color="white" />
-            </div>
-          </motion.div>
+            Meet the Team
+          </motion.h2>
+          <p
+            className={`max-w-2xl mx-auto text-sm sm:text-base leading-relaxed ${
+              theme === "dark" ||
+              (theme === "system" &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "text-white/70"
+                : "text-black/80"
+            }`}
+          >
+            Led by passionate innovators from{" "}
+            <span className="font-semibold text-[#F4B400]">UEM Kolkata</span>,
+            our team blends{" "}
+            <span className="text-[#56eda9]">technical mastery</span> with{" "}
+            <span className="text-[#1befdd]">emotional design</span> to build
+            community-driven experiences.
+          </p>
+        </div>
 
-          {/* Text */}
-          <div className="text-center sm:text-left">
-            <motion.h2
-              className={`text-2xl font-bold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-[#DB4437]" : "text-[#DB4437]"}`}
-              style={{ textShadow: theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "0 0 10px rgba(219, 68, 55, 0.7)" : "none" }}
+        {/* Team Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+          {[
+            {
+              name: "Ashna Islam",
+              role: "Chairman",
+              img: "/arnab.jpg",
+            },
+            {
+              name: "Arnab Sarkar",
+              role: "Vice Chairman",
+              img: "/arnab.jpg",
+            },
+            {
+              name: "Mayank Kumar Sharma",
+              role: "Vision & Product Strategist",
+              img: "https://via.placeholder.com/300x300.png?text=Mayank",
+            },
+            {
+              name: "Sreejata Gupta",
+              role: "Creative Designer & UX Engineer",
+              img: "https://via.placeholder.com/300x300.png?text=Sreejata",
+            },
+          ].map((member, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.05, y: -5 }}
+              transition={{ type: "spring", stiffness: 250 }}
+              className={`rounded-2xl p-6 flex flex-col items-center text-center shadow-lg backdrop-blur-md transition-all duration-300 ${
+                theme === "dark" ||
+                (theme === "system" &&
+                  window.matchMedia("(prefers-color-scheme: dark)").matches)
+                  ? "bg-white/5 border border-white/10"
+                  : "bg-white/80 border border-gray-300"
+              }`}
             >
-              Meet the Team
-            </motion.h2>
-            <p className={`text-sm sm:text-base leading-relaxed ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/80"}`}>
-              Led by passionate students from{" "}
-              <span className="font-semibold text-[#F4B400]">UEM Kolkata</span>,
-              our team blends{" "}
-              <span className="text-[#56eda9]">technical mastery</span> with{" "}
-              <span className="text-[#1befdd]">emotional design</span> to create
-              immersive, community-driven digital experiences.
-            </p>
-          </div>
+              <img
+                src={member.img}
+                alt={member.name}
+                className="w-32 h-32 rounded-full object-cover shadow-md mb-4"
+              />
+              <h3
+                className={`text-lg font-semibold ${
+                  theme === "dark" ||
+                  (theme === "system" &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches)
+                    ? "text-white"
+                    : "text-gray-800"
+                }`}
+              >
+                {member.name}
+              </h3>
+              <p
+                className={`text-sm mt-2 ${
+                  theme === "dark" ||
+                  (theme === "system" &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches)
+                    ? "text-white/70"
+                    : "text-gray-600"
+                }`}
+              >
+                {member.role}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </motion.section>
 
@@ -68,11 +148,17 @@ export default function Sections() {
         viewport={{ once: true }}
         className="w-full"
       >
-        <div className={`backdrop-blur-md rounded-2xl shadow-lg p-8 sm:p-12 flex flex-col sm:flex-row items-center gap-8 hover:shadow-2xl transition
-          ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-            ? "bg-white/5 border border-white/10"
-            : "bg-white/80 border border-gray-300"}
-        `}>
+        <div
+          className={`backdrop-blur-md rounded-2xl shadow-lg p-8 sm:p-12 flex flex-col sm:flex-row items-center gap-8 hover:shadow-2xl transition
+          ${
+            theme === "dark" ||
+            (theme === "system" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ? "bg-white/5 border border-white/10"
+              : "bg-white/80 border border-gray-300"
+          }
+        `}
+        >
           {/* Icon */}
           <motion.div
             whileHover={{ scale: 1.1, rotate: 5 }}
@@ -87,15 +173,38 @@ export default function Sections() {
           {/* Text */}
           <div className="text-center sm:text-left">
             <motion.h2
-              className={`text-2xl font-bold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-[#0F9D58]" : "text-[#0F9D58]"}`}
-              style={{ textShadow: theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "0 0 10px rgba(15, 157, 88, 0.7)" : "none" }}
+              className={`text-2xl font-bold mb-3 ${
+                theme === "dark" ||
+                (theme === "system" &&
+                  window.matchMedia("(prefers-color-scheme: dark)").matches)
+                  ? "text-[#0F9D58]"
+                  : "text-[#0F9D58]"
+              }`}
+              style={{
+                textShadow:
+                  theme === "dark" ||
+                  (theme === "system" &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches)
+                    ? "0 0 10px rgba(15, 157, 88, 0.7)"
+                    : "none",
+              }}
             >
               Join the Conversation
             </motion.h2>
-            <p className={`text-sm sm:text-base leading-relaxed ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/80"}`}>
+            <p
+              className={`text-sm sm:text-base leading-relaxed ${
+                theme === "dark" ||
+                (theme === "system" &&
+                  window.matchMedia("(prefers-color-scheme: dark)").matches)
+                  ? "text-white/70"
+                  : "text-black/80"
+              }`}
+            >
               Dive into discussions, share ideas, and help shape the future of{" "}
-              <span className="font-semibold text-[#d1fe68]">AI and Design</span>.{" "}
-              Explore our{" "}
+              <span className="font-semibold text-[#d1fe68]">
+                AI and Design
+              </span>
+              . Explore our{" "}
               <motion.span
                 whileHover={{ scale: 1.1 }}
                 className="text-[#F4B400] underline hover:text-[#DB4437] transition inline-block font-medium"
