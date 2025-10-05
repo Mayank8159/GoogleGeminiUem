@@ -96,7 +96,6 @@ const itemVariants = {
 
 export default function Home() {
   const { theme } = useTheme();
-  // Removed logoRef since GSAP is no longer controlling the main logo float
   const particlesRef = useRef([]);
   const isDark =
     theme === "dark" ||
@@ -104,10 +103,8 @@ export default function Home() {
       window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   useEffect(() => {
-    // Always scroll to top on mount
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
-    // Animate background particles (kept, as this is visually distinct from logo float)
     particlesRef.current.forEach((particle, index) => {
       if (particle) {
         gsap.to(particle, {
@@ -125,7 +122,6 @@ export default function Home() {
       }
     });
 
-    // GSAP ScrollTrigger for the main title (kept)
     const titleElement = document.getElementById("main-title");
     if (titleElement) {
       gsap.fromTo(
@@ -156,8 +152,9 @@ export default function Home() {
         }
       `}
     >
-      {/* Enhanced background with floating particles (kept) */}
+      {/* --- ENHANCED BACKGROUND WITH MORE FLOATING ELEMENTS --- */}
       <div className="absolute inset-0 z-0 opacity-20 will-change-transform">
+        {/* Existing smaller particles */}
         <div className="absolute inset-0">
           {[...Array(12)].map((_, i) => (
             <div
@@ -182,8 +179,10 @@ export default function Home() {
             />
           ))}
         </div>
-        {/* Animated Blobs (kept) */}
+
+        {/* Existing animated blobs */}
         <motion.div
+          aria-hidden="true"
           animate={{
             scale: [1, 1.18, 1],
             rotate: [0, 360],
@@ -193,6 +192,7 @@ export default function Home() {
           className="absolute h-80 w-80 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 blur-[80px] -top-20 -left-20 will-change-transform"
         />
         <motion.div
+          aria-hidden="true"
           animate={{
             scale: [1.1, 1, 1.1],
             rotate: [0, -360],
@@ -201,6 +201,57 @@ export default function Home() {
           transition={{ duration: 32, repeat: Infinity, repeatType: "reverse" }}
           className="absolute h-96 w-96 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 blur-[70px] -bottom-20 -right-20 will-change-transform"
         />
+
+        {/* NEW FLOATING ELEMENTS */}
+        <motion.div
+          aria-hidden="true"
+          animate={{
+            x: ["-5%", "5%", "-5%"],
+            y: ["-5%", "5%", "-5%"],
+            scale: [0.9, 1.05, 0.9],
+            rotate: [0, 15, 0],
+            opacity: [0.08, 0.15, 0.08],
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/4 left-1/4 h-64 w-64 rounded-xl bg-purple-500 blur-[90px] will-change-transform"
+        />
+        <motion.div
+          aria-hidden="true"
+          animate={{
+            x: ["5%", "-5%", "5%"],
+            y: ["5%", "-5%", "5%"],
+            scale: [1.05, 0.9, 1.05],
+            rotate: [0, -20, 0],
+            opacity: [0.06, 0.12, 0.06],
+          }}
+          transition={{ duration: 30, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-1/3 right-1/4 h-72 w-72 rounded-full bg-yellow-400 blur-[100px] will-change-transform"
+        />
+        <motion.div
+          aria-hidden="true"
+          animate={{
+            x: ["-8%", "8%", "-8%"],
+            y: ["8%", "-8%", "8%"],
+            scale: [0.8, 1.1, 0.8],
+            rotate: [0, 10, 0],
+            opacity: [0.05, 0.1, 0.05],
+          }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute top-1/2 left-0 h-56 w-56 rounded-full bg-green-500 blur-[80px] will-change-transform"
+        />
+        <motion.div
+          aria-hidden="true"
+          animate={{
+            x: ["8%", "-8%", "8%"],
+            y: ["-8%", "8%", "-8%"],
+            scale: [1.1, 0.8, 1.1],
+            rotate: [0, -12, 0],
+            opacity: [0.07, 0.14, 0.07],
+          }}
+          transition={{ duration: 27, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          className="absolute bottom-0 left-1/2 h-60 w-60 rounded-xl bg-pink-500 blur-[95px] will-change-transform"
+        />
+
       </div>
 
       <div className="max-w-6xl mx-auto text-center flex flex-col items-center gap-24 relative z-10">
@@ -214,22 +265,22 @@ export default function Home() {
           {/* LOGO ANIMATION FIX: Merging GSAP float into Framer Motion */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ 
-                scale: 1, 
-                opacity: 1, 
+            animate={{
+                scale: 1,
+                opacity: 1,
                 y: [0, -8, 0], // New Framer Motion float animation
-                transition: { 
-                    type: "spring", 
-                    stiffness: 120, 
+                transition: {
+                    type: "spring",
+                    stiffness: 120,
                     delay: 0.4,
                     // Float transition parameters
-                    y: { 
-                        duration: 1.2, 
+                    y: {
+                        duration: 1.2,
                         ease: "easeInOut", // Replaces power1.inOut
-                        repeat: Infinity, 
-                        repeatType: "reverse" 
+                        repeat: Infinity,
+                        repeatType: "reverse"
                     }
-                } 
+                }
             }}
             className="relative mt-6"
             whileHover={{ scale: 1.07 }}
@@ -342,7 +393,6 @@ export default function Home() {
             transition={{ delay: 1.2, duration: 0.5 }}
             className="flex flex-col sm:flex-row gap-4 mt-6"
           >
-            {/* Removed the 'Join the Crew' link as it's not defined in the original prompt. */}
             <Link to="/events" aria-label="View upcoming events">
               <motion.button
                 className={`px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition-all duration-300 transform border-2
@@ -442,7 +492,7 @@ export default function Home() {
           </motion.div>
         </motion.section>
 
-        {/* Gemini Click Challenge (No floating animation applied here) */}
+        {/* Gemini Click Challenge (kept, no floating animation here) */}
         <motion.section
           variants={itemVariants}
           initial="hidden"
