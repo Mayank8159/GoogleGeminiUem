@@ -78,7 +78,7 @@ export default function Sections() {
             {
               name: "Ashna Islam",
               role: "Chairman",
-              img: "/arnab.jpg",
+              img: "/ashna.jpeg",
             },
             {
               name: "Arnab Sarkar",
@@ -86,14 +86,14 @@ export default function Sections() {
               img: "/arnab.jpg",
             },
             {
-              name: "Mayank Kumar Sharma",
-              role: "Vision & Product Strategist",
-              img: "https://via.placeholder.com/300x300.png?text=Mayank",
+              name: "Dipankar Bera",
+              role: "Secretary",
+              img: "/dipankar.jpg",
             },
             {
-              name: "Sreejata Gupta",
-              role: "Creative Designer & UX Engineer",
-              img: "https://via.placeholder.com/300x300.png?text=Sreejata",
+              name: "Arko Sen",
+              role: "Secretary",
+              img: "/arko.jpg",
             },
           ].map((member, index) => (
             <motion.div
