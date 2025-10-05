@@ -77,12 +77,12 @@ export default function Sections() {
           {[
             {
               name: "Ashna Islam",
-              role: "Chairman",
+              role: "Chairperson",
               img: "/ashna.jpeg",
             },
             {
               name: "Arnab Sarkar",
-              role: "Vice Chairman",
+              role: "Vice Chairperson",
               img: "/arnab.jpg",
             },
             {
