@@ -11,8 +11,8 @@ export default function EventAdmin() {
     title: "",
     description: "",
     eventDate: "",
-    imageUrl: "",
   });
+  const [imageFile, setImageFile] = useState(null);
 
   const BACKEND_URL = "https://googlegeminiuem.onrender.com";
 
@@ -44,32 +44,36 @@ export default function EventAdmin() {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    try {
-      const resizedBlob = await resizeImage(file);
-      const formData = new FormData();
-      formData.append("image", resizedBlob, "event.jpg");
-
-      const uploadRes = await axios.post(`${BACKEND_URL}/api/upload`, formData);
-      setForm((prev) => ({ ...prev, imageUrl: uploadRes.data.imageUrl }));
-      toast.success("✅ Image uploaded successfully!");
-    } catch (err) {
-      console.error(err);
-      toast.error("❌ Image upload failed");
-    }
+    setImageFile(file);
+    toast.info("📦 Image selected and ready for upload");
   };
 
   const submitEvent = async () => {
+    if (!form.title || !form.description || !form.eventDate || !imageFile) {
+      toast.error("⚠️ Please fill all fields and select an image");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("adminToken");
-      await axios.post(`${BACKEND_URL}/api/events/admin/events`, form, {
+      const resizedBlob = await resizeImage(imageFile);
+      const formData = new FormData();
+
+      formData.append("title", form.title);
+      formData.append("description", form.description);
+      formData.append("eventDate", form.eventDate);
+      formData.append("image", resizedBlob, "event.jpg");
+
+      await axios.post(`${BACKEND_URL}/admin/events`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       });
 
       toast.success("✅ Event published successfully!");
-      setForm({ title: "", description: "", eventDate: "", imageUrl: "" });
+      setForm({ title: "", description: "", eventDate: "" });
+      setImageFile(null);
     } catch (err) {
       console.error(err);
       toast.error("❌ Failed to publish event");
@@ -118,6 +122,7 @@ export default function EventAdmin() {
               placeholder="Event Title"
               value={form.title}
               onChange={handleChange}
+              required
               className="w-full p-3 rounded bg-white/10 text-white placeholder-gray-400 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <textarea
@@ -125,6 +130,7 @@ export default function EventAdmin() {
               placeholder="Event Description"
               value={form.description}
               onChange={handleChange}
+              required
               className="w-full p-3 rounded bg-white/10 text-white placeholder-gray-400 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
               rows={4}
             />
@@ -133,6 +139,7 @@ export default function EventAdmin() {
               name="eventDate"
               value={form.eventDate}
               onChange={handleChange}
+              required
               className="w-full p-3 rounded bg-white/10 text-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
 
@@ -165,10 +172,10 @@ export default function EventAdmin() {
               />
             </label>
 
-            {form.imageUrl && (
+            {imageFile && (
               <div className="mt-4">
                 <img
-                  src={form.imageUrl}
+                  src={URL.createObjectURL(imageFile)}
                   alt="Event Preview"
                   className="w-full rounded-lg border border-indigo-300 shadow-md"
                 />
