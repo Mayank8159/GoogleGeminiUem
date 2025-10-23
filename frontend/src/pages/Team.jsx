@@ -38,7 +38,7 @@ const Team = () => {
         email: "arnabsar2005@gmail.com",
         phone: "+91 xxxxx xxxxx",
         location: "Kolkata, India",
-        bio: "Hobbies =in technical aspect i enjoy coding ,solving problems in personal life i love gaming, ride bike , play football experience- I am currently working in the PR team of a conference name AI care. I have taken part in multiple poster competitions Which helped me in enhancing my research and speaking skills",
+        bio: "I’m Arnab, a 2nd-year CSE (Cybersecurity) student passionate about coding, problem-solving, and AI. As Vice Chair of the Google Gemini Student Community, I aspire to drive innovative projects, lead collaborative initiatives, and make a meaningful impact in the tech community.",
         skills: ["Leadership", "Public Speaking", "Cybersecurity"],
       },
       {
