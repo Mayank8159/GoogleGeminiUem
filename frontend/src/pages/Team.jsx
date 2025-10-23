@@ -146,7 +146,7 @@ const Team = () => {
         skills: ["Leadership", "Event Management", "Public Speaking"],
       },
       {
-        id: 11,
+        id: 12,
         name: "Snigdha Singha",
         designation: "Social media, sponsorship and branding head",
         pic: "/Snigdha.jpg",
@@ -157,7 +157,7 @@ const Team = () => {
         skills: ["Leadership", "Social Media Management", "Branding"],
       },
       {
-        id: 12,
+        id: 13,
         name: "Suvrojeet Paul",
         designation: "Photography Head",
         pic: "/Suvrojeet.jpg",
@@ -168,7 +168,7 @@ const Team = () => {
         skills: ["Leadership", "Photography", "IOT"],
       },
       {
-        id: 13,
+        id: 14,
         name: "Swastik Manna",
         designation: "Graphics /videography-photography-editing Head",
         pic: "/Swastik.png",
