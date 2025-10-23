@@ -32,7 +32,7 @@ export default function Navbar() {
     theme === "dark" ||
     (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
-  // ✅ Always check for user in localStorage
+  // Sync user state
   useEffect(() => {
     try {
       const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -40,25 +40,21 @@ export default function Navbar() {
     } catch {
       setUser(null);
     }
-  }, [location]); // runs on route change
+  }, [location]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    if (user?.role === "admin") {
-      navigate("/admin/login");
-    } else {
-      navigate("/login");
-    }
+    if (user?.role === "admin") navigate("/admin/login");
+    else navigate("/login");
 
     setUser(null);
+    setIsOpen(false);
   };
 
   const userInitial =
-    user?.role === "admin"
-      ? "A"
-      : user?.name?.charAt(0)?.toUpperCase() || "";
+    user?.role === "admin" ? "A" : user?.name?.charAt(0)?.toUpperCase() || "";
 
   return (
     <motion.nav
@@ -110,7 +106,7 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* ✅ Auth Section */}
+          {/* Auth Section */}
           {user ? (
             <div className="flex items-center gap-4">
               <motion.div
@@ -135,7 +131,6 @@ export default function Navbar() {
               </motion.button>
             </div>
           ) : (
-            // ❌ Hide Get Started if admin logged in
             !user && (
               <div className="relative">
                 <motion.button
@@ -192,6 +187,110 @@ export default function Navbar() {
           )}
         </div>
       </div>
+
+      {/* Mobile Nav */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className={`mt-4 flex flex-col gap-4 sm:hidden text-sm font-medium ${
+              isDark ? "text-white" : "text-gray-800"
+            }`}
+          >
+            {navLinks.map(({ name, href, icon: Icon, color }) => (
+              <Link
+                key={name}
+                to={href}
+                className={`flex items-center gap-2 transition ${
+                  isDark ? "text-white" : "text-gray-800"
+                }`}
+                style={location.pathname === href ? { color } : {}}
+                onClick={() => setIsOpen(false)}
+              >
+                <Icon className="h-4 w-4" />
+                {name}
+              </Link>
+            ))}
+
+            {user ? (
+              <div className="flex items-center gap-4 mt-2">
+                <div className="bg-[#F4B400] text-black font-bold rounded-full h-10 w-10 flex items-center justify-center shadow-md">
+                  {userInitial}
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+                    isDark ? "bg-white/10" : "bg-gray-200/80"
+                  }`}
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="relative">
+                <motion.button
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 0 15px #F4B400",
+                    backgroundColor: "#0F9D58",
+                    color: "#fff",
+                  }}
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="bg-[#F4B400] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
+                >
+                  Get Started
+                  <motion.div
+                    animate={{ rotate: dropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown size={18} />
+                  </motion.div>
+                </motion.button>
+
+                <AnimatePresence>
+                  {dropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      className={`mt-2 rounded-lg shadow-lg border backdrop-blur-md z-50 ${
+                        isDark
+                          ? "bg-[#1F1F1F]/90 border-white/10 text-white"
+                          : "bg-white border-gray-200 text-gray-800"
+                      }`}
+                    >
+                      <Link
+                        to="/login"
+                        onClick={() => {
+                          setDropdownOpen(false);
+                          setIsOpen(false);
+                        }}
+                        className="block px-4 py-2 hover:bg-[#F4B400]/20 transition rounded-t-lg"
+                      >
+                        Login as User
+                      </Link>
+                      <Link
+                        to="/admin/login"
+                        onClick={() => {
+                          setDropdownOpen(false);
+                          setIsOpen(false);
+                        }}
+                        className="block px-4 py-2 hover:bg-[#0F9D58]/20 transition rounded-b-lg"
+                      >
+                        Login as Admin
+                      </Link>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }
