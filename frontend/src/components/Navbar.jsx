@@ -7,6 +7,7 @@ import {
   Menu,
   X,
   LogOut,
+  ChevronDown,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -19,36 +20,45 @@ const navLinks = [
   { name: "Team", href: "/team", icon: Users, color: "#0F9D58" },
 ];
 
-const linkVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0 },
-};
-
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { theme } = useTheme();
 
-  // Sync user state on route change
+  const isDark =
+    theme === "dark" ||
+    (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+  // ✅ Always check for user in localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      setUser(storedUser);
+    } catch {
       setUser(null);
     }
-  }, [location]);
+  }, [location]); // runs on route change
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+
+    if (user?.role === "admin") {
+      navigate("/admin/login");
+    } else {
+      navigate("/login");
+    }
+
     setUser(null);
-    navigate("/login");
   };
 
-  const userInitial = user?.name?.charAt(0).toUpperCase() || "";
+  const userInitial =
+    user?.role === "admin"
+      ? "A"
+      : user?.name?.charAt(0)?.toUpperCase() || "";
 
   return (
     <motion.nav
@@ -56,14 +66,12 @@ export default function Navbar() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 backdrop-blur-xl border rounded-2xl px-6 py-4 transition-colors duration-500 ${
-        theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        isDark
           ? "bg-gradient-to-br from-[#1A1A1A]/50 to-[#2A2A2A]/50 border-white/10 shadow-[0_0_25px_rgba(255,255,255,0.2)] text-white"
           : "bg-gradient-to-br from-white/50 to-gray-100/50 border-gray-300 shadow-[0_0_25px_rgba(0,0,0,0.1)] text-gray-800"
       }`}
     >
-      {/* Top Row */}
-  <div className="flex items-center justify-between">
-        {/* Logo */}
+      <div className="flex items-center justify-between">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -77,7 +85,7 @@ export default function Navbar() {
           />
         </motion.div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile toggle */}
         <button
           className="sm:hidden"
           onClick={() => setIsOpen(!isOpen)}
@@ -87,38 +95,22 @@ export default function Navbar() {
         </button>
 
         {/* Desktop Nav */}
-        <motion.div
-          className="hidden sm:flex items-center gap-8 text-sm font-medium"
-          initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-        >
+        <div className="hidden sm:flex items-center gap-8 text-sm font-medium relative">
           {navLinks.map(({ name, href, icon: Icon, color }) => (
-            <motion.div
+            <Link
               key={name}
-              variants={linkVariants}
-              whileHover={{
-                scale: 1.1,
-                textShadow: `0 0 8px ${color}`,
-                color,
-              }}
+              to={href}
+              className={`flex items-center gap-1 transition ${
+                isDark ? "text-white" : "text-gray-800"
+              }`}
+              style={location.pathname === href ? { color } : {}}
             >
-              <Link 
-                to={href} 
-                className={`flex items-center gap-1 transition ${
-                  theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-                    ? "text-white"
-                    : "text-gray-800"
-                }`}
-                style={location.pathname === href ? { color } : {}}
-              >
-                <Icon className="h-4 w-4" />
-                {name}
-              </Link>
-            </motion.div>
+              <Icon className="h-4 w-4" />
+              {name}
+            </Link>
           ))}
 
-          {/* Auth Section */}
+          {/* ✅ Auth Section */}
           {user ? (
             <div className="flex items-center gap-4">
               <motion.div
@@ -135,9 +127,7 @@ export default function Navbar() {
                   boxShadow: "0 0 10px #DB4437",
                 }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-                  theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-                    ? "bg-white/10"
-                    : "bg-gray-200/80"
+                  isDark ? "bg-white/10" : "bg-gray-200/80"
                 }`}
               >
                 <LogOut size={16} />
@@ -145,113 +135,63 @@ export default function Navbar() {
               </motion.button>
             </div>
           ) : (
-            <motion.div
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 0 15px #F4B400",
-                backgroundColor: "#0F9D58",
-                color: "#fff",
-              }}
-            >
-              <Link
-                to="/login"
-                className="bg-[#F4B400] text-black px-5 py-2 rounded-lg font-semibold transition block"
-              >
-                Get Started
-              </Link>
-            </motion.div>
-          )}
-        </motion.div>
-      </div>
-
-      {/* Mobile Nav */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className={`mt-4 flex flex-col gap-4 sm:hidden text-sm font-medium ${
-              theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-                ? "text-white"
-                : "text-gray-800"
-            }`}
-          >
-            {navLinks.map(({ name, href, icon: Icon, color }) => (
-              <motion.div
-                key={name}
-                whileHover={{
-                  scale: 1.05,
-                  textShadow: `0 0 10px ${color}`,
-                  color,
-                }}
-              >
-                <Link 
-                  to={href} 
-                  className={`flex items-center gap-2 transition ${
-                    theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-                      ? "text-white"
-                      : "text-gray-800"
-                  }`}
-                  style={location.pathname === href ? { color } : {}}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Icon className="h-4 w-4" />
-                  {name}
-                </Link>
-              </motion.div>
-            ))}
-
-            {/* Mobile Auth Section */}
-            {user ? (
-              <div className="flex items-center gap-4 mt-2">
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  className="bg-[#F4B400] text-black font-bold rounded-full h-10 w-10 flex items-center justify-center shadow-md"
-                >
-                  {userInitial}
-                </motion.div>
+            // ❌ Hide Get Started if admin logged in
+            !user && (
+              <div className="relative">
                 <motion.button
-                  onClick={() => {
-                    handleLogout();
-                    setIsOpen(false);
-                  }}
                   whileHover={{
                     scale: 1.05,
-                    backgroundColor: "#DB4437",
-                    boxShadow: "0 0 10px #DB4437",
+                    boxShadow: "0 0 15px #F4B400",
+                    backgroundColor: "#0F9D58",
+                    color: "#fff",
                   }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-                    theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-                      ? "bg-white/10"
-                      : "bg-gray-200/80"
-                  }`}
-                >
-                  <LogOut size={16} />
-                  Logout
-                </motion.button>
-              </div>
-            ) : (
-              <motion.div
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 0 15px #F4B400",
-                  backgroundColor: "#0F9D58",
-                  color: "#fff",
-                }}
-              >
-                <Link
-                  to="/login"
-                  className="bg-[#F4B400] text-black px-4 py-2 rounded-lg font-semibold transition block"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="bg-[#F4B400] text-black px-5 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
                 >
                   Get Started
-                </Link>
-              </motion.div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  <motion.div
+                    animate={{ rotate: dropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown size={18} />
+                  </motion.div>
+                </motion.button>
+
+                <AnimatePresence>
+                  {dropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      className={`absolute right-0 mt-2 w-44 rounded-lg shadow-lg border backdrop-blur-md z-50 ${
+                        isDark
+                          ? "bg-[#1F1F1F]/90 border-white/10 text-white"
+                          : "bg-white border-gray-200 text-gray-800"
+                      }`}
+                    >
+                      <Link
+                        to="/login"
+                        onClick={() => setDropdownOpen(false)}
+                        className="block px-4 py-2 hover:bg-[#F4B400]/20 transition rounded-t-lg"
+                      >
+                        Login as User
+                      </Link>
+                      <Link
+                        to="/admin/login"
+                        onClick={() => setDropdownOpen(false)}
+                        className="block px-4 py-2 hover:bg-[#0F9D58]/20 transition rounded-b-lg"
+                      >
+                        Login as Admin
+                      </Link>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )
+          )}
+        </div>
+      </div>
     </motion.nav>
   );
 }
