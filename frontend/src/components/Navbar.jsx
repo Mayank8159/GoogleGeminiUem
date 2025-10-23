@@ -32,7 +32,7 @@ export default function Navbar() {
     theme === "dark" ||
     (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
-  // Sync user state
+  // Sync user state from localStorage
   useEffect(() => {
     try {
       const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -43,18 +43,22 @@ export default function Navbar() {
   }, [location]);
 
   const handleLogout = () => {
+    // Remove all tokens and user info
     localStorage.removeItem("token");
+    localStorage.removeItem("adminToken");
     localStorage.removeItem("user");
 
+    // Redirect based on role
     if (user?.role === "admin") navigate("/admin/login");
     else navigate("/login");
 
+    // Reset state
     setUser(null);
     setIsOpen(false);
+    setDropdownOpen(false);
   };
 
-  const userInitial =
-    user?.role === "admin" ? "A" : user?.name?.charAt(0)?.toUpperCase() || "";
+  const userInitial = user?.role === "admin" ? "A" : user?.name?.charAt(0)?.toUpperCase() || "";
 
   return (
     <motion.nav
@@ -67,7 +71,9 @@ export default function Navbar() {
           : "bg-gradient-to-br from-white/50 to-gray-100/50 border-gray-300 shadow-[0_0_25px_rgba(0,0,0,0.1)] text-gray-800"
       }`}
     >
+      {/* Top Row */}
       <div className="flex items-center justify-between">
+        {/* Logo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -81,7 +87,7 @@ export default function Navbar() {
           />
         </motion.div>
 
-        {/* Mobile toggle */}
+        {/* Mobile Toggle */}
         <button
           className="sm:hidden"
           onClick={() => setIsOpen(!isOpen)}
@@ -96,9 +102,7 @@ export default function Navbar() {
             <Link
               key={name}
               to={href}
-              className={`flex items-center gap-1 transition ${
-                isDark ? "text-white" : "text-gray-800"
-              }`}
+              className={`flex items-center gap-1 transition ${isDark ? "text-white" : "text-gray-800"}`}
               style={location.pathname === href ? { color } : {}}
             >
               <Icon className="h-4 w-4" />
@@ -122,15 +126,14 @@ export default function Navbar() {
                   backgroundColor: "#DB4437",
                   boxShadow: "0 0 10px #DB4437",
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-                  isDark ? "bg-white/10" : "bg-gray-200/80"
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${isDark ? "bg-white/10" : "bg-gray-200/80"}`}
               >
                 <LogOut size={16} />
                 Logout
               </motion.button>
             </div>
           ) : (
+            // Show Get Started only if no user logged in
             !user && (
               <div className="relative">
                 <motion.button
@@ -144,10 +147,7 @@ export default function Navbar() {
                   className="bg-[#F4B400] text-black px-5 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
                 >
                   Get Started
-                  <motion.div
-                    animate={{ rotate: dropdownOpen ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
+                  <motion.div animate={{ rotate: dropdownOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
                     <ChevronDown size={18} />
                   </motion.div>
                 </motion.button>
@@ -160,23 +160,13 @@ export default function Navbar() {
                       exit={{ opacity: 0, y: -5 }}
                       transition={{ duration: 0.2 }}
                       className={`absolute right-0 mt-2 w-44 rounded-lg shadow-lg border backdrop-blur-md z-50 ${
-                        isDark
-                          ? "bg-[#1F1F1F]/90 border-white/10 text-white"
-                          : "bg-white border-gray-200 text-gray-800"
+                        isDark ? "bg-[#1F1F1F]/90 border-white/10 text-white" : "bg-white border-gray-200 text-gray-800"
                       }`}
                     >
-                      <Link
-                        to="/login"
-                        onClick={() => setDropdownOpen(false)}
-                        className="block px-4 py-2 hover:bg-[#F4B400]/20 transition rounded-t-lg"
-                      >
+                      <Link to="/login" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-[#F4B400]/20 transition rounded-t-lg">
                         Login as User
                       </Link>
-                      <Link
-                        to="/admin/login"
-                        onClick={() => setDropdownOpen(false)}
-                        className="block px-4 py-2 hover:bg-[#0F9D58]/20 transition rounded-b-lg"
-                      >
+                      <Link to="/admin/login" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-[#0F9D58]/20 transition rounded-b-lg">
                         Login as Admin
                       </Link>
                     </motion.div>
@@ -195,17 +185,13 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className={`mt-4 flex flex-col gap-4 sm:hidden text-sm font-medium ${
-              isDark ? "text-white" : "text-gray-800"
-            }`}
+            className={`mt-4 flex flex-col gap-4 sm:hidden text-sm font-medium ${isDark ? "text-white" : "text-gray-800"}`}
           >
             {navLinks.map(({ name, href, icon: Icon, color }) => (
               <Link
                 key={name}
                 to={href}
-                className={`flex items-center gap-2 transition ${
-                  isDark ? "text-white" : "text-gray-800"
-                }`}
+                className={`flex items-center gap-2 transition ${isDark ? "text-white" : "text-gray-800"}`}
                 style={location.pathname === href ? { color } : {}}
                 onClick={() => setIsOpen(false)}
               >
@@ -221,72 +207,67 @@ export default function Navbar() {
                 </div>
                 <button
                   onClick={handleLogout}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-                    isDark ? "bg-white/10" : "bg-gray-200/80"
-                  }`}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${isDark ? "bg-white/10" : "bg-gray-200/80"}`}
                 >
                   <LogOut size={16} />
                   Logout
                 </button>
               </div>
             ) : (
-              <div className="relative">
-                <motion.button
-                  whileHover={{
-                    scale: 1.05,
-                    boxShadow: "0 0 15px #F4B400",
-                    backgroundColor: "#0F9D58",
-                    color: "#fff",
-                  }}
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="bg-[#F4B400] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
-                >
-                  Get Started
-                  <motion.div
-                    animate={{ rotate: dropdownOpen ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
+              !user && (
+                <div className="relative">
+                  <motion.button
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 0 15px #F4B400",
+                      backgroundColor: "#0F9D58",
+                      color: "#fff",
+                    }}
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="bg-[#F4B400] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
                   >
-                    <ChevronDown size={18} />
-                  </motion.div>
-                </motion.button>
-
-                <AnimatePresence>
-                  {dropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -5 }}
-                      transition={{ duration: 0.2 }}
-                      className={`mt-2 rounded-lg shadow-lg border backdrop-blur-md z-50 ${
-                        isDark
-                          ? "bg-[#1F1F1F]/90 border-white/10 text-white"
-                          : "bg-white border-gray-200 text-gray-800"
-                      }`}
-                    >
-                      <Link
-                        to="/login"
-                        onClick={() => {
-                          setDropdownOpen(false);
-                          setIsOpen(false);
-                        }}
-                        className="block px-4 py-2 hover:bg-[#F4B400]/20 transition rounded-t-lg"
-                      >
-                        Login as User
-                      </Link>
-                      <Link
-                        to="/admin/login"
-                        onClick={() => {
-                          setDropdownOpen(false);
-                          setIsOpen(false);
-                        }}
-                        className="block px-4 py-2 hover:bg-[#0F9D58]/20 transition rounded-b-lg"
-                      >
-                        Login as Admin
-                      </Link>
+                    Get Started
+                    <motion.div animate={{ rotate: dropdownOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
+                      <ChevronDown size={18} />
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                  </motion.button>
+
+                  <AnimatePresence>
+                    {dropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        transition={{ duration: 0.2 }}
+                        className={`mt-2 rounded-lg shadow-lg border backdrop-blur-md z-50 ${
+                          isDark ? "bg-[#1F1F1F]/90 border-white/10 text-white" : "bg-white border-gray-200 text-gray-800"
+                        }`}
+                      >
+                        <Link
+                          to="/login"
+                          onClick={() => {
+                            setDropdownOpen(false);
+                            setIsOpen(false);
+                          }}
+                          className="block px-4 py-2 hover:bg-[#F4B400]/20 transition rounded-t-lg"
+                        >
+                          Login as User
+                        </Link>
+                        <Link
+                          to="/admin/login"
+                          onClick={() => {
+                            setDropdownOpen(false);
+                            setIsOpen(false);
+                          }}
+                          className="block px-4 py-2 hover:bg-[#0F9D58]/20 transition rounded-b-lg"
+                        >
+                          Login as Admin
+                        </Link>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )
             )}
           </motion.div>
         )}
