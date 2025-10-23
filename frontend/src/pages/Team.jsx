@@ -52,7 +52,7 @@ const Team = () => {
         bio: "I'm Arko presently working as a head of tech management in GGSC, and also associated with IEEE and THEATRIX of UEMK",
         skills: ["Leadership", "Public Speaking", "Cybersecurity"],
       },
-       {
+      {
         id: 4,
         name: "Dipankar Bera",
         designation: "Secretary",
@@ -72,7 +72,12 @@ const Team = () => {
         phone: "+91 xxxxx xxxxx",
         location: "Kolkata, India",
         bio: "Visionary founder blending cosmic design, real-time tech, and emotional UX. Expert in React, Next.js, Tailwind v4, Framer Motion, Socket.io, modular architecture, and premium UI polish—crafting branded platforms that empower communities with immersive, glowing, feedback-rich experiences.",
-        skills: ["Leadership", "Full Stack Development", "AI/ML", "UI/UX Design"],
+        skills: [
+          "Leadership",
+          "Full Stack Development",
+          "AI/ML",
+          "UI/UX Design",
+        ],
       },
       {
         id: 6,
@@ -88,13 +93,13 @@ const Team = () => {
       {
         id: 7,
         name: "Parnatosh Mukherjee",
-        designation: "Event Coordinator",
+        designation: "Student Operations",
         pic: "/Parnatosh.jpeg",
         email: "parnatosh2020@gmail.com",
         phone: "+91 xxxxx xxxxx",
         location: "Kolkata, India",
         bio: "I am a dedicated learner with a strong interest in advanced biology, microbiology, management, and technology. I enjoy exploring programming, data analysis, and problem-solving in areas like machine learning and quantum computing. Passionate about continuous learning, I combine academic knowledge with practical skills to grow in both technical and analytical fields.",
-        skills: ["Leadership", "Event Management", "AI/ML"],
+        skills: ["Leadership", "Soft Skills", "AI/ML"],
       },
       {
         id: 8,
@@ -118,6 +123,61 @@ const Team = () => {
         bio: "I am Sagnik Saha,B.Tech student in AI & Robotics with strong interest in artificial intelligence, robotics, and embedded systems. Active IEEE MTTS UEMK member with hands-on experience in innovative technologies. Passionate about problem-solving, research, and developing impactful solutions by combining technical knowledge with creativity and teamwork to address real-world challenges.",
         skills: ["Leadership", "Management", "Robotics and AI"],
       },
+      {
+        id: 10,
+        name: "Sattwik Singha Roy",
+        designation: "Social Media Strategist",
+        pic: "/Sattwik.jpg",
+        email: "awssattwikrajput@gmail.com",
+        phone: "+91 xxxxx xxxxx",
+        location: "Kolkata, India",
+        bio: "Multidimensional and mission-driven, Sattwik Singha Roy is a highly ambitious engineering student, social media strategist, and passionate debater. A skilled communicator and sharp thinker, he thrives on learning, exploring, and evolving balancing devotion, humility, and drive with a relentless hunger for impact, growth, and being there when others need him the most.",
+        skills: ["Leadership", "Social Media Management", "AI"],
+      },
+      {
+        id: 11,
+        name: "Sneha Banik",
+        designation: "Event Manager",
+        pic: "/Sneha.jpeg",
+        email: "sneha.banik06@gmail.com",
+        phone: "+91 xxxxx xxxxx",
+        location: "Kolkata, India",
+        bio: "I am a 2nd year BTech CSE(AI) student studying at UEM,Newtown.I am an active member of CSI,UEMCON and Iris,and I believe my experiences can provide valuable input to the team and I will be grateful if I am chosen to be in this esteemed team.",
+        skills: ["Leadership", "Event Management", "Public Speaking"],
+      },
+      {
+        id: 11,
+        name: "Snigdha Singha",
+        designation: "Social media, sponsorship and branding head",
+        pic: "/Snigdha.jpg",
+        email: "myselfsnigdha2023@gmail.com",
+        phone: "+91 xxxxx xxxxx",
+        location: "Kolkata, India",
+        bio: "I’m Snigdha Singha, a B.Tech AIML student. I’m passionate about creativity, social media, and community building. Currently, I serve as the Social Media, Sponsorship, and Branding Lead at the Google Gemini Student Community, where I aim to contribute through innovative strategies and impactful collaborations.",
+        skills: ["Leadership", "Social Media Management", "Branding"],
+      },
+      {
+        id: 12,
+        name: "Suvrojeet Paul",
+        designation: "Photography Head",
+        pic: "/Suvrojeet.jpg",
+        email: "paulsuvrojeet@gmail.com",
+        phone: "+91 xxxxx xxxxx",
+        location: "Kolkata, India",
+        bio: "I am a second-year B.Tech student at IEM Newtown who loves exploring life with passion. I enjoy photography, working out at the gym, studying, and playing cricket. With a friendly and confident nature, i value making new friends and building connections, always bringing positivity and enthusiasm around me.",
+        skills: ["Leadership", "Photography", "IOT"],
+      },
+      {
+        id: 13,
+        name: "Swastik Manna",
+        designation: "Graphics /videography-photography-editing Head",
+        pic: "/Swastik.png",
+        email: "swastikmanna2006@gmail.com",
+        phone: "+91 xxxxx xxxxx",
+        location: "Kolkata, India",
+        bio: "I'm Swastik Manna, Btech 2nd year student. I have real-world experience working as a freelance editor. I own a Canon R50 camera and work as a graphics designer, videographer, and editor for Technologia Hackathon. Visual storytelling and content creation are my passion, and I love creating impactful, high-quality work through my skills.",
+        skills: ["Leadership", "Photography", "Videography", "Editing"],
+      },
     ];
 
     socket.emit("getTeamData");
@@ -131,7 +191,8 @@ const Team = () => {
 
   const isDark =
     theme === "dark" ||
-    (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    (theme === "system" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   return (
     <main
@@ -196,14 +257,14 @@ const Team = () => {
                 >
                   {member.name}
                 </h3>
-                <p className="text-sm text-gray-400 mb-2">{member.designation}</p>
+                <p className="text-sm text-gray-400 mb-2">
+                  {member.designation}
+                </p>
               </div>
 
               {/* Dropdown Arrow */}
               <div
-                onClick={() =>
-                  setOpenCard(isOpen ? null : member.id)
-                }
+                onClick={() => setOpenCard(isOpen ? null : member.id)}
                 className="flex justify-center items-center cursor-pointer py-3 border-t border-white/20"
               >
                 <motion.div
