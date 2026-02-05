@@ -1,12 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;900&family=Goldman:wght@400;700&display=swap');
+
 @import "tailwindcss";
+
 
 /* Prevent elastic overscroll on mobile */
 html, body {
   overscroll-behavior: none;
 }
 
+@theme {
+  --font-eldorado: "Cinzel", serif;
+  --font-treasure: "Goldman", sans-serif;
+}
+
+
+
 /* Enhanced Google Fonts Configuration */
 @layer base {
+  .font-eldorado { font-family: var(--font-eldorado); }
+  .font-treasure { font-family: var(--font-treasure); }
   .font-outfit { font-family: 'Outfit', system-ui, -apple-system, sans-serif; }
   .font-inter { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
   .font-space-grotesk { font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif; }

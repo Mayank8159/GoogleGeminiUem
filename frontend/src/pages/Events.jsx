@@ -1,486 +1,337 @@
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
-import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
-import { io } from "socket.io-client";
-import { Calendar, CheckCircle, Clock, MapPin, Users, Sparkles } from "lucide-react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { MFALogo } from "../components/MFALogo";
+ // ✅ adjust path if needed
 
-// Enhanced Icon component with animations
-const AnimatedIcon = ({ icon: Icon, color = "currentColor", size = 24, className = "" }) => (
+gsap.registerPlugin(ScrollTrigger);
+
+const isPast = (dateStr, timeStr) => {
+  const eventDate = new Date(`${dateStr}, 2026 ${timeStr}`);
+  return new Date() > eventDate;
+};
+
+const GoldShimmer = () => (
   <motion.div
-    whileHover={{ scale: 1.2, rotate: 5 }}
-    whileTap={{ scale: 0.95 }}
-    className={`inline-flex items-center justify-center ${className}`}
-  >
-    <Icon size={size} color={color} />
-  </motion.div>
+    initial={{ x: "-110%" }}
+    animate={{ x: "210%" }}
+    transition={{ repeat: Infinity, duration: 3, ease: "linear", repeatDelay: 2 }}
+    className="absolute inset-0 z-10 w-full h-full skew-x-[-25deg] bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none"
+  />
 );
 
-// Connect to backend socket server
-const socket = io("https://googlegeminiuem.onrender.com");
+/** --- “Glass tube + liquid” day card --- */
+function TimelineCard({ title, isDark, children }) {
+  const cardRef = useRef(null);
+  const liquidRef = useRef(null);
 
-const EventCard = ({ event, index }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const { theme } = useTheme();
-  
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.9 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      scale: 1,
-      transition: { 
-        duration: 0.6, 
-        delay: index * 0.1,
-        type: "spring",
-        stiffness: 100
-      }
-    },
-    hover: { 
-      y: -10, 
-      scale: 1.02,
-      boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
-      transition: { duration: 0.3 }
-    }
-  };
+  useEffect(() => {
+    if (!cardRef.current || !liquidRef.current) return;
 
-  const googleColors = ['#4285F4', '#DB4437', '#F4B400', '#0F9D58'];
-  const accentColor = googleColors[index % googleColors.length];
+    const ctx = gsap.context(() => {
+      // Infinite flowing shimmer/wave inside liquid
+      gsap.to(liquidRef.current, {
+        backgroundPosition: "300% 0%",
+        duration: 6,
+        ease: "linear",
+        repeat: -1,
+      });
+
+      // Fill amount tied to scroll within this card
+      gsap.fromTo(
+        liquidRef.current,
+        { height: "18%" },
+        {
+          height: "96%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: true,
+          },
+        }
+      );
+    }, cardRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      className={[
+        "relative overflow-hidden rounded-3xl border backdrop-blur-xl",
+        "px-5 sm:px-8 py-8 sm:py-10",
+        isDark ? "bg-black/25 border-amber-500/15" : "bg-white/70 border-amber-900/10",
+        "shadow-[0_25px_80px_rgba(0,0,0,0.25)]",
+      ].join(" ")}
+    >
+      {/* soft glow */}
+      <div className="pointer-events-none absolute -inset-24 opacity-45 blur-3xl bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.22),transparent_55%),radial-gradient(circle_at_80%_40%,rgba(191,149,63,0.16),transparent_55%)]" />
+
+      {/* Card title */}
+      <div className="relative z-10 flex items-center gap-4 mb-10">
+        <span className={`w-1.5 h-8 ${isDark ? "bg-amber-500" : "bg-amber-800"}`} />
+        <h2 className="font-[family-name:--font-eldorado] text-3xl sm:text-5xl font-black tracking-tight">
+          {title}
+        </h2>
+      </div>
+
+      {/* Glass tube (left) */}
+      <div className="relative z-10">
+        <div className="absolute left-0 top-0 bottom-0 w-10 sm:w-12 flex justify-center">
+          {/* outer glass */}
+          <div
+            className={[
+              "relative w-3.5 sm:w-4 rounded-full",
+              "border",
+              isDark ? "border-white/20" : "border-amber-900/15",
+              "bg-white/5",
+              "shadow-[inset_0_0_18px_rgba(255,255,255,0.10)]",
+              "backdrop-blur-2xl",
+            ].join(" ")}
+          >
+            {/* inner liquid */}
+            <div
+              ref={liquidRef}
+              className={[
+                "absolute bottom-0 left-0 right-0 rounded-full",
+                "opacity-95",
+                "shadow-[0_0_26px_rgba(251,191,36,0.35)]",
+              ].join(" ")}
+              style={{
+                background:
+                  "linear-gradient(90deg, rgba(191,149,63,0.95) 0%, rgba(252,246,186,0.95) 25%, rgba(179,135,40,0.95) 55%, rgba(251,245,183,0.95) 78%, rgba(170,119,28,0.95) 100%)",
+                backgroundSize: "300% 100%",
+              }}
+            />
+
+            {/* glass highlight */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-white/25 via-white/5 to-transparent opacity-45" />
+          </div>
+        </div>
+
+        {/* Content area */}
+        <div className="pl-10 sm:pl-14">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+const TimelineItem = ({ date, time, activity, isDark }) => {
+  const hasEnded = isPast(date, time);
+  const rowRef = useRef(null);
+  const dotRef = useRef(null);
+
+  useEffect(() => {
+    if (!rowRef.current || !dotRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        dotRef.current,
+        { scale: 0.9, opacity: 0.6 },
+        {
+          scale: 1.15,
+          opacity: 1,
+          duration: 0.35,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: rowRef.current,
+            start: "top 85%",
+          },
+        }
+      );
+    }, rowRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <motion.div
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      whileHover="hover"
-      className="group cursor-pointer"
-      onClick={() => setIsExpanded(!isExpanded)}
+      ref={rowRef}
+      initial={{ opacity: 0, x: -18 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      className={[
+        "relative flex gap-4 sm:gap-6 mb-6 transition-all duration-700",
+        "font-[family-name:--font-treasure]",
+        hasEnded ? "opacity-25 grayscale" : "opacity-100",
+      ].join(" ")}
     >
-      <motion.div
-        className={`backdrop-blur-md rounded-xl p-6 shadow-lg h-full relative overflow-hidden
-          ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-            ? "bg-white/10 border border-white/20"
-            : "bg-white/80 border border-gray-300"}
-        `}
-        animate={{ 
-          borderColor: isExpanded ? accentColor : theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)",
-          boxShadow: isExpanded 
-            ? `0 0 30px ${accentColor}40` 
-            : "0 0 0 rgba(0,0,0,0.1)"
-        }}
-        transition={{ duration: 0.3 }}
+      <div
+        className={[
+          "flex-shrink-0 w-20 sm:w-24 text-[10px] sm:text-sm font-bold pt-1",
+          isDark ? "text-amber-300" : "text-amber-700",
+        ].join(" ")}
       >
-        {/* Animated background gradient */}
-        <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500"
-          style={{
-            background: `linear-gradient(135deg, ${accentColor}20, transparent)`
-          }}
+        {time}
+      </div>
+
+      <div className="relative flex-1">
+        {/* Dot aligned to the glass tube center */}
+        <div
+          ref={dotRef}
+          className={[
+            "absolute -left-[44px] sm:-left-[56px] top-[6px]",
+            "w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full",
+            hasEnded
+              ? "bg-zinc-500"
+              : isDark
+              ? "bg-yellow-400 shadow-[0_0_18px_#fbbf24]"
+              : "bg-amber-600 shadow-[0_0_16px_rgba(217,119,6,0.5)]",
+          ].join(" ")}
         />
 
-        {/* Sparkle effect on hover */}
-        <AnimatePresence>
-          {isExpanded && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0 }}
-              className="absolute top-2 right-2"
-            >
-              <Sparkles className="h-5 w-5 text-yellow-400" />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <p className={`text-base sm:text-xl font-semibold leading-snug ${isDark ? "text-white/90" : "text-black/80"}`}>
+          {activity}
+        </p>
 
-        <div className="relative z-10">
-          <motion.h3 
-            className={`text-xl font-semibold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
-            animate={{ color: isExpanded ? accentColor : theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "white" : "black" }}
-            transition={{ duration: 0.3 }}
-          >
-            {event.title}
-          </motion.h3>
-          
-          <motion.p 
-            className={`text-sm mb-4 leading-relaxed ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/80" : "text-black/80"}`}
-            animate={{ opacity: isExpanded ? 1 : 0.8 }}
-          >
-            {event.description}
-          </motion.p>
-
-          <div className="space-y-2">
-            <motion.div 
-              className={`flex items-center gap-2 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}
-              whileHover={{ x: 5 }}
-            >
-              <Clock className="h-4 w-4" />
-              <span>{new Date(event.eventDate).toLocaleString()}</span>
-            </motion.div>
-            
-            <AnimatePresence>
-              {isExpanded && (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="space-y-2 pt-2 border-t border-white/10"
-                >
-                  <motion.div 
-                    className={`flex items-center gap-2 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}
-                    whileHover={{ x: 5 }}
-                  >
-                    <MapPin className="h-4 w-4" />
-                    <span>UEM Kolkata Campus</span>
-                  </motion.div>
-                  <motion.div 
-                    className={`flex items-center gap-2 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}
-                    whileHover={{ x: 5 }}
-                  >
-                    <Users className="h-4 w-4" />
-                    <span>Open to all students</span>
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <motion.div 
-            className={`mt-4 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/50" : "text-black/50"}`}
-            animate={{ opacity: isExpanded ? 0.5 : 1 }}
-          >
-            {isExpanded ? "Click to collapse" : "Click for details"}
-          </motion.div>
-        </div>
-      </motion.div>
+        <div className={`mt-3 h-[1px] ${isDark ? "bg-white/10" : "bg-amber-900/10"}`} />
+      </div>
     </motion.div>
   );
 };
 
 export default function Events() {
   const { theme } = useTheme();
-  const [upcoming, setUpcoming] = useState([]);
-  const [completed, setCompleted] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const [prefersDark, setPrefersDark] = useState(false);
 
-  const fetchEvents = async () => {
-    try {
-      const [up, comp] = await Promise.all([
-        axios.get("https://googlegeminiuem.onrender.com/api/events/events/upcoming"),
-        axios.get("https://googlegeminiuem.onrender.com/api/events/events/completed"),
-      ]);
-      setUpcoming(Array.isArray(up.data) ? up.data : []);
-      setCompleted(Array.isArray(comp.data) ? comp.data : []);
-    } catch (err) {
-      console.error("Error fetching events:", err);
-      setUpcoming([]);
-      setCompleted([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const isDark = useMemo(() => {
+    if (!mounted) return false;
+    if (theme === "dark") return true;
+    if (theme === "light") return false;
+    return prefersDark;
+  }, [theme, prefersDark, mounted]);
+
+  const goldGradient =
+    "linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 70%, #FBF5B7 85%, #AA771C 100%)";
 
   useEffect(() => {
-    fetchEvents();
-    socket.on("eventBroadcast", () => fetchEvents());
-    return () => socket.disconnect();
+    setMounted(true);
+    window.scrollTo(0, 0);
+
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const apply = () => setPrefersDark(mq.matches);
+    apply();
+
+    if (mq.addEventListener) mq.addEventListener("change", apply);
+    else mq.addListener(apply);
+
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener("change", apply);
+      else mq.removeListener(apply);
+    };
   }, []);
 
-  if (loading) {
-    return (
-      <main className={`px-4 pt-36 pb-20 min-h-screen flex items-center justify-center transition-colors duration-500
-        ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-          ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
-          : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
-      `}>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="text-center"
-        >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="inline-block mb-4"
-          >
-            <Calendar className="h-12 w-12 text-blue-400" />
-          </motion.div>
-          <motion.p 
-            className="text-xl font-semibold"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            Loading amazing events...
-          </motion.p>
-        </motion.div>
-      </main>
-    );
-  }
+  if (!mounted) return null;
 
   return (
-    <main className={`px-4 pt-36 pb-20 min-h-screen overflow-hidden relative transition-colors duration-500
-      ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-        ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
-        : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
-    `}>
-      {/* Enhanced Glowing background orbs */}
-      <div className="absolute inset-0 z-0 opacity-20">
-        <motion.div
-          animate={{ 
-            scale: [1, 1.3, 1], 
-            rotate: [0, 180, 360], 
-            opacity: [0.1, 0.4, 0.1],
-            x: [0, 50, 0]
-          }}
-          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-96 w-96 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 blur-3xl -top-20 -left-20"
-        />
-        <motion.div
-          animate={{ 
-            scale: [1, 1.2, 1], 
-            rotate: [0, -180, -360], 
-            opacity: [0.1, 0.3, 0.1],
-            x: [0, -30, 0]
-          }}
-          transition={{ duration: 25, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-80 w-80 rounded-full bg-gradient-to-r from-indigo-500 to-pink-500 blur-3xl -bottom-20 -right-20"
-        />
-        <motion.div
-          animate={{ 
-            scale: [1, 1.4, 1], 
-            rotate: [0, 90, 180, 270, 360], 
-            opacity: [0.05, 0.2, 0.05]
-          }}
-          transition={{ duration: 30, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-64 w-64 rounded-full bg-gradient-to-r from-green-400 to-blue-500 blur-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-        />
-      </div>
-
-      {/* Floating particles */}
-      <div className="absolute inset-0 z-0">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full"
+    <main className="min-h-screen px-4 pb-20 pt-40 sm:pt-48 bg-transparent overflow-hidden relative">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl mx-auto relative z-10">
+        {/* HEADER */}
+        <motion.div initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="text-center mb-16 sm:mb-24">
+          <motion.h1
+            animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+            className="font-[family-name:--font-eldorado] text-5xl sm:text-8xl lg:text-9xl font-black mb-4 tracking-tight leading-none"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              background: goldGradient,
+              backgroundSize: "300% auto",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              filter: "drop-shadow(0 0 25px rgba(191,149,63,0.4))",
             }}
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 3,
-            }}
-          />
-        ))}
-      </div>
+          >
+            CHAMBER <br className="sm:hidden" /> OF SECRETS
+          </motion.h1>
+          <p className={`font-[family-name:--font-eldorado] text-sm sm:text-2xl font-bold tracking-[0.5em] uppercase ${isDark ? "text-amber-300" : "text-amber-800"}`}>
+            Theme: Eldorado
+          </p>
+        </motion.div>
 
-      <div className="max-w-7xl mx-auto relative z-10 space-y-24">
-        {/* Upcoming Events Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, type: "spring" }}
-          className={`backdrop-blur-md rounded-2xl p-8 shadow-2xl relative overflow-hidden
-            ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-              ? "bg-white/5 border border-white/10"
-              : "bg-white/80 border border-gray-300"}
-          `}
-        >
-          {/* Section background animation */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10"
-            animate={{ 
-              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-            }}
-            transition={{ duration: 8, repeat: Infinity }}
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 sm:gap-24 items-start">
+          {/* LEFT */}
+          <div className="flex flex-col gap-10 sm:gap-14">
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative group mx-auto w-full max-w-lg">
+              <div className="absolute -inset-4 bg-amber-500/10 rounded-[2.5rem] blur-3xl opacity-30 group-hover:opacity-60 transition duration-1000"></div>
+              <img src="/chamber/poster.png" alt="Poster" className="relative rounded-[2rem] shadow-2xl w-full border border-white/10" />
+            </motion.div>
 
-          <div className="relative z-10">
-            <motion.div 
-              className="flex flex-col items-center justify-center mb-12"
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.3, type: "spring" }}
-            >
-              <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-                <motion.div
-                  className="h-16 w-16 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg"
-                  whileHover={{ scale: 1.1, rotate: 10 }}
-                  animate={{ 
-                    boxShadow: [
-                      "0 0 0 rgba(59, 130, 246, 0)",
-                      "0 0 30px rgba(59, 130, 246, 0.5)",
-                      "0 0 0 rgba(59, 130, 246, 0)"
-                    ]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  <AnimatedIcon icon={Calendar} color="white" size={32} />
-                </motion.div>
-                <div>
-                  <motion.h2
-                    className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent tracking-wide leading-tight"
-                    animate={{ 
-                      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                    }}
-                    transition={{ duration: 5, repeat: Infinity }}
+            {/* SPONSOR CARD — Eldorado Gold Theme */}
+            <div className="relative flex flex-col items-center">
+              <p className="font-[family-name:--font-treasure] text-[10px] font-bold uppercase tracking-[0.55em] mb-4 text-amber-500/70">
+                Strategic Partner
+              </p>
+
+              <motion.div whileHover={{ scale: 1.02, y: -6 }} className="relative w-full max-w-[340px] sm:max-w-[460px]">
+                {/* Eldorado aura */}
+                <div className="absolute -inset-10 opacity-60 blur-[70px] bg-[radial-gradient(circle_at_50%_40%,rgba(251,191,36,0.35),transparent_55%),radial-gradient(circle_at_20%_80%,rgba(191,149,63,0.28),transparent_55%)]" />
+
+                {/* Gold frame */}
+                <div className="relative rounded-[1.65rem] p-[1.5px] bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728,#FBF5B7,#AA771C)] shadow-[0_30px_90px_rgba(191,149,63,0.20)]">
+                  <div
+                    className={[
+                      "relative overflow-hidden rounded-[1.55rem] p-5 sm:p-7",
+                      "backdrop-blur-2xl border border-white/10",
+                      isDark ? "bg-black/35" : "bg-white/85",
+                    ].join(" ")}
                   >
-                    Upcoming Events
-                  </motion.h2>
-                  <motion.p 
-                    className={`mt-2 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                  >
-                    Discover what's coming next in our community
-                  </motion.p>
+                    <GoldShimmer />
+
+                    {/* inner highlight */}
+                    <div className="pointer-events-none absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_30%_25%,rgba(252,246,186,0.28),transparent_55%)]" />
+
+                    <div className="relative z-20 flex flex-col items-center gap-4">
+                      {/* ✅ Use MFALogo (exact, no padding issues) */}
+                      <div className="sm:hidden">
+                        <MFALogo height={94} className="mx-auto" />
+                      </div>
+                      <div className="hidden sm:block">
+                        <MFALogo height={108} className="mx-auto" />
+                      </div>
+
+                      <div className="text-center">
+                        <h3 className={`font-[family-name:--font-eldorado] text-lg sm:text-xl font-black uppercase tracking-tight ${isDark ? "text-white/90" : "text-black/90"}`}>
+                          Mercy For Animals
+                        </h3>
+                        <div className="h-[1px] w-14 mx-auto mt-2 bg-amber-500/35" />
+                        <p className={`mt-2 text-[11px] sm:text-xs font-semibold tracking-[0.28em] uppercase ${isDark ? "text-amber-200/70" : "text-amber-900/40"}`}>
+                          Eldorado Alliance
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* bottom gold glow */}
+                    <div className="pointer-events-none absolute -bottom-10 left-10 right-10 h-24 opacity-40 blur-3xl bg-[radial-gradient(circle,rgba(251,191,36,0.35),transparent_60%)]" />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.1
-                  }
-                }
-              }}
-              initial="hidden"
-              animate="visible"
-            >
-              {upcoming.length > 0 ? (
-                upcoming.map((event, index) => <EventCard key={event._id} event={event} index={index} />)
-              ) : (
-                <motion.div 
-                  className="col-span-full text-center py-12"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <motion.div
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <Calendar className="h-16 w-16 text-white/30 mx-auto mb-4" />
-                  </motion.div>
-                  <p className={`text-lg ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}>No upcoming events yet. Stay tuned!</p>
-                </motion.div>
-              )}
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
-        </motion.section>
 
-        {/* Completed Events Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, type: "spring", delay: 0.2 }}
-          className={`backdrop-blur-md rounded-2xl p-8 shadow-2xl relative overflow-hidden
-            ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-              ? "bg-white/5 border border-white/10"
-              : "bg-white/80 border border-gray-300"}
-          `}
-        >
-          {/* Section background animation */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-teal-500/10"
-            animate={{ 
-              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-            }}
-            transition={{ duration: 8, repeat: Infinity, delay: 2 }}
-          />
+          {/* RIGHT */}
+          <div className="space-y-8 sm:space-y-10 px-1 sm:px-2">
+            <TimelineCard title="FEB 06" isDark={isDark}>
+              <TimelineItem date="Feb 6" time="08:00 PM" activity="Inauguration" isDark={isDark} />
+              <TimelineItem date="Feb 6" time="08:20 PM" activity="Online Round Starts" isDark={isDark} />
+              <TimelineItem date="Feb 6" time="09:20 PM" activity="Game Ends" isDark={isDark} />
+              <TimelineItem date="Feb 6" time="09:30 PM" activity="Conclusion" isDark={isDark} />
+            </TimelineCard>
 
-          <div className="relative z-10">
-            <motion.div 
-              className="flex flex-col items-center justify-center mb-12"
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.5, type: "spring" }}
-            >
-              <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-                <motion.div
-                  className="h-16 w-16 flex items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-teal-600 shadow-lg"
-                  whileHover={{ scale: 1.1, rotate: -10 }}
-                  animate={{ 
-                    boxShadow: [
-                      "0 0 0 rgba(34, 197, 94, 0)",
-                      "0 0 30px rgba(34, 197, 94, 0.5)",
-                      "0 0 0 rgba(34, 197, 94, 0)"
-                    ]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-                >
-                  <AnimatedIcon icon={CheckCircle} color="white" size={32} />
-                </motion.div>
-                <div>
-                  <motion.h2
-                    className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-green-400 to-teal-300 bg-clip-text text-transparent tracking-wide leading-tight"
-                    animate={{ 
-                      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                    }}
-                    transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-                  >
-                    Completed Events
-                  </motion.h2>
-                  <motion.p 
-                    className={`mt-2 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                  >
-                    Celebrating our past achievements
-                  </motion.p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.1,
-                    delayChildren: 0.3
-                  }
-                }
-              }}
-              initial="hidden"
-              animate="visible"
-            >
-              {completed.length > 0 ? (
-                completed.map((event, index) => <EventCard key={event._id} event={event} index={index} />)
-              ) : (
-                <motion.div 
-                  className="col-span-full text-center py-12"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7 }}
-                >
-                  <motion.div
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <CheckCircle className="h-16 w-16 text-white/30 mx-auto mb-4" />
-                  </motion.div>
-                  <p className={`text-lg ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}>No completed events yet. Exciting things coming soon!</p>
-                </motion.div>
-              )}
-            </motion.div>
+            <TimelineCard title="FEB 07" isDark={isDark}>
+              <TimelineItem date="Feb 7" time="09:00 AM" activity="Reporting" isDark={isDark} />
+              <TimelineItem date="Feb 7" time="10:00 AM" activity="Inauguration" isDark={isDark} />
+              <TimelineItem date="Feb 7" time="10:30 AM" activity="Game Starts" isDark={isDark} />
+              <TimelineItem date="Feb 7" time="01:30 PM" activity="Break" isDark={isDark} />
+              <TimelineItem date="Feb 7" time="02:30 PM" activity="Event Ends" isDark={isDark} />
+            </TimelineCard>
           </div>
-        </motion.section>
-      </div>
+        </div>
+      </motion.div>
     </main>
   );
 }
