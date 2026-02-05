@@ -423,7 +423,7 @@ export default function Events() {
                             isDark ? "text-amber-200/70" : "text-amber-900/40"
                           }`}
                         >
-                          Eldorado Alliance
+                          Golden Alliance
                         </p>
                       </div>
                     </div>
