@@ -25,7 +25,6 @@ const getTimeLeft = (target) => {
 
 const pad2 = (n) => String(n).padStart(2, "0");
 
-// Your existing “past event” logic (kept as-is)
 const isPast = (dateStr, timeStr) => {
   const eventDate = new Date(`${dateStr}, 2026 ${timeStr}`);
   return new Date() > eventDate;
@@ -40,7 +39,16 @@ const GoldShimmer = () => (
   />
 );
 
-// ✅ Countdown component (renders anywhere you want)
+// ✅ Silver shimmer for sponsor card
+const SilverShimmer = () => (
+  <motion.div
+    initial={{ x: "-110%" }}
+    animate={{ x: "210%" }}
+    transition={{ repeat: Infinity, duration: 3.5, ease: "linear", repeatDelay: 2 }}
+    className="absolute inset-0 z-10 w-full h-full skew-x-[-25deg] bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none"
+  />
+);
+
 function Countdown({ isDark, goldGradient, timeLeft }) {
   return (
     <motion.div
@@ -114,7 +122,6 @@ function Countdown({ isDark, goldGradient, timeLeft }) {
   );
 }
 
-/** --- “Glass tube + liquid” day card --- */
 function TimelineCard({ title, isDark, children }) {
   const cardRef = useRef(null);
   const liquidRef = useRef(null);
@@ -123,7 +130,6 @@ function TimelineCard({ title, isDark, children }) {
     if (!cardRef.current || !liquidRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Infinite flowing shimmer/wave inside liquid
       gsap.to(liquidRef.current, {
         backgroundPosition: "300% 0%",
         duration: 6,
@@ -131,7 +137,6 @@ function TimelineCard({ title, isDark, children }) {
         repeat: -1,
       });
 
-      // Fill amount tied to scroll within this card
       gsap.fromTo(
         liquidRef.current,
         { height: "18%" },
@@ -161,10 +166,8 @@ function TimelineCard({ title, isDark, children }) {
         "shadow-[0_25px_80px_rgba(0,0,0,0.25)]",
       ].join(" ")}
     >
-      {/* soft glow */}
       <div className="pointer-events-none absolute -inset-24 opacity-45 blur-3xl bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.22),transparent_55%),radial-gradient(circle_at_80%_40%,rgba(191,149,63,0.16),transparent_55%)]" />
 
-      {/* Card title */}
       <div className="relative z-10 flex items-center gap-4 mb-10">
         <span className={`w-1.5 h-8 ${isDark ? "bg-amber-500" : "bg-amber-800"}`} />
         <h2 className="font-[family-name:--font-eldorado] text-3xl sm:text-5xl font-black tracking-tight">
@@ -172,10 +175,8 @@ function TimelineCard({ title, isDark, children }) {
         </h2>
       </div>
 
-      {/* Glass tube (left) */}
       <div className="relative z-10">
         <div className="absolute left-0 top-0 bottom-0 w-10 sm:w-12 flex justify-center">
-          {/* outer glass */}
           <div
             className={[
               "relative w-3.5 sm:w-4 rounded-full",
@@ -186,7 +187,6 @@ function TimelineCard({ title, isDark, children }) {
               "backdrop-blur-2xl",
             ].join(" ")}
           >
-            {/* inner liquid */}
             <div
               ref={liquidRef}
               className={[
@@ -201,12 +201,10 @@ function TimelineCard({ title, isDark, children }) {
               }}
             />
 
-            {/* glass highlight */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-white/25 via-white/5 to-transparent opacity-45" />
           </div>
         </div>
 
-        {/* Content area */}
         <div className="pl-10 sm:pl-14">{children}</div>
       </div>
     </div>
@@ -263,7 +261,6 @@ const TimelineItem = ({ date, time, activity, isDark }) => {
       </div>
 
       <div className="relative flex-1">
-        {/* Dot aligned to the glass tube center */}
         <div
           ref={dotRef}
           className={[
@@ -277,11 +274,7 @@ const TimelineItem = ({ date, time, activity, isDark }) => {
           ].join(" ")}
         />
 
-        <p
-          className={`text-base sm:text-xl font-semibold leading-snug ${
-            isDark ? "text-white/90" : "text-black/80"
-          }`}
-        >
+        <p className={`text-base sm:text-xl font-semibold leading-snug ${isDark ? "text-white/90" : "text-black/80"}`}>
           {activity}
         </p>
 
@@ -306,7 +299,10 @@ export default function Events() {
   const goldGradient =
     "linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 70%, #FBF5B7 85%, #AA771C 100%)";
 
-  // ✅ countdown state lives here (single interval)
+  // ✅ Silver theme for sponsor card
+  const silverGradient =
+    "linear-gradient(135deg, #E5E7EB 0%, #F9FAFB 35%, #D1D5DB 55%, #F3F4F6 75%, #9CA3AF 100%)";
+
   const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(EVENT_START));
 
   useEffect(() => {
@@ -356,15 +352,10 @@ export default function Events() {
           >
             CHAMBER <br className="sm:hidden" /> OF SECRETS
           </motion.h1>
-          <p
-            className={`font-[family-name:--font-eldorado] text-sm sm:text-2xl font-bold tracking-[0.5em] uppercase ${
-              isDark ? "text-amber-300" : "text-amber-800"
-            }`}
-          >
+          <p className={`font-[family-name:--font-eldorado] text-sm sm:text-2xl font-bold tracking-[0.5em] uppercase ${isDark ? "text-amber-300" : "text-amber-800"}`}>
             Theme: Temple Run
           </p>
 
-          {/* ✅ Countdown placed right under header */}
           <Countdown isDark={isDark} goldGradient={goldGradient} timeLeft={timeLeft} />
         </motion.div>
 
@@ -376,18 +367,21 @@ export default function Events() {
               <img src="/chamber/poster.png" alt="Poster" className="relative rounded-[2rem] shadow-2xl w-full border border-white/10" />
             </motion.div>
 
-            {/* SPONSOR CARD — Eldorado Gold Theme */}
+            {/* SPONSOR CARD — SILVER THEME */}
             <div className="relative flex flex-col items-center">
-              <p className="font-[family-name:--font-treasure] text-[10px] font-bold uppercase tracking-[0.55em] mb-4 text-amber-500/70">
+              <p className="font-[family-name:--font-treasure] text-[10px] font-bold uppercase tracking-[0.55em] mb-4 text-gray-400">
                 Strategic Partner
               </p>
 
               <motion.div whileHover={{ scale: 1.02, y: -6 }} className="relative w-full max-w-[340px] sm:max-w-[460px]">
-                {/* Eldorado aura */}
-                <div className="absolute -inset-10 opacity-60 blur-[70px] bg-[radial-gradient(circle_at_50%_40%,rgba(251,191,36,0.35),transparent_55%),radial-gradient(circle_at_20%_80%,rgba(191,149,63,0.28),transparent_55%)]" />
+                {/* Silver aura */}
+                <div className="absolute -inset-10 opacity-70 blur-[70px] bg-[radial-gradient(circle_at_50%_40%,rgba(229,231,235,0.55),transparent_55%),radial-gradient(circle_at_20%_80%,rgba(156,163,175,0.45),transparent_55%)]" />
 
-                {/* Gold frame */}
-                <div className="relative rounded-[1.65rem] p-[1.5px] bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728,#FBF5B7,#AA771C)] shadow-[0_30px_90px_rgba(191,149,63,0.20)]">
+                {/* Silver frame */}
+                <div
+                  className="relative rounded-[1.65rem] p-[1.5px] shadow-[0_30px_90px_rgba(156,163,175,0.35)]"
+                  style={{ background: silverGradient }}
+                >
                   <div
                     className={[
                       "relative overflow-hidden rounded-[1.55rem] p-5 sm:p-7",
@@ -395,13 +389,12 @@ export default function Events() {
                       isDark ? "bg-black/35" : "bg-white/85",
                     ].join(" ")}
                   >
-                    <GoldShimmer />
+                    <SilverShimmer />
 
                     {/* inner highlight */}
-                    <div className="pointer-events-none absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_30%_25%,rgba(252,246,186,0.28),transparent_55%)]" />
+                    <div className="pointer-events-none absolute inset-0 opacity-45 bg-[radial-gradient(circle_at_30%_25%,rgba(249,250,251,0.38),transparent_55%)]" />
 
                     <div className="relative z-20 flex flex-col items-center gap-4">
-                      {/* ✅ Use MFALogo (exact, no padding issues) */}
                       <div className="sm:hidden">
                         <MFALogo height={94} className="mx-auto" />
                       </div>
@@ -410,26 +403,18 @@ export default function Events() {
                       </div>
 
                       <div className="text-center">
-                        <h3
-                          className={`font-[family-name:--font-eldorado] text-lg sm:text-xl font-black uppercase tracking-tight ${
-                            isDark ? "text-white/90" : "text-black/90"
-                          }`}
-                        >
+                        <h3 className={`font-[family-name:--font-eldorado] text-lg sm:text-xl font-black uppercase tracking-tight ${isDark ? "text-gray-600" : "text-gray-800"}`}>
                           Mercy For Animals
                         </h3>
-                        <div className="h-[1px] w-14 mx-auto mt-2 bg-amber-500/35" />
-                        <p
-                          className={`mt-2 text-[11px] sm:text-xs font-semibold tracking-[0.28em] uppercase ${
-                            isDark ? "text-amber-200/70" : "text-amber-900/40"
-                          }`}
-                        >
-                          Golden Alliance
+                        <div className="h-[1px] w-14 mx-auto mt-2 bg-gray-400/40" />
+                        <p className={`mt-2 text-[11px] sm:text-xs font-semibold tracking-[0.28em] uppercase ${isDark ? "text-gray-600" : "text-gray-800"}`}>
+                          Silver Alliance
                         </p>
                       </div>
                     </div>
 
-                    {/* bottom gold glow */}
-                    <div className="pointer-events-none absolute -bottom-10 left-10 right-10 h-24 opacity-40 blur-3xl bg-[radial-gradient(circle,rgba(251,191,36,0.35),transparent_60%)]" />
+                    {/* bottom silver glow */}
+                    <div className="pointer-events-none absolute -bottom-10 left-10 right-10 h-24 opacity-45 blur-3xl bg-[radial-gradient(circle,rgba(229,231,235,0.55),transparent_60%)]" />
                   </div>
                 </div>
               </motion.div>
