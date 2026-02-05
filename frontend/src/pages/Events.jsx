@@ -370,7 +370,7 @@ export default function Events() {
             {/* SPONSOR CARD — SILVER THEME */}
             <div className="relative flex flex-col items-center">
               <p className="font-[family-name:--font-treasure] text-[10px] font-bold uppercase tracking-[0.55em] mb-4 text-gray-400">
-                Strategic Partner
+                Sponsor
               </p>
 
               <motion.div whileHover={{ scale: 1.02, y: -6 }} className="relative w-full max-w-[340px] sm:max-w-[460px]">
@@ -425,17 +425,17 @@ export default function Events() {
           <div className="space-y-8 sm:space-y-10 px-1 sm:px-2">
             <TimelineCard title="FEB 06" isDark={isDark}>
               <TimelineItem date="Feb 6" time="08:00 PM" activity="Inauguration" isDark={isDark} />
-              <TimelineItem date="Feb 6" time="08:20 PM" activity="Online Round Starts" isDark={isDark} />
-              <TimelineItem date="Feb 6" time="09:20 PM" activity="Game Ends" isDark={isDark} />
+              <TimelineItem date="Feb 6" time="08:20 PM" activity="Quiz Starts" isDark={isDark} />
+              <TimelineItem date="Feb 6" time="09:20 PM" activity="Quiz Ends" isDark={isDark} />
               <TimelineItem date="Feb 6" time="09:30 PM" activity="Conclusion" isDark={isDark} />
             </TimelineCard>
 
             <TimelineCard title="FEB 07" isDark={isDark}>
               <TimelineItem date="Feb 7" time="09:00 AM" activity="Reporting" isDark={isDark} />
               <TimelineItem date="Feb 7" time="10:00 AM" activity="Inauguration" isDark={isDark} />
-              <TimelineItem date="Feb 7" time="10:30 AM" activity="Game Starts" isDark={isDark} />
+              <TimelineItem date="Feb 7" time="10:30 AM" activity="Hunt Starts" isDark={isDark} />
               <TimelineItem date="Feb 7" time="01:30 PM" activity="Break" isDark={isDark} />
-              <TimelineItem date="Feb 7" time="02:30 PM" activity="Event Ends" isDark={isDark} />
+              <TimelineItem date="Feb 7" time="02:30 PM" activity="Hunt Ends" isDark={isDark} />
             </TimelineCard>
           </div>
         </div>
