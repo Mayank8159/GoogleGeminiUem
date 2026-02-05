@@ -9,7 +9,7 @@ import { MFALogo } from "../components/MFALogo";
 gsap.registerPlugin(ScrollTrigger);
 
 // ✅ Event start (local time)
-const EVENT_START = new Date("Feb 6, 2026 08:00:00");
+const EVENT_START = new Date("Feb 6, 2026 20:00:00");
 
 const getTimeLeft = (target) => {
   const diff = target.getTime() - new Date().getTime();
