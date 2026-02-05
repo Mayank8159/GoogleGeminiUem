@@ -361,7 +361,7 @@ export default function Events() {
               isDark ? "text-amber-300" : "text-amber-800"
             }`}
           >
-            Theme: Eldorado
+            Theme: Temple Run
           </p>
 
           {/* ✅ Countdown placed right under header */}
