@@ -4,10 +4,28 @@ import { useTheme } from "../context/ThemeContext";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { MFALogo } from "../components/MFALogo";
- // ✅ adjust path if needed
+// ✅ adjust path if needed
 
 gsap.registerPlugin(ScrollTrigger);
 
+// ✅ Event start (local time)
+const EVENT_START = new Date("Feb 6, 2026 08:00:00");
+
+const getTimeLeft = (target) => {
+  const diff = target.getTime() - new Date().getTime();
+  const clamped = Math.max(0, diff);
+
+  const days = Math.floor(clamped / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((clamped / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((clamped / (1000 * 60)) % 60);
+  const seconds = Math.floor((clamped / 1000) % 60);
+
+  return { diff, days, hours, minutes, seconds };
+};
+
+const pad2 = (n) => String(n).padStart(2, "0");
+
+// Your existing “past event” logic (kept as-is)
 const isPast = (dateStr, timeStr) => {
   const eventDate = new Date(`${dateStr}, 2026 ${timeStr}`);
   return new Date() > eventDate;
@@ -21,6 +39,80 @@ const GoldShimmer = () => (
     className="absolute inset-0 z-10 w-full h-full skew-x-[-25deg] bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none"
   />
 );
+
+// ✅ Countdown component (renders anywhere you want)
+function Countdown({ isDark, goldGradient, timeLeft }) {
+  return (
+    <motion.div
+      initial={{ y: 10, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.1 }}
+      className="mt-10 flex justify-center"
+    >
+      <div
+        className={[
+          "relative overflow-hidden rounded-2xl border backdrop-blur-xl",
+          "px-5 sm:px-7 py-4 sm:py-5",
+          isDark ? "bg-black/30 border-amber-500/15" : "bg-white/75 border-amber-900/10",
+          "shadow-[0_20px_70px_rgba(0,0,0,0.22)]",
+        ].join(" ")}
+      >
+        <GoldShimmer />
+
+        <div className="relative z-20 text-center">
+          <p
+            className={`font-[family-name:--font-treasure] text-[10px] sm:text-xs font-bold uppercase tracking-[0.55em] ${
+              isDark ? "text-amber-200/70" : "text-amber-900/40"
+            }`}
+          >
+            Countdown to Inauguration
+          </p>
+
+          {timeLeft.diff <= 0 ? (
+            <div
+              className={`mt-2 font-[family-name:--font-eldorado] text-2xl sm:text-4xl font-black ${
+                isDark ? "text-white/90" : "text-black/90"
+              }`}
+            >
+              Event started
+            </div>
+          ) : (
+            <div className="mt-3 flex items-end justify-center gap-4 sm:gap-6">
+              {[
+                { label: "DAYS", value: timeLeft.days },
+                { label: "HRS", value: pad2(timeLeft.hours) },
+                { label: "MIN", value: pad2(timeLeft.minutes) },
+                { label: "SEC", value: pad2(timeLeft.seconds) },
+              ].map((x) => (
+                <div key={x.label} className="text-center">
+                  <div
+                    className="font-[family-name:--font-eldorado] text-3xl sm:text-5xl font-black leading-none"
+                    style={{
+                      background: goldGradient,
+                      backgroundSize: "300% auto",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      filter: "drop-shadow(0 0 18px rgba(191,149,63,0.25))",
+                    }}
+                  >
+                    {x.value}
+                  </div>
+                  <div
+                    className={`mt-1 font-[family-name:--font-treasure] text-[9px] sm:text-[11px] font-bold tracking-[0.35em] ${
+                      isDark ? "text-amber-200/70" : "text-amber-900/40"
+                    }`}
+                  >
+                    {x.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 /** --- “Glass tube + liquid” day card --- */
 function TimelineCard({ title, isDark, children }) {
@@ -185,7 +277,11 @@ const TimelineItem = ({ date, time, activity, isDark }) => {
           ].join(" ")}
         />
 
-        <p className={`text-base sm:text-xl font-semibold leading-snug ${isDark ? "text-white/90" : "text-black/80"}`}>
+        <p
+          className={`text-base sm:text-xl font-semibold leading-snug ${
+            isDark ? "text-white/90" : "text-black/80"
+          }`}
+        >
           {activity}
         </p>
 
@@ -210,6 +306,9 @@ export default function Events() {
   const goldGradient =
     "linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 70%, #FBF5B7 85%, #AA771C 100%)";
 
+  // ✅ countdown state lives here (single interval)
+  const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(EVENT_START));
+
   useEffect(() => {
     setMounted(true);
     window.scrollTo(0, 0);
@@ -226,6 +325,15 @@ export default function Events() {
       else mq.removeListener(apply);
     };
   }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const tick = () => setTimeLeft(getTimeLeft(EVENT_START));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [mounted]);
 
   if (!mounted) return null;
 
@@ -248,9 +356,16 @@ export default function Events() {
           >
             CHAMBER <br className="sm:hidden" /> OF SECRETS
           </motion.h1>
-          <p className={`font-[family-name:--font-eldorado] text-sm sm:text-2xl font-bold tracking-[0.5em] uppercase ${isDark ? "text-amber-300" : "text-amber-800"}`}>
+          <p
+            className={`font-[family-name:--font-eldorado] text-sm sm:text-2xl font-bold tracking-[0.5em] uppercase ${
+              isDark ? "text-amber-300" : "text-amber-800"
+            }`}
+          >
             Theme: Eldorado
           </p>
+
+          {/* ✅ Countdown placed right under header */}
+          <Countdown isDark={isDark} goldGradient={goldGradient} timeLeft={timeLeft} />
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 sm:gap-24 items-start">
@@ -295,11 +410,19 @@ export default function Events() {
                       </div>
 
                       <div className="text-center">
-                        <h3 className={`font-[family-name:--font-eldorado] text-lg sm:text-xl font-black uppercase tracking-tight ${isDark ? "text-white/90" : "text-black/90"}`}>
+                        <h3
+                          className={`font-[family-name:--font-eldorado] text-lg sm:text-xl font-black uppercase tracking-tight ${
+                            isDark ? "text-white/90" : "text-black/90"
+                          }`}
+                        >
                           Mercy For Animals
                         </h3>
                         <div className="h-[1px] w-14 mx-auto mt-2 bg-amber-500/35" />
-                        <p className={`mt-2 text-[11px] sm:text-xs font-semibold tracking-[0.28em] uppercase ${isDark ? "text-amber-200/70" : "text-amber-900/40"}`}>
+                        <p
+                          className={`mt-2 text-[11px] sm:text-xs font-semibold tracking-[0.28em] uppercase ${
+                            isDark ? "text-amber-200/70" : "text-amber-900/40"
+                          }`}
+                        >
                           Eldorado Alliance
                         </p>
                       </div>
