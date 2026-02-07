@@ -136,7 +136,7 @@ const Round2 = () => {
       <div className="pt-6 px-8 flex justify-between items-center z-10">
         <button onClick={() => navigate('/')} className="text-[#facc15] font-black text-[10px] tracking-widest">← EXIT</button>
         <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-black text-[#facc15] drop-shadow-[0_0_15px_rgba(250,204,21,0.5)] italic">RUNE CHASE</h1>
+            <h1 className="text-4xl md:text-5xl font-black text-[#facc15] drop-shadow-[0_0_15px_rgba(250,204,21,0.5)] italic">Chamber of Secrets</h1>
             <p className="text-[#facc15] font-mono text-[10px] tracking-[0.4em]">LEVEL {level}/5</p>
         </div>
         <button 

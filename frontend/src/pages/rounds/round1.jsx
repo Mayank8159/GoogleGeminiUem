@@ -120,7 +120,7 @@ const Round1 = () => {
       {/* Header */}
       <div className="text-center mb-10 z-10">
         <h1 className="text-6xl md:text-8xl font-black text-[#facc15] drop-shadow-[0_0_20px_rgba(250,204,21,0.5)] tracking-tighter uppercase italic">
-          QR MAZE: THE RUN
+          Chamber of Secrets
         </h1>
         <div className="h-2 w-64 bg-[#facc15] mx-auto mt-2 rounded-full shadow-[0_0_30px_#facc15]"></div>
       </div>
