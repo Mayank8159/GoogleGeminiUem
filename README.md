@@ -1,11 +1,11 @@
 <div align="center">
 
 <a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=900&size=45&pause=1000&color=38BDF8&center=true&vCenter=true&width=900&height=100&lines=GOOGLE+GEMINI+STUDENT+COMMUNITY;THE+AI+FRONTIER+IS+HERE;CONNECT.+COLLABORATE.+INNOVATE." alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=900&size=38&pause=1000&color=00D1FF&center=true&vCenter=true&width=850&height=100&lines=GOOGLE+GEMINI+STUDENT+COMMUNITY;THE+AI+FRONTIER+IS+HERE;CONNECT.+COLLABORATE.+INNOVATE." alt="Typing SVG" />
 </a>
 
 <a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=22&pause=1000&color=A855F7&center=true&vCenter=true&width=700&lines=STATUS:+NEURAL+LINK+STABLE;MERN+STACK:+ACTIVE;GEMINI+AI:+INTEGRATED;USER+CLASS:+STUDENT+DEVELOPER" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=20&pause=1000&color=BC13FE&center=true&vCenter=true&width=750&lines=STATUS:+NEURAL+LINK+STABLE;MERN+STACK:+OPERATIONAL;GEMINI+AI:+INTEGRATED;TARGET:+STUDENT+INNOVATION" alt="Typing SVG" />
 </a>
 
 <p>
@@ -69,10 +69,10 @@
 
 | Module | Status | Technology | Function |
 | :--- | :---: | :--- | :--- |
-| **`Client/`** | 🟢 | **React.js** | Neon UI / Glassmorphic dashboard for community interaction. |
-| **`Server/`** | 🟢 | **Node.js** | The central nervous system managing data flow and APIs. |
-| **`AI-Core/`** | 🟢 | **Google Gemini** | Generates intelligent summaries and powers discussions. |
-| **`Database/`** | 🟢 | **MongoDB** | Persistent storage for student profiles and event data. |
+| **`Client/`** | 🟢 | **React.js** | Neon UI / Glassmorphic dashboard. |
+| **`Server/`** | 🟢 | **Node.js** | Central nervous system managing data flow. |
+| **`AI-Core/`** | 🟢 | **Google Gemini** | Intelligence layer powering discussions. |
+| **`Database/`** | 🟢 | **MongoDB** | Persistent storage for neural records. |
 
 ---
 
@@ -81,7 +81,7 @@
 <div align="center">
 
 <a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Console&size=20&pause=1000&color=38BDF8&center=true&vCenter=true&width=600&height=100&lines=git+clone+gemini-community;npm+install;npm+run+dev+server;>_ SYSTEM+INITIALIZED" alt="Terminal Typing" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Console&size=20&pause=1000&color=00D1FF&center=true&vCenter=true&width=600&height=70&lines=git+clone+gemini-community;npm+install;npm+run+dev+server;>_ SYSTEM+INITIALIZED" alt="Terminal Typing" />
 </a>
 
 </div>
@@ -106,10 +106,10 @@ cd client && npm install && npm start
 ### 🛠️ THE ARCHITECT 🛠️
 
 **Mayank Kumar Sharma**
-*MERN Stack Developer | AI Enthusiast*
+*MERN Stack Developer | AI Developer*
 
----
+<img src="https://www.google.com/search?q=https://github-readme-stats.vercel.app/api%3Fusername%3Dyour-username%26show_icons%3Dtrue%26theme%3Dtokyonight%26hide_border%3Dtrue%26bg_color%3D0D1117" alt="GitHub Stats" width="400" />
 
-[ **[WEBSITE](https://www.google.com/search?q=https://your-portfolio.com)** ] | [ **[LINKEDIN](https://www.google.com/search?q=https://linkedin.com/in/your-profile)** ] | [ **[DISCORD](https://www.google.com/search?q=https://discord.gg/your-link)** ]
+[ **[WEBSITE](https://www.ggscuemk.tech/)** ] | [ **[DISCORD](https://discord.com/channels/1455117330211274874/1455134203434766357)** ]
 
 </div>
