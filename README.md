@@ -76,31 +76,6 @@
 
 ---
 
-## 🚀 Deployment Protocol
-
-<div align="center">
-
-<a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Console&size=20&pause=1000&color=00D1FF&center=true&vCenter=true&width=600&height=70&lines=git+clone+gemini-community;npm+install;npm+run+dev+server;>_ SYSTEM+INITIALIZED" alt="Terminal Typing" />
-</a>
-
-</div>
-
-```bash
-# Standard Execution Sequence
-git clone [https://github.com/your-username/gemini-student-community.git](https://github.com/your-username/gemini-student-community.git)
-cd gemini-student-community
-
-# Start Backend
-cd server && npm install && npm start
-
-# Start Frontend
-cd client && npm install && npm start
-
-```
-
----
-
 <div align="center">
 
 ### 🛠️ THE ARCHITECT 🛠️
@@ -108,8 +83,7 @@ cd client && npm install && npm start
 **Mayank Kumar Sharma**
 *MERN Stack Developer | AI Developer*
 
-<img src="https://www.google.com/search?q=https://github-readme-stats.vercel.app/api%3Fusername%3Dyour-username%26show_icons%3Dtrue%26theme%3Dtokyonight%26hide_border%3Dtrue%26bg_color%3D0D1117" alt="GitHub Stats" width="400" />
-
 [ **[WEBSITE](https://www.ggscuemk.tech/)** ] | [ **[DISCORD](https://discord.com/channels/1455117330211274874/1455134203434766357)** ]
 
 </div>
+
