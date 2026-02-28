@@ -64,7 +64,7 @@ export default function EventAdmin() {
       formData.append("eventDate", form.eventDate);
       formData.append("image", resizedBlob, "event.jpg");
 
-      await axios.post(`${BACKEND_URL}/admin/events`, formData, {
+      await axios.post(`${BACKEND_URL}/api/events/admin/events`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
