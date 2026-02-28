@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Home,
   MessageSquare,
@@ -24,7 +24,9 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+  const desktopDropdownRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { theme } = useTheme();
@@ -41,7 +43,38 @@ export default function Navbar() {
     } catch {
       setUser(null);
     }
+
+    // Close nav/drawers on route change for consistent behavior.
+    setIsOpen(false);
+    setDesktopDropdownOpen(false);
+    setMobileDropdownOpen(false);
   }, [location]);
+
+  useEffect(() => {
+    if (!desktopDropdownOpen) return;
+
+    const handleOutsideClick = (event) => {
+      if (desktopDropdownRef.current && !desktopDropdownRef.current.contains(event.target)) {
+        setDesktopDropdownOpen(false);
+      }
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setDesktopDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [desktopDropdownOpen]);
 
   const handleLogout = () => {
     // Remove all tokens and user info
@@ -56,7 +89,8 @@ export default function Navbar() {
     // Reset state
     setUser(null);
     setIsOpen(false);
-    setDropdownOpen(false);
+    setDesktopDropdownOpen(false);
+    setMobileDropdownOpen(false);
   };
 
   const userInitial = user?.role === "admin" ? "A" : user?.name?.charAt(0)?.toUpperCase() || "";
@@ -69,41 +103,42 @@ export default function Navbar() {
       className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 transition-colors duration-500"
     >
       {/* Outer container for animated border */}
-      <div className="relative rounded-2xl p-[2px] overflow-hidden sm:overflow-x-hidden sm:overflow-y-visible">
-        {/* Top animated gradient sweep */}
-        <motion.div
-          className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
-          style={{
-            background: isDark
-              ? 'linear-gradient(90deg, transparent, rgba(66, 133, 244, 1), rgba(244, 180, 0, 1), transparent)'
-              : 'linear-gradient(90deg, transparent, rgba(66, 133, 244, 0.9), rgba(244, 180, 0, 1), transparent)',
-            filter: 'blur(0)',
-          }}
-          animate={{x: ['-100%', '100%']}}
-          transition={{duration: 2.5, repeat: Infinity, ease: 'linear'}}
-        />
-        
-        {/* Bottom animated gradient sweep */}
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none"
-          style={{
-            background: isDark
-              ? 'linear-gradient(90deg, transparent, rgba(15, 157, 88, 1), rgba(244, 180, 0, 0.9), transparent)'
-              : 'linear-gradient(90deg, transparent, rgba(15, 157, 88, 0.9), rgba(244, 180, 0, 0.9), transparent)',
-          }}
-          animate={{x: ['100%', '-100%']}}
-          transition={{duration: 2.5, repeat: Infinity, ease: 'linear'}}
-        />
+      <div className="relative rounded-2xl p-[2px] overflow-visible">
+        {/* Dedicated clipping layer keeps border sweeps inside rounded edges */}
+        <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+          {/* Top animated gradient sweep */}
+          <motion.div
+            className="absolute top-0 left-[-50%] w-[200%] h-[2px] will-change-transform"
+            style={{
+              background: isDark
+                ? 'linear-gradient(90deg, transparent 0%, rgba(66, 133, 244, 1) 35%, rgba(244, 180, 0, 1) 50%, rgba(66, 133, 244, 1) 65%, transparent 100%)'
+                : 'linear-gradient(90deg, transparent 0%, rgba(66, 133, 244, 0.9) 35%, rgba(244, 180, 0, 1) 50%, rgba(66, 133, 244, 0.9) 65%, transparent 100%)',
+              filter: 'blur(0)',
+            }}
+            animate={{ x: ['-25%', '25%'] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+          />
+
+          {/* Bottom animated gradient sweep */}
+          <motion.div
+            className="absolute bottom-0 left-[-50%] w-[200%] h-[2px] will-change-transform"
+            style={{
+              background: isDark
+                ? 'linear-gradient(90deg, transparent 0%, rgba(15, 157, 88, 1) 35%, rgba(244, 180, 0, 0.9) 50%, rgba(15, 157, 88, 1) 65%, transparent 100%)'
+                : 'linear-gradient(90deg, transparent 0%, rgba(15, 157, 88, 0.9) 35%, rgba(244, 180, 0, 0.9) 50%, rgba(15, 157, 88, 0.9) 65%, transparent 100%)',
+            }}
+            animate={{ x: ['25%', '-25%'] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+          />
+        </div>
         
         {/* Vibrant surrounding glow */}
         <motion.div
           className="absolute inset-0 rounded-2xl pointer-events-none"
           style={{
-            boxShadow: isDark
-              ? '0 0 28px rgba(66, 133, 244, 0.5), inset 0 0 28px rgba(244, 180, 0, 0.22)'
-              : '0 0 24px rgba(66, 133, 244, 0.55), inset 0 0 24px rgba(244, 180, 0, 0.28)'
+            boxShadow: 'none'
           }}
-          animate={{ opacity: [0.75, 1, 0.75] }}
+          animate={{ opacity: 1 }}
           transition={{duration: 3, repeat: Infinity, ease: 'easeInOut'}}
         />
         
@@ -131,7 +166,13 @@ export default function Navbar() {
         {/* Mobile Toggle */}
         <button
           className="sm:hidden"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => {
+            const nextOpen = !isOpen;
+            setIsOpen(nextOpen);
+            if (!nextOpen) {
+              setMobileDropdownOpen(false);
+            }
+          }}
           aria-label="Toggle Menu"
         >
           {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -197,7 +238,7 @@ export default function Navbar() {
           ) : (
             // Show Get Started only if no user logged in
             !user && (
-              <div className="relative">
+              <div className="relative" ref={desktopDropdownRef}>
                 <motion.button
                   whileHover={{
                     scale: 1.05,
@@ -205,30 +246,32 @@ export default function Navbar() {
                     backgroundColor: "#0F9D58",
                     color: "#fff",
                   }}
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  onClick={() => setDesktopDropdownOpen((prev) => !prev)}
+                  aria-expanded={desktopDropdownOpen}
+                  aria-haspopup="menu"
                   className="btn-pattern btn-primary text-white px-5 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
                 >
                   Get Started
-                  <motion.div animate={{ rotate: dropdownOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
+                  <motion.div animate={{ rotate: desktopDropdownOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
                     <ChevronDown size={18} />
                   </motion.div>
                 </motion.button>
 
                 <AnimatePresence>
-                  {dropdownOpen && (
+                  {desktopDropdownOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -5 }}
+                      initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -6, scale: 0.98 }}
                       transition={{ duration: 0.2 }}
-                      className={`absolute right-0 mt-2 w-44 rounded-lg shadow-lg border backdrop-blur-md z-50 ${
+                      className={`absolute right-0 top-full mt-2 w-44 rounded-lg shadow-lg border backdrop-blur-md z-50 origin-top-right ${
                         isDark ? "bg-[#0a0f14]/95 border-white/10 text-white" : "bg-white/95 border-gray-200 text-gray-800"
                       }`}
                     >
-                      <Link to="/login" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-[#F4B400]/20 transition rounded-t-lg">
+                      <Link to="/login" onClick={() => setDesktopDropdownOpen(false)} className="block px-4 py-2 hover:bg-[#F4B400]/20 transition rounded-t-lg">
                         Login as User
                       </Link>
-                      <Link to="/admin/login" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-[#0F9D58]/20 transition rounded-b-lg">
+                      <Link to="/admin/login" onClick={() => setDesktopDropdownOpen(false)} className="block px-4 py-2 hover:bg-[#0F9D58]/20 transition rounded-b-lg">
                         Login as Admin
                       </Link>
                     </motion.div>
@@ -309,17 +352,19 @@ export default function Navbar() {
                       backgroundColor: "#0F9D58",
                       color: "#fff",
                     }}
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    onClick={() => setMobileDropdownOpen((prev) => !prev)}
+                    aria-expanded={mobileDropdownOpen}
+                    aria-haspopup="menu"
                     className="btn-pattern btn-primary text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
                   >
                     Get Started
-                    <motion.div animate={{ rotate: dropdownOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
+                    <motion.div animate={{ rotate: mobileDropdownOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
                       <ChevronDown size={18} />
                     </motion.div>
                   </motion.button>
 
                   <AnimatePresence>
-                    {dropdownOpen && (
+                    {mobileDropdownOpen && (
                       <motion.div
                         initial={{ opacity: 0, y: -5 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -332,7 +377,7 @@ export default function Navbar() {
                         <Link
                           to="/login"
                           onClick={() => {
-                            setDropdownOpen(false);
+                            setMobileDropdownOpen(false);
                             setIsOpen(false);
                           }}
                           className="block px-4 py-2 hover:bg-[#F4B400]/20 transition rounded-t-lg"
@@ -342,7 +387,7 @@ export default function Navbar() {
                         <Link
                           to="/admin/login"
                           onClick={() => {
-                            setDropdownOpen(false);
+                            setMobileDropdownOpen(false);
                             setIsOpen(false);
                           }}
                           className="block px-4 py-2 hover:bg-[#0F9D58]/20 transition rounded-b-lg"
