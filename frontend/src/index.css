@@ -6,6 +6,22 @@
 /* Prevent elastic overscroll on mobile */
 html, body {
   overscroll-behavior: none;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html,
+  body {
+    scroll-behavior: auto;
+  }
 }
 
 /* Define CSS Custom Properties for Fonts */

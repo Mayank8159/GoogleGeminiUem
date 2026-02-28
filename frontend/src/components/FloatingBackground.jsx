@@ -20,6 +20,7 @@ const FloatingBackground = () => {
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setSize(width, height);
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
@@ -74,8 +75,11 @@ const FloatingBackground = () => {
     scene.add(pointLight);
 
     // Animation loop
+    let frameId;
     const animate = () => {
-      requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(animate);
+
+      if (document.hidden) return;
 
       objects.forEach((obj) => {
         obj.position.x += obj.userData.velocityX;
@@ -111,6 +115,7 @@ const FloatingBackground = () => {
       const newHeight = container.clientHeight;
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.setSize(newWidth, newHeight);
     };
 
@@ -119,7 +124,18 @@ const FloatingBackground = () => {
     // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
-      container.removeChild(renderer.domElement);
+      cancelAnimationFrame(frameId);
+
+      objects.forEach((obj) => {
+        obj.geometry.dispose();
+        obj.material.dispose();
+        scene.remove(obj);
+      });
+
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
+
       renderer.dispose();
     };
   }, [theme]);

@@ -48,9 +48,6 @@ function AppContent() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] text-white">
-      {/* Global Components */}
-      <Loader />
-      
       {/* Conditional Navbar: Hidden in Rounds for full-screen immersion */}
       {shouldShowNavbar && <Navbar />}
       

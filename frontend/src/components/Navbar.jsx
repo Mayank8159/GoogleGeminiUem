@@ -98,11 +98,12 @@ export default function Navbar() {
         {/* Vibrant surrounding glow */}
         <motion.div
           className="absolute inset-0 rounded-2xl pointer-events-none"
-          animate={{
+          style={{
             boxShadow: isDark
-              ? ['0 0 25px rgba(66, 133, 244, 0.5), inset 0 0 25px rgba(244, 180, 0, 0.2)', '0 0 35px rgba(244, 180, 0, 0.6), inset 0 0 35px rgba(15, 157, 88, 0.2)', '0 0 25px rgba(66, 133, 244, 0.5), inset 0 0 25px rgba(244, 180, 0, 0.2)']
-              : ['0 0 20px rgba(66, 133, 244, 0.6), inset 0 0 20px rgba(244, 180, 0, 0.3)', '0 0 30px rgba(244, 180, 0, 0.7), inset 0 0 30px rgba(15, 157, 88, 0.3)', '0 0 20px rgba(66, 133, 244, 0.6), inset 0 0 20px rgba(244, 180, 0, 0.3)']
+              ? '0 0 28px rgba(66, 133, 244, 0.5), inset 0 0 28px rgba(244, 180, 0, 0.22)'
+              : '0 0 24px rgba(66, 133, 244, 0.55), inset 0 0 24px rgba(244, 180, 0, 0.28)'
           }}
+          animate={{ opacity: [0.75, 1, 0.75] }}
           transition={{duration: 3, repeat: Infinity, ease: 'easeInOut'}}
         />
         

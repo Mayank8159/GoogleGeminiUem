@@ -8,6 +8,13 @@ export default function Loader() {
   const logoRef = useRef(null);
   const ringsRef = useRef([]);
   const particlesRef = useRef([]);
+  const particleConfigRef = useRef(
+    [...Array(8)].map((_, i) => ({
+      left: `${15 + Math.random() * 70}%`,
+      top: `${window.innerHeight * 0.8 + Math.random() * 60}px`,
+      color: ['#4285F4', '#F4B400', '#0F9D58', '#DB4437'][i % 4],
+    }))
+  );
 
   useEffect(() => {
     // Hardware-accelerated transforms and lighter animations
@@ -34,7 +41,7 @@ export default function Loader() {
       }
     });
 
-    particlesRef.current.forEach((particle, index) => {
+    particlesRef.current.forEach((particle) => {
       if (particle) {
         gsap.to(particle, {
           y: -window.innerHeight * 0.7,
@@ -48,6 +55,12 @@ export default function Loader() {
         });
       }
     });
+
+    return () => {
+      if (logoRef.current) gsap.killTweensOf(logoRef.current);
+      ringsRef.current.forEach((ring) => ring && gsap.killTweensOf(ring));
+      particlesRef.current.forEach((particle) => particle && gsap.killTweensOf(particle));
+    };
   }, []);
 
   useEffect(() => {
@@ -58,11 +71,11 @@ export default function Loader() {
           clearInterval(progressTimer);
           return 100;
         }
-        return Math.min(prev + Math.random() * 12 + 2, 100);
+        return Math.min(prev + Math.random() * 18 + 6, 100);
       });
-    }, 150);
+    }, 120);
 
-    const timer = setTimeout(() => setIsVisible(false), 3000);
+    const timer = setTimeout(() => setIsVisible(false), 1400);
     
     return () => {
       clearTimeout(timer);
@@ -85,20 +98,16 @@ export default function Loader() {
         >
           {/* Enhanced floating particles */}
           <div className="absolute inset-0 pointer-events-none will-change-transform">
-            {[...Array(12)].map((_, i) => (
+            {particleConfigRef.current.map((particleConfig, i) => (
               <div
                 key={i}
                 ref={el => particlesRef.current[i] = el}
                 className="absolute w-1.5 h-1.5 rounded-full opacity-0"
                 style={{
-                  left: `${15 + Math.random() * 70}%`,
-                  top: `${window.innerHeight * 0.8 + Math.random() * 60}px`,
-                  backgroundColor: [
-                    '#4285F4', '#F4B400', '#0F9D58', '#DB4437'
-                  ][i % 4],
-                  boxShadow: `0 0 6px ${[
-                    '#4285F4', '#F4B400', '#0F9D58', '#DB4437'
-                  ][i % 4]}40`,
+                  left: particleConfig.left,
+                  top: particleConfig.top,
+                  backgroundColor: particleConfig.color,
+                  boxShadow: `0 0 6px ${particleConfig.color}40`,
                   willChange: 'transform'
                 }}
               />
