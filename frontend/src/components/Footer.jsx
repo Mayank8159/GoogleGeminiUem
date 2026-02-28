@@ -111,16 +111,16 @@ export default function Footer() {
           {/* Navigation Links */}
           <div className="flex flex-wrap justify-center md:justify-end gap-2">
             <Link to="/" className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs hover:bg-[#4285F4]/20 hover:text-[#4285F4] hover:drop-shadow-[0_0_4px_#4285F4] transition ${isDark ? "bg-white/10" : "bg-gray-800/10"}`}>
-              <Home className="h-3 w-3" /> Home
+              <Home className="h-4 w-4" /> Home
             </Link>
             <Link to="/discussion" className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs hover:bg-[#DB4437]/20 hover:text-[#DB4437] hover:drop-shadow-[0_0_4px_#DB4437] transition ${isDark ? "bg-white/10" : "bg-gray-800/10"}`}>
-              <MessageSquare className="h-3 w-3" /> Discussion
+              <MessageSquare className="h-4 w-4" /> Discussion
             </Link>
             <Link to="/events" className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs hover:bg-[#F4B400]/20 hover:text-[#F4B400] hover:drop-shadow-[0_0_4px_#F4B400] transition ${isDark ? "bg-white/10" : "bg-gray-800/10"}`}>
-              <CalendarDays className="h-3 w-3" /> Events
+              <CalendarDays className="h-4 w-4" /> Events
             </Link>
             <Link to="/team" className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs hover:bg-[#0F9D58]/20 hover:text-[#0F9D58] hover:drop-shadow-[0_0_4px_#0F9D58] transition ${isDark ? "bg-white/10" : "bg-gray-800/10"}`}>
-              <Users className="h-3 w-3" /> Team
+              <Users className="h-4 w-4" /> Team
             </Link>
           </div>
 
@@ -133,7 +133,7 @@ export default function Footer() {
               className="hover:text-[#4285F4] hover:drop-shadow-[0_0_4px_#4285F4] transition"
               whileHover={{ scale: 1.1 }}
             >
-              <Linkedin className="h-5 w-5" />
+              <Linkedin className="h-4 w-4" />
             </motion.a>
             <motion.a
               href="https://www.instagram.com/ggsc_officialuemk?igsh=eGpvMXdqejk2NXk4"
@@ -142,7 +142,7 @@ export default function Footer() {
               className="hover:text-[#DB4437] hover:drop-shadow-[0_0_4px_#DB4437] transition"
               whileHover={{ scale: 1.1 }}
             >
-              <Instagram className="h-5 w-5" />
+              <Instagram className="h-4 w-4" />
             </motion.a>
             <motion.a
               href="https://www.whatsapp.com/channel/0029Vb6OWFpB4hdTD7YMU029"
@@ -151,7 +151,7 @@ export default function Footer() {
               className="hover:text-[#25D366] hover:drop-shadow-[0_0_4px_#25D366] transition"
               whileHover={{ scale: 1.1 }}
             >
-              <MessageCircle className="h-5 w-5" />
+              <MessageCircle className="h-4 w-4" />
             </motion.a>
           </div>
         </div>
