@@ -150,8 +150,8 @@ export default function EventAdmin() {
     <main
       className={`min-h-screen transition-colors duration-500 pt-36 relative overflow-hidden ${
         isDark
-          ? "bg-gradient-to-br from-[#0B1519] via-[#1A2F37] to-[#25424D] text-white"
-          : "bg-gradient-to-br from-[#f0f3f6] via-[#e3e6ea] to-[#cfd8dc] text-slate-900"
+          ? "bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] text-white"
+          : "bg-gradient-to-br from-[#f8f9fa] via-[#f1f3f5] to-[#e9ecef] text-slate-900"
       }`}
     >
       {/* Animated radial gradient background */}

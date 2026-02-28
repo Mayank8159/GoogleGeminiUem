@@ -16,8 +16,8 @@ export default function AdminDashboard() {
     <main
       className={`px-4 pt-36 pb-16 min-h-screen overflow-x-hidden relative transition-colors duration-500 ${
         isDark
-          ? "bg-gradient-to-br from-[#0B1519] via-[#1A2F37] to-[#25424D] text-white"
-          : "bg-gradient-to-br from-[#f0f3f6] via-[#e3e6ea] to-[#cfd8dc] text-black"
+          ? "bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] text-white"
+          : "bg-gradient-to-br from-[#f8f9fa] via-[#f1f3f5] to-[#e9ecef] text-black"
       }`}
     >
       {/* Professional Background */}

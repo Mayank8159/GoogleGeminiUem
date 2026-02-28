@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { motion } from "framer-motion";
-import { ChevronDown, Mail, Phone, MapPin } from "lucide-react";
+import { ChevronDown, Mail, Phone, MapPin, Users, Sparkles } from "lucide-react";
 import socket from "../socket";
 
 const Team = () => {
@@ -196,35 +196,42 @@ const Team = () => {
 
   return (
     <main
-      className={`min-h-screen pt-28 pb-20 px-4 sm:px-6 transition-colors duration-500 ${
+      className={`min-h-screen pt-36 pb-20 px-4 sm:px-6 transition-colors duration-500 ${
         isDark
-          ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
-          : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"
+          ? "bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] text-white"
+          : "bg-gradient-to-br from-[#f8f9fa] via-[#f1f3f5] to-[#e9ecef] text-gray-900"
       }`}
     >
-      {/* Header */}
+      {/* Professional Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-12"
+        className="text-center mb-16 max-w-4xl mx-auto"
       >
-        <h1
-          className={`text-3xl sm:text-4xl font-bold font-outfit mb-4 ${
-            isDark
-              ? "drop-shadow-[0_0_10px_rgba(255,255,255,0.6)] text-white"
-              : "text-black"
-          }`}
+        <motion.div
+          className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#4285F4] to-[#0F9D58] mb-6 shadow-lg"
+          animate={{
+            boxShadow: [
+              "0 0 20px rgba(66, 133, 244, 0.3)",
+              "0 0 30px rgba(15, 157, 88, 0.3)",
+              "0 0 20px rgba(66, 133, 244, 0.3)"
+            ]
+          }}
+          transition={{ duration: 3, repeat: Infinity }}
         >
+          <Users className="w-10 h-10 text-white" />
+        </motion.div>
+        <h1 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-[#4285F4] via-[#F4B400] to-[#0F9D58] bg-clip-text text-transparent">
           Our Team
         </h1>
-        <p className={`text-lg ${isDark ? "text-white/70" : "text-black/70"}`}>
+        <p className={`text-lg ${isDark ? "text-gray-400" : "text-gray-600"}`}>
           Meet the brilliant minds behind the Google Gemini Student Community
         </p>
       </motion.div>
 
-      {/* Team Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      {/* Professional Team Grid */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {teamMembers.map((member, index) => {
           const cardTheme = cardThemes[index % cardThemes.length];
           const isOpen = openCard === member.id;
@@ -232,107 +239,170 @@ const Team = () => {
           return (
             <motion.div
               key={member.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              className={`relative bg-white/10 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl overflow-hidden transition-transform duration-300 ${
-                isDark ? "hover:bg-white/10" : "hover:bg-black/5"
+              transition={{ delay: index * 0.05, duration: 0.5 }}
+              whileHover={{ y: -5, transition: { duration: 0.3 } }}
+              className={`relative backdrop-blur-xl border rounded-3xl overflow-hidden shadow-xl transition-all duration-300 ${
+                isDark 
+                  ? "bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20" 
+                  : "bg-white/80 border-gray-200 hover:bg-white hover:border-gray-300"
               }`}
             >
-              {/* Profile Section */}
-              <div className="flex flex-col items-center text-center p-6">
-                <div
-                  className="w-28 h-28 rounded-full overflow-hidden shadow-lg mb-4 border-2"
-                  style={{ borderColor: cardTheme.primary }}
-                >
-                  <img
-                    src={member.pic}
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                  />
+              {/* Profile Section with Enhanced Design */}
+              <div className="relative">
+                {/* Gradient Background Accent */}
+                <div 
+                  className="absolute top-0 left-0 right-0 h-24 opacity-20"
+                  style={{
+                    background: `linear-gradient(135deg, ${cardTheme.primary}, ${cardTheme.secondary})`
+                  }}
+                />
+                
+                <div className="relative flex flex-col items-center text-center p-6 pt-8">
+                  {/* Avatar with Gradient Border */}
+                  <motion.div
+                    whileHover={{ scale: 1.05, rotate: 2 }}
+                    className="relative mb-4"
+                  >
+                    <div
+                      className="absolute inset-0 rounded-full blur-md opacity-50"
+                      style={{
+                        background: `linear-gradient(135deg, ${cardTheme.primary}, ${cardTheme.accent})`
+                      }}
+                    />
+                    <div
+                      className="relative w-28 h-28 rounded-full overflow-hidden shadow-2xl border-4 bg-white"
+                      style={{ borderColor: cardTheme.primary }}
+                    >
+                      <img
+                        src={member.pic}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </motion.div>
+
+                  {/* Name and Title */}
+                  <h3
+                    className="text-xl font-bold font-outfit mb-1"
+                    style={{ color: cardTheme.primary }}
+                  >
+                    {member.name}
+                  </h3>
+                  <p className={`text-sm mb-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                    {member.designation}
+                  </p>
                 </div>
-                <h3
-                  className="text-xl font-semibold font-outfit"
-                  style={{ color: cardTheme.primary }}
-                >
-                  {member.name}
-                </h3>
-                <p className="text-sm text-gray-400 mb-2">
-                  {member.designation}
-                </p>
               </div>
 
-              {/* Dropdown Arrow */}
-              <div
+              {/* Expand/Collapse Button */}
+              <motion.div
                 onClick={() => setOpenCard(isOpen ? null : member.id)}
-                className="flex justify-center items-center cursor-pointer py-3 border-t border-white/20"
+                className={`flex justify-center items-center cursor-pointer py-3 border-t transition-colors ${
+                  isDark 
+                    ? "border-white/10 hover:bg-white/5" 
+                    : "border-gray-200 hover:bg-gray-50"
+                }`}
+                whileHover={{ backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)" }}
               >
                 <motion.div
                   animate={{ rotate: isOpen ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
                 >
                   <ChevronDown
-                    className={`w-6 h-6 ${
-                      isDark ? "text-white/70" : "text-gray-700"
-                    }`}
+                    className="w-6 h-6"
+                    style={{ color: cardTheme.primary }}
                   />
                 </motion.div>
-              </div>
+              </motion.div>
 
-              {/* Expandable Section */}
+              {/* Enhanced Expandable Section */}
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{
                   height: isOpen ? "auto" : 0,
                   opacity: isOpen ? 1 : 0,
                 }}
-                transition={{ duration: 0.4 }}
-                className="overflow-hidden px-6 pb-4"
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="overflow-hidden"
               >
-                <p
-                  className={`text-sm mt-3 ${
-                    isDark ? "text-white/80" : "text-gray-700"
-                  }`}
-                >
-                  {member.bio}
-                </p>
-
-                <div className="space-y-2 mt-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-[#DB4437]" />
-                    <span>{member.email}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-[#0F9D58]" />
-                    <span>{member.phone}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-[#F4B400]" />
-                    <span>{member.location}</span>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <h4
-                    className={`text-sm font-semibold mb-2 ${
-                      isDark ? "text-white" : "text-gray-800"
+                <div className={`px-6 pb-6 pt-2 border-t ${isDark ? "border-white/10" : "border-gray-200"}`}>
+                  {/* Bio */}
+                  <p
+                    className={`text-sm leading-relaxed mb-4 ${
+                      isDark ? "text-gray-300" : "text-gray-700"
                     }`}
                   >
-                    Skills
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {member.skills.map((skill, i) => (
-                      <span
-                        key={i}
-                        className={`px-2 py-1 rounded-full text-xs ${
-                          isDark
-                            ? "bg-white/20 text-white"
-                            : "bg-black/10 text-gray-800"
-                        }`}
-                      >
-                        {skill}
+                    {member.bio}
+                  </p>
+
+                  {/* Contact Information */}
+                  <div className="space-y-2 mb-4">
+                    <motion.div 
+                      className="flex items-center gap-2 text-sm"
+                      whileHover={{ x: 4 }}
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#DB4437] to-[#EA4335] flex items-center justify-center flex-shrink-0">
+                        <Mail className="h-4 w-4 text-white" />
+                      </div>
+                      <span className={`break-all ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                        {member.email}
                       </span>
-                    ))}
+                    </motion.div>
+                    <motion.div 
+                      className="flex items-center gap-2 text-sm"
+                      whileHover={{ x: 4 }}
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0F9D58] to-[#34A853] flex items-center justify-center flex-shrink-0">
+                        <Phone className="h-4 w-4 text-white" />
+                      </div>
+                      <span className={isDark ? "text-gray-300" : "text-gray-700"}>
+                        {member.phone}
+                      </span>
+                    </motion.div>
+                    <motion.div 
+                      className="flex items-center gap-2 text-sm"
+                      whileHover={{ x: 4 }}
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F4B400] to-[#FBBC05] flex items-center justify-center flex-shrink-0">
+                        <MapPin className="h-4 w-4 text-white" />
+                      </div>
+                      <span className={isDark ? "text-gray-300" : "text-gray-700"}>
+                        {member.location}
+                      </span>
+                    </motion.div>
+                  </div>
+
+                  {/* Skills Section */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sparkles className="h-4 w-4" style={{ color: cardTheme.primary }} />
+                      <h4
+                        className="text-sm font-semibold"
+                        style={{ color: cardTheme.primary }}
+                      >
+                        Skills
+                      </h4>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {member.skills.map((skill, i) => (
+                        <motion.span
+                          key={i}
+                          whileHover={{ scale: 1.05 }}
+                          className={`px-3 py-1 rounded-full text-xs font-medium shadow-sm ${
+                            isDark
+                              ? "bg-white/10 text-white border border-white/20"
+                              : "bg-gray-100 text-gray-800 border border-gray-200"
+                          }`}
+                          style={{
+                            borderColor: `${cardTheme.primary}40`
+                          }}
+                        >
+                          {skill}
+                        </motion.span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </motion.div>

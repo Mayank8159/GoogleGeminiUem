@@ -68,8 +68,8 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 backdrop-blur-xl border rounded-2xl px-6 py-4 transition-colors duration-500 ${
         isDark
-          ? "bg-gradient-to-br from-[#1A1A1A]/50 to-[#2A2A2A]/50 border-white/10 shadow-[0_0_25px_rgba(255,255,255,0.2)] text-white"
-          : "bg-gradient-to-br from-white/50 to-gray-100/50 border-gray-300 shadow-[0_0_25px_rgba(0,0,0,0.1)] text-gray-800"
+          ? "bg-gradient-to-br from-[#0a0f14]/90 to-[#151b23]/90 border-white/10 shadow-[0_0_25px_rgba(255,255,255,0.1)] text-white"
+          : "bg-gradient-to-br from-white/90 to-[#f8f9fa]/90 border-gray-300 shadow-[0_0_25px_rgba(0,0,0,0.1)] text-gray-800"
       }`}
     >
       {/* Top Row */}
@@ -183,7 +183,7 @@ export default function Navbar() {
                       exit={{ opacity: 0, y: -5 }}
                       transition={{ duration: 0.2 }}
                       className={`absolute right-0 mt-2 w-44 rounded-lg shadow-lg border backdrop-blur-md z-50 ${
-                        isDark ? "bg-[#1F1F1F]/90 border-white/10 text-white" : "bg-white border-gray-200 text-gray-800"
+                        isDark ? "bg-[#0a0f14]/95 border-white/10 text-white" : "bg-white/95 border-gray-200 text-gray-800"
                       }`}
                     >
                       <Link to="/login" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-[#F4B400]/20 transition rounded-t-lg">
@@ -287,7 +287,7 @@ export default function Navbar() {
                         exit={{ opacity: 0, y: -5 }}
                         transition={{ duration: 0.2 }}
                         className={`mt-2 rounded-lg shadow-lg border backdrop-blur-md z-50 ${
-                          isDark ? "bg-[#1F1F1F]/90 border-white/10 text-white" : "bg-white border-gray-200 text-gray-800"
+                          isDark ? "bg-[#0a0f14]/95 border-white/10 text-white" : "bg-white/95 border-gray-200 text-gray-800"
                         }`}
                       >
                         <Link

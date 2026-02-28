@@ -2,10 +2,22 @@ import { Linkedin, Instagram, MessageCircle, Home, CalendarDays, Users, MessageS
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Footer() {
+  const { theme } = useTheme();
+  
+  const isDark =
+    theme === "dark" ||
+    (theme === "system" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
+
   return (
-    <footer className="mt-4 px-4 py-8 pb-16 md:pb-8 bg-[#2B3C42] backdrop-blur-xl border-t border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.2)] text-white relative">
+    <footer className={`mt-0 px-4 py-8 pb-16 md:pb-8 backdrop-blur-xl border-t shadow-lg relative transition-colors duration-500 ${
+      isDark
+        ? "bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] border-white/20 text-white"
+        : "bg-gradient-to-br from-[#f8f9fa] via-[#f1f3f5] to-[#e9ecef] border-gray-300 text-gray-900"
+    }`}>
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
         
         {/* Left: Logos + Title */}
@@ -49,7 +61,7 @@ export default function Footer() {
 
         {/* Center: Embedded Map */}
         <div className="flex flex-col items-center gap-2">
-          <div className="flex items-center gap-1 text-xs text-white/70">
+          <div className={`flex items-center gap-1 text-xs ${isDark ? "text-white/70" : "text-gray-600"}`}>
             <MapPin className="h-3 w-3" />
             <span>UEM Kolkata</span>
           </div>
@@ -74,16 +86,16 @@ export default function Footer() {
         <div className="flex flex-col items-center md:items-end gap-4">
           {/* Navigation Links */}
           <div className="flex flex-wrap justify-center md:justify-end gap-2">
-            <Link to="/" className="flex items-center gap-1 bg-white/10 px-2 py-1 rounded-md text-xs hover:bg-[#4285F4]/20 hover:text-[#4285F4] hover:drop-shadow-[0_0_4px_#4285F4] transition">
+            <Link to="/" className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs hover:bg-[#4285F4]/20 hover:text-[#4285F4] hover:drop-shadow-[0_0_4px_#4285F4] transition ${isDark ? "bg-white/10" : "bg-gray-800/10"}`}>
               <Home className="h-3 w-3" /> Home
             </Link>
-            <Link to="/discussion" className="flex items-center gap-1 bg-white/10 px-2 py-1 rounded-md text-xs hover:bg-[#DB4437]/20 hover:text-[#DB4437] hover:drop-shadow-[0_0_4px_#DB4437] transition">
+            <Link to="/discussion" className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs hover:bg-[#DB4437]/20 hover:text-[#DB4437] hover:drop-shadow-[0_0_4px_#DB4437] transition ${isDark ? "bg-white/10" : "bg-gray-800/10"}`}>
               <MessageSquare className="h-3 w-3" /> Discussion
             </Link>
-            <Link to="/events" className="flex items-center gap-1 bg-white/10 px-2 py-1 rounded-md text-xs hover:bg-[#F4B400]/20 hover:text-[#F4B400] hover:drop-shadow-[0_0_4px_#F4B400] transition">
+            <Link to="/events" className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs hover:bg-[#F4B400]/20 hover:text-[#F4B400] hover:drop-shadow-[0_0_4px_#F4B400] transition ${isDark ? "bg-white/10" : "bg-gray-800/10"}`}>
               <CalendarDays className="h-3 w-3" /> Events
             </Link>
-            <Link to="/team" className="flex items-center gap-1 bg-white/10 px-2 py-1 rounded-md text-xs hover:bg-[#0F9D58]/20 hover:text-[#0F9D58] hover:drop-shadow-[0_0_4px_#0F9D58] transition">
+            <Link to="/team" className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs hover:bg-[#0F9D58]/20 hover:text-[#0F9D58] hover:drop-shadow-[0_0_4px_#0F9D58] transition ${isDark ? "bg-white/10" : "bg-gray-800/10"}`}>
               <Users className="h-3 w-3" /> Team
             </Link>
           </div>
@@ -126,7 +138,7 @@ export default function Footer() {
         <ThemeToggle />
       </div>
 
-      <div className="mt-6 text-center text-xs text-white/60">
+      <div className={`mt-6 text-center text-xs ${isDark ? "text-white/60" : "text-gray-500"}`}>
         © {new Date().getFullYear()} Google Gemini Student Community @ UEM Kolkata. All rights reserved.
       </div>
     </footer>

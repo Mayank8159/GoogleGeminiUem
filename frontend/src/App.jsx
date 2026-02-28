@@ -47,7 +47,7 @@ function AppContent() {
   const shouldShowFooter = !hideFooterRoutes.includes(location.pathname);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] text-white">
       {/* Global Components */}
       <Loader />
       

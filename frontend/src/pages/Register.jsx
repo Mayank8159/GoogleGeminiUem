@@ -44,8 +44,8 @@ export default function Register() {
   return (
     <main className={`min-h-screen flex items-center justify-center px-4 transition-colors duration-500
       ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-        ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
-        : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+        ? "bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] text-white"
+        : "bg-gradient-to-br from-[#f8f9fa] via-[#f1f3f5] to-[#e9ecef] text-black"}
     `}>
       <motion.div
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
