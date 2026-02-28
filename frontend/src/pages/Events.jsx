@@ -101,6 +101,28 @@ const EventCard = ({ event, index }) => {
           >
             {event.title}
           </motion.h3>
+
+          {/* Event Image - Show when expanded or if imageUrl exists */}
+          <AnimatePresence>
+            {isExpanded && event.imageUrl && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mb-4 rounded-lg overflow-hidden"
+              >
+                <img 
+                  src={`${BACKEND_URL}/${event.imageUrl}`}
+                  alt={event.title}
+                  className="w-full h-auto object-cover rounded-lg shadow-md"
+                  onError={(e) => {
+                    console.error(`Failed to load image: ${event.imageUrl}`);
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
           
           <motion.p 
             className={`text-sm mb-4 leading-relaxed ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/80" : "text-black/80"}`}

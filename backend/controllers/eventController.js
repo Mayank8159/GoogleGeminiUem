@@ -9,7 +9,7 @@ export const createEvent = async (req, res) => {
     const event = new Event({
       title: req.body.title,
       description: req.body.description,
-      eventDate: req.body.eventDate,
+      eventDate: new Date(req.body.eventDate), // Convert string to Date object
       imageUrl: req.file.path
     });
     
@@ -27,7 +27,7 @@ export const createEvent = async (req, res) => {
 export const getUpcomingEvents = async (req, res) => {
   try {
     const now = new Date();
-    const events = await Event.find({ eventDate: { $gte: now } }).sort({ eventDate: 1 });
+    const events = await Event.find({ eventDate: { $gt: now } }).sort({ eventDate: 1 });
     res.json(events);
   } catch (err) {
     res.status(500).json({ error: err.message });
