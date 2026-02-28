@@ -185,10 +185,9 @@ export default function Navbar() {
                 onClick={handleLogout}
                 whileHover={{
                   scale: 1.05,
-                  backgroundColor: "#DB4437",
-                  boxShadow: "0 0 10px #DB4437",
+                  boxShadow: "0 12px 40px rgba(220, 53, 69, 0.35), 0 0 30px rgba(220, 53, 69, 0.25)",
                 }}
-                className="btn-pattern btn-danger flex items-center gap-2 px-4 py-2 rounded-lg transition text-white"
+                className="btn-pattern btn-danger-glass flex items-center gap-2 px-5 py-2.5 rounded-lg transition text-white font-semibold"
               >
                 <LogOut size={16} />
                 Logout
@@ -293,7 +292,7 @@ export default function Navbar() {
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="btn-pattern btn-danger flex items-center gap-2 px-4 py-2 rounded-lg transition text-white"
+                  className="btn-pattern btn-danger-glass flex items-center gap-2 px-5 py-2.5 rounded-lg transition text-white font-semibold"
                 >
                   <LogOut size={16} />
                   Logout

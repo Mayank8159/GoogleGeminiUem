@@ -14,6 +14,8 @@ const itemVariants = {
 
 export default function Sections() {
   const { theme } = useTheme();
+  const isDarkMode = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  
   return (
     <div className="space-y-16 max-w-5xl mx-auto">
       {/* Team Spotlight */}
@@ -26,51 +28,40 @@ export default function Sections() {
       >
         {/* Section Header */}
         <div
-          className={`backdrop-blur-md rounded-3xl shadow-2xl p-10 sm:p-14 text-center transition-all duration-300 border-t border-l ${
-            theme === "dark" ||
-            (theme === "system" &&
-              window.matchMedia("(prefers-color-scheme: dark)").matches)
-              ? "bg-gradient-to-br from-white/8 to-white/3 border-white/20"
-              : "bg-gradient-to-br from-white/90 to-white/70 border-gray-200/60"
+          className={`backdrop-blur-xl rounded-3xl shadow-2xl p-12 sm:p-16 text-center transition-all duration-300 border-2 relative overflow-hidden ${
+            isDarkMode
+              ? "bg-white/8 border-white/25 shadow-red-500/10"
+              : "bg-white/95 border-gray-300/50 shadow-gray-200/30"
           }`}
         >
+          {/* Gradient top accent */}
+          <motion.div
+            className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-red-500 to-transparent"
+            animate={{ opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+
           <motion.h2
-            className={`text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight ${
-              theme === "dark" ||
-              (theme === "system" &&
-                window.matchMedia("(prefers-color-scheme: dark)").matches)
-                ? "text-[#DB4437]"
-                : "text-[#DB4437]"
-            }`}
-            style={{
-              textShadow:
-                theme === "dark" ||
-                (theme === "system" &&
-                  window.matchMedia("(prefers-color-scheme: dark)").matches)
-                  ? "0 0 12px rgba(219, 68, 55, 0.5)"
-                  : "none",
-            }}
+            className={`text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight bg-gradient-to-r from-red-400 via-purple-400 to-red-400 bg-clip-text text-transparent`}
           >
             Meet the Team
           </motion.h2>
           <p
-            className={`max-w-3xl mx-auto text-base sm:text-lg leading-relaxed ${
-              theme === "dark" ||
-              (theme === "system" &&
-                window.matchMedia("(prefers-color-scheme: dark)").matches)
+            className={`max-w-3xl mx-auto text-base sm:text-lg leading-relaxed font-medium ${
+              isDarkMode
                 ? "text-white/80"
                 : "text-black/85"
             }`}
           >
             Led by passionate innovators from{" "}
-            <span className="font-semibold text-[#F4B400]">UEM Kolkata</span>,
+            <span className="font-bold text-[#F4B400]">UEM Kolkata</span>,
             our team combines vision, dedication, and expertise to drive the future of AI
             and community engagement.
           </p>
         </div>
 
         {/* Team Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-14">
           {[
             {
               name: "Ashna Islam",
@@ -95,20 +86,18 @@ export default function Sections() {
           ].map((member, index) => (
             <motion.div
               key={index}
-              whileHover={{ scale: 1.08, y: -8 }}
+              whileHover={{ scale: 1.08, y: -12 }}
               transition={{ type: "spring", stiffness: 300, damping: 10 }}
-              className={`rounded-3xl p-8 flex flex-col items-center text-center shadow-xl backdrop-blur-md transition-all duration-300 border hover:shadow-2xl ${
-                theme === "dark" ||
-                (theme === "system" &&
-                  window.matchMedia("(prefers-color-scheme: dark)").matches)
-                  ? "bg-gradient-to-br from-white/8 to-white/3 border-white/20"
-                  : "bg-gradient-to-br from-white/90 to-white/70 border-gray-200/60"
+              className={`rounded-2xl p-8 flex flex-col items-center text-center shadow-xl backdrop-blur-xl transition-all duration-300 border-2 group ${
+                isDarkMode
+                  ? "bg-white/10 border-white/25 hover:bg-white/15 hover:shadow-red-500/20"
+                  : "bg-white/90 border-gray-300/60 hover:bg-white/97 hover:shadow-gray-200/40"
               }`}
             >
-              <div className="relative mb-4">
+              <div className="relative mb-6">
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="h-40 w-40 rounded-full overflow-hidden shadow-lg ring-4 ring-[#DB4437]/30"
+                  whileHover={{ scale: 1.08 }}
+                  className="h-40 w-40 rounded-2xl overflow-hidden shadow-lg ring-4 ring-[#DB4437]/40 group-hover:ring-[#DB4437]/60 transition-all duration-300"
                 >
                   <img
                     src={member.img}
@@ -119,9 +108,7 @@ export default function Sections() {
               </div>
               <h3
                 className={`text-xl font-bold tracking-tight ${
-                  theme === "dark" ||
-                  (theme === "system" &&
-                    window.matchMedia("(prefers-color-scheme: dark)").matches)
+                  isDarkMode
                     ? "text-white"
                     : "text-gray-900"
                 }`}
@@ -129,10 +116,8 @@ export default function Sections() {
                 {member.name}
               </h3>
               <p
-                className={`text-sm font-semibold mt-2 ${
-                  theme === "dark" ||
-                  (theme === "system" &&
-                    window.matchMedia("(prefers-color-scheme: dark)").matches)
+                className={`text-sm font-semibold mt-2 tracking-wide ${
+                  isDarkMode
                     ? "text-[#F4B400]"
                     : "text-[#DB4437]"
                 }`}
@@ -153,72 +138,69 @@ export default function Sections() {
         className="w-full"
       >
         <div
-          className={`backdrop-blur-md rounded-3xl shadow-2xl p-10 sm:p-14 flex flex-col sm:flex-row items-center gap-10 hover:shadow-3xl transition-all duration-300 border-t border-l ${
-            theme === "dark" ||
-            (theme === "system" &&
-              window.matchMedia("(prefers-color-scheme: dark)").matches)
-              ? "bg-gradient-to-br from-white/8 to-white/3 border-white/20"
-              : "bg-gradient-to-br from-white/90 to-white/70 border-gray-200/60"
+          className={`backdrop-blur-xl rounded-3xl shadow-2xl p-12 sm:p-16 flex flex-col items-center hover:shadow-3xl transition-all duration-300 border-2 relative overflow-hidden ${
+            isDarkMode
+              ? "bg-white/8 border-white/25 hover:shadow-blue-500/20"
+              : "bg-white/95 border-gray-300/50 hover:shadow-gray-200/40"
           }`}
         >
-          {/* Icon */}
+          {/* Gradient top accent */}
           <motion.div
-            whileHover={{ scale: 1.12, y: -2 }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-            className="flex-shrink-0"
-          >
-            <div className="h-32 w-32 flex items-center justify-center rounded-full bg-gradient-to-br from-[#4285F4] to-[#F4B400] shadow-2xl">
-              <MessageCircle size={48} color="white" strokeWidth={1.5} />
-            </div>
-          </motion.div>
+            className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-blue-500 to-transparent"
+            animate={{ opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
 
-          {/* Text */}
-          <div className="text-center sm:text-left flex-1">
-            <motion.h2
-              className={`text-3xl sm:text-4xl font-extrabold mb-4 tracking-tight ${
-                theme === "dark" ||
-                (theme === "system" &&
-                  window.matchMedia("(prefers-color-scheme: dark)").matches)
-                  ? "text-[#4285F4]"
-                  : "text-[#4285F4]"
-              }`}
-              style={{
-                textShadow:
-                  theme === "dark" ||
-                  (theme === "system" &&
-                    window.matchMedia("(prefers-color-scheme: dark)").matches)
-                    ? "0 0 12px rgba(66, 133, 244, 0.5)"
-                    : "none",
-              }}
+          {/* Icon and Text Container */}
+          <div className="flex flex-col sm:flex-row items-center gap-12 w-full mb-8">
+            {/* Icon */}
+            <motion.div
+              whileHover={{ scale: 1.12, y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
+              className="flex-shrink-0"
             >
-              Join the Conversation
-            </motion.h2>
-            <p
-              className={`text-base sm:text-lg leading-relaxed mb-6 ${
-                theme === "dark" ||
-                (theme === "system" &&
-                  window.matchMedia("(prefers-color-scheme: dark)").matches)
-                  ? "text-white/80"
-                  : "text-black/85"
-              }`}
-            >
-              Engage with our vibrant community, exchange innovative ideas, and
-              help shape the future of{" "}
-              <span className="font-semibold text-[#F4B400]">
-                AI and Design
-              </span>
-              . Connect with fellow students, ask questions, and grow together.
-            </p>
-            <Link to="/discussion">
-              <motion.button
-                whileHover={{ scale: 1.05, x: 4 }}
-                whileTap={{ scale: 0.95 }}
-                className="btn-pattern btn-primary px-6 py-2.5 text-sm rounded-xl transition-all duration-300 border text-white"
+              <div className="h-36 w-36 flex items-center justify-center rounded-2xl bg-gradient-to-br from-[#4285F4] via-[#0F9D58] to-[#F4B400] shadow-2xl group hover:shadow-blue-500/40 transition-all duration-300">
+                <MessageCircle size={56} color="white" strokeWidth={1.2} />
+              </div>
+            </motion.div>
+
+            {/* Text */}
+            <div className="text-center sm:text-left flex-1 relative z-10">
+              <motion.h2
+                className={`text-3xl sm:text-4xl font-extrabold mb-5 tracking-tight bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent`}
               >
-                Visit Discussion Board →
-              </motion.button>
-            </Link>
+                Join the Conversation
+              </motion.h2>
+              <p
+                className={`text-base sm:text-lg leading-relaxed font-medium ${
+                  isDarkMode
+                    ? "text-white/80"
+                    : "text-black/85"
+                }`}
+              >
+                Engage with our vibrant community, exchange innovative ideas, and
+                help shape the future of{" "}
+                <span className="font-bold text-[#F4B400]">
+                  AI and Design
+                </span>
+                . Connect with fellow students, ask questions, and grow together.
+              </p>
+            </div>
           </div>
+
+          {/* Button at Bottom Center */}
+          <Link to="/discussion" className="w-full flex justify-center">
+            <motion.button
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-primary px-8 py-3 text-base rounded-xl transition-all duration-300 border font-semibold shadow-lg hover:shadow-xl flex items-center gap-2"
+            >
+              Visit Discussion Board
+              <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                →
+              </motion.span>
+            </motion.button>
+          </Link>
         </div>
       </motion.section>
     </div>

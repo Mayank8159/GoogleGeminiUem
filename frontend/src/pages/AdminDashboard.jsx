@@ -163,16 +163,17 @@ export default function AdminDashboard() {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="mt-8"
         >
-          <button
+          <motion.button
             onClick={() => {
               localStorage.removeItem("adminToken");
               navigate("/admin/login");
             }}
-            className="btn-pattern btn-danger w-full rounded-xl p-4 font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-white"
+            whileHover={{ scale: 1.02 }}
+            className="btn-pattern btn-danger-glass w-full rounded-xl p-4 font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-white"
           >
             <LogOut size={20} />
             Logout
-          </button>
+          </motion.button>
         </motion.div>
       </div>
     </main>
