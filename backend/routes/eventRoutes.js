@@ -6,6 +6,7 @@ import {
   getUpcomingEvents,
   getCompletedEvents
 } from '../controllers/eventController.js';
+import { verifyAdmin } from '../middleware/verifyAdmin.js';
 
 const router = express.Router();
 
@@ -23,10 +24,10 @@ const upload = multer({ storage });
 
 // Routes
 // Admin creates an event (with image)
-router.post('/admin/events', upload.single('image'), createEvent);
+router.post('/admin/events', verifyAdmin, upload.single('image'), createEvent);
 
 // Get events
-router.get('/events/upcoming', getUpcomingEvents);
-router.get('/events/completed', getCompletedEvents);
+router.get('/upcoming', getUpcomingEvents);
+router.get('/completed', getCompletedEvents);
 
 export default router;

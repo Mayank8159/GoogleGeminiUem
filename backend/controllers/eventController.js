@@ -2,7 +2,17 @@ import Event from '../models/Events.js';
 
 export const createEvent = async (req, res) => {
   try {
-    const event = new Event(req.body);
+    if (!req.file) {
+      return res.status(400).json({ error: 'Image file is required' });
+    }
+
+    const event = new Event({
+      title: req.body.title,
+      description: req.body.description,
+      eventDate: req.body.eventDate,
+      imageUrl: req.file.path
+    });
+    
     await event.save();
 
     const io = req.app.get('io');

@@ -14,7 +14,7 @@ export default function EventAdmin() {
   });
   const [imageFile, setImageFile] = useState(null);
 
-  const BACKEND_URL = "https://googlegeminiuem.onrender.com";
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
