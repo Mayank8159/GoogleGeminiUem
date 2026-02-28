@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, Sparkles } from 'lucide-react';
+import FloatingBackground from '../components/FloatingBackground';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
@@ -60,6 +61,9 @@ export default function Login() {
         }}
         transition={{ duration: 8, repeat: Infinity }}
       />
+
+      {/* Three.js Floating Background */}
+      <FloatingBackground />
 
       <motion.div
         initial={{ opacity: 0, y: 30, scale: 0.95 }}

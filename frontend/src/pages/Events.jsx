@@ -38,9 +38,9 @@ const EventCard = ({ event, index }) => {
       }
     },
     hover: { 
-      y: -10, 
-      scale: 1.02,
-      boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+      y: -12, 
+      scale: 1.03,
+      boxShadow: "0 25px 50px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)",
       transition: { duration: 0.3 }
     }
   };
@@ -58,24 +58,26 @@ const EventCard = ({ event, index }) => {
       onClick={() => setIsExpanded(!isExpanded)}
     >
       <motion.div
-        className={`backdrop-blur-md rounded-xl p-6 shadow-lg h-full relative overflow-hidden
+        className={`backdrop-blur-xl rounded-2xl p-7 shadow-lg h-full relative overflow-hidden border-2 transition-all duration-300
           ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-            ? "bg-white/10 border border-white/20"
-            : "bg-white/80 border border-gray-300"}
+            ? "bg-white/10 border-white/25 hover:bg-white/15"
+            : "bg-white/85 border-gray-300/60 hover:bg-white/95"}
         `}
         animate={{ 
-          borderColor: isExpanded ? accentColor : theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)",
+          borderColor: isExpanded ? accentColor : theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "rgba(255,255,255,0.25)" : "rgba(128,128,128,0.3)",
           boxShadow: isExpanded 
-            ? `0 0 30px ${accentColor}40` 
-            : "0 0 0 rgba(0,0,0,0.1)"
+            ? `0 15px 40px ${accentColor}30, inset 0 1px 0 rgba(255,255,255,0.1)` 
+            : theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ? "0 4px 15px rgba(0,0,0,0.2)"
+              : "0 2px 8px rgba(0,0,0,0.08)"
         }}
         transition={{ duration: 0.3 }}
       >
         {/* Animated background gradient */}
         <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500"
+          className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500 rounded-2xl"
           style={{
-            background: `linear-gradient(135deg, ${accentColor}20, transparent)`
+            background: `linear-gradient(135deg, ${accentColor}30, transparent 70%)`
           }}
         />
 
@@ -95,7 +97,7 @@ const EventCard = ({ event, index }) => {
 
         <div className="relative z-10">
           <motion.h3 
-            className={`text-xl font-semibold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
+            className={`text-2xl font-bold mb-4 leading-tight ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
             animate={{ color: isExpanded ? accentColor : theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "white" : "black" }}
             transition={{ duration: 0.3 }}
           >
@@ -125,18 +127,18 @@ const EventCard = ({ event, index }) => {
           </AnimatePresence>
           
           <motion.p 
-            className={`text-sm mb-4 leading-relaxed ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/80" : "text-black/80"}`}
-            animate={{ opacity: isExpanded ? 1 : 0.8 }}
+            className={`text-sm mb-5 leading-relaxed font-medium ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/85" : "text-black/80"}`}
+            animate={{ opacity: isExpanded ? 1 : 0.85 }}
           >
             {event.description}
           </motion.p>
 
-          <div className="space-y-2">
+          <div className="space-y-3 mt-5 pt-5 border-t" style={{ borderTopColor: `${accentColor}30` }}>
             <motion.div 
-              className={`flex items-center gap-2 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}
+              className={`flex items-center gap-3 text-xs font-medium ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
               whileHover={{ x: 5 }}
             >
-              <Clock className="h-4 w-4" />
+              <Clock className="h-4 w-4 flex-shrink-0" style={{ color: accentColor }} />
               <span>{new Date(event.eventDate).toLocaleString()}</span>
             </motion.div>
             
@@ -146,20 +148,20 @@ const EventCard = ({ event, index }) => {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="space-y-2 pt-2 border-t border-white/10"
+                  className="space-y-3 pt-4"
                 >
                   <motion.div 
-                    className={`flex items-center gap-2 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}
+                    className={`flex items-center gap-3 text-xs font-medium ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
                     whileHover={{ x: 5 }}
                   >
-                    <MapPin className="h-4 w-4" />
+                    <MapPin className="h-4 w-4 flex-shrink-0" style={{ color: accentColor }} />
                     <span>UEM Kolkata Campus</span>
                   </motion.div>
                   <motion.div 
-                    className={`flex items-center gap-2 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}
+                    className={`flex items-center gap-3 text-xs font-medium ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
                     whileHover={{ x: 5 }}
                   >
-                    <Users className="h-4 w-4" />
+                    <Users className="h-4 w-4 flex-shrink-0" style={{ color: accentColor }} />
                     <span>Open to all students</span>
                   </motion.div>
                 </motion.div>
@@ -168,10 +170,11 @@ const EventCard = ({ event, index }) => {
           </div>
 
           <motion.div 
-            className={`mt-4 text-xs ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/50" : "text-black/50"}`}
-            animate={{ opacity: isExpanded ? 0.5 : 1 }}
+            className={`mt-6 pt-4 border-t font-medium text-xs tracking-wide uppercase ${isExpanded ? "text-white/50" : "text-white/60"}`}
+            style={{ borderTopColor: `${accentColor}20` }}
+            animate={{ opacity: isExpanded ? 0.6 : 0.7, color: isExpanded ? `${accentColor}80` : "rgba(255,255,255,0.6)" }}
           >
-            {isExpanded ? "Click to collapse" : "Click for details"}
+            {isExpanded ? "Click to collapse ↑" : "Click for details ↓"}
           </motion.div>
         </div>
       </motion.div>
@@ -232,37 +235,49 @@ export default function Events() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="text-center"
+          className="text-center space-y-4"
         >
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="inline-block mb-4"
+            animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            className="inline-flex items-center justify-center h-16 w-16 rounded-full mb-6"
+            style={{
+              background: "linear-gradient(135deg, rgba(66, 133, 244, 0.2), rgba(15, 157, 88, 0.2))"
+            }}
           >
-            <Calendar className="h-12 w-12 text-blue-400" />
+            <Calendar className="h-8 w-8 text-blue-400" />
           </motion.div>
-          <motion.p 
-            className="text-xl font-semibold"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
           >
-            Loading amazing events...
-          </motion.p>
+            <h3 className={`text-2xl font-bold mb-2 ${isDarkMode ? "text-white" : "text-black"}`}>Loading Events</h3>
+            <motion.p 
+              className={`text-lg font-medium ${isDarkMode ? "text-white/70" : "text-black/70"}`}
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              Fetching amazing opportunities for you...
+            </motion.p>
+          </motion.div>
         </motion.div>
         </div>
       </main>
     );
   }
 
+  const isDarkMode = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
   return (
     <main className={`px-4 pt-36 pb-20 min-h-screen overflow-hidden relative transition-colors duration-500
-      ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ${isDarkMode
         ? "bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] text-white"
         : "bg-gradient-to-br from-[#f8f9fa] via-[#f1f3f5] to-[#e9ecef] text-black"}
     `}>
       {/* Animated radial gradient background */}
       <motion.div
-        className="absolute inset-0 opacity-50 pointer-events-none"
+        className="absolute inset-0 opacity-40 pointer-events-none"
         animate={{
           background: [
             "radial-gradient(800px at 20% 50%, rgba(66, 133, 244, 0.15) 0%, transparent 50%)",
@@ -280,28 +295,35 @@ export default function Events() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, type: "spring" }}
-          className={`rounded-3xl p-10 shadow-xl relative overflow-hidden
-            ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-              ? "bg-white/8 border border-white/15"
-              : "bg-white/90 border border-gray-200"}
+          className={`rounded-3xl p-12 shadow-2xl relative overflow-hidden backdrop-blur-lg
+            ${isDarkMode
+              ? "bg-white/8 border border-white/20 shadow-blue-500/10"
+              : "bg-white/95 border border-gray-200/50"}
           `}
         >
+          {/* Gradient top accent */}
+          <motion.div
+            className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-blue-500 to-transparent"
+            animate={{ opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+          
           <div className="relative z-10">
             <motion.div 
-              className="flex flex-col items-center justify-center mb-12"
+              className="flex flex-col items-center justify-center mb-14"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
             >
               <motion.h2
-                className={`text-5xl sm:text-6xl font-extrabold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
+                className={`text-5xl sm:text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent`}
               >
                 Upcoming Events
               </motion.h2>
               <motion.p 
-                className={`text-lg ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
+                className={`text-lg font-medium ${isDarkMode ? "text-white/70" : "text-black/70"}`}
               >
-                Discover what's coming next in our community
+                Join us for exciting opportunities and learning experiences
               </motion.p>
             </motion.div>
 
@@ -323,18 +345,22 @@ export default function Events() {
                 upcoming.map((event, index) => <EventCard key={event._id} event={event} index={index} />)
               ) : (
                 <motion.div 
-                  className="col-span-full text-center py-12"
+                  className="col-span-full text-center py-16 px-8"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 }}
                 >
                   <motion.div
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.1, 1] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="mb-6"
                   >
-                    <Calendar className="h-16 w-16 text-white/30 mx-auto mb-4" />
+                    <Calendar className={`h-20 w-20 mx-auto ${isDarkMode ? "text-blue-400/60" : "text-blue-500/60"}`} />
                   </motion.div>
-                  <p className={`text-lg ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}>No upcoming events yet. Stay tuned!</p>
+                  <h3 className={`text-2xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-black"}`}>No upcoming events yet</h3>
+                  <p className={`text-lg font-medium ${isDarkMode ? "text-white/60" : "text-black/60"} max-w-sm mx-auto`}>
+                    Exciting opportunities are coming soon. Check back regularly for the latest updates!
+                  </p>
                 </motion.div>
               )}
             </motion.div>
@@ -346,28 +372,35 @@ export default function Events() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, type: "spring", delay: 0.2 }}
-          className={`rounded-3xl p-10 shadow-xl relative overflow-hidden
-            ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-              ? "bg-white/8 border border-white/15"
-              : "bg-white/90 border border-gray-200"}
+          className={`rounded-3xl p-12 shadow-2xl relative overflow-hidden backdrop-blur-lg
+            ${isDarkMode
+              ? "bg-white/8 border border-white/20 shadow-green-500/10"
+              : "bg-white/95 border border-gray-200/50"}
           `}
         >
+          {/* Gradient top accent */}
+          <motion.div
+            className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-green-500 to-transparent"
+            animate={{ opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+          
           <div className="relative z-10">
             <motion.div 
-              className="flex flex-col items-center justify-center mb-12"
+              className="flex flex-col items-center justify-center mb-14"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
             >
               <motion.h2
-                className={`text-5xl sm:text-6xl font-extrabold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
+                className={`text-5xl sm:text-6xl font-extrabold mb-4 bg-gradient-to-r from-green-400 via-emerald-400 to-green-400 bg-clip-text text-transparent`}
               >
                 Completed Events
               </motion.h2>
               <motion.p 
-                className={`text-lg ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
+                className={`text-lg font-medium ${isDarkMode ? "text-white/70" : "text-black/70"}`}
               >
-                Celebrating our past achievements
+                Celebrating our community's amazing achievements
               </motion.p>
             </motion.div>
 
@@ -390,18 +423,22 @@ export default function Events() {
                 completed.map((event, index) => <EventCard key={event._id} event={event} index={index} />)
               ) : (
                 <motion.div 
-                  className="col-span-full text-center py-12"
+                  className="col-span-full text-center py-16 px-8"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.7 }}
                 >
                   <motion.div
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="mb-6"
                   >
-                    <CheckCircle className="h-16 w-16 text-white/30 mx-auto mb-4" />
+                    <CheckCircle className={`h-20 w-20 mx-auto ${isDarkMode ? "text-green-400/60" : "text-green-500/60"}`} />
                   </motion.div>
-                  <p className={`text-lg ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/60" : "text-black/60"}`}>No completed events yet. Exciting things coming soon!</p>
+                  <h3 className={`text-2xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-black"}`}>No completed events yet</h3>
+                  <p className={`text-lg font-medium ${isDarkMode ? "text-white/60" : "text-black/60"} max-w-sm mx-auto`}>
+                    Be part of our journey! Attend upcoming events and see them featured here.
+                  </p>
                 </motion.div>
               )}
             </motion.div>
