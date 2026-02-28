@@ -123,7 +123,7 @@ export default function Navbar() {
           <img
             src="/main.png"
             alt="Gemini"
-            className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg hover:scale-105 transition cursor-pointer"
+            className="h-12 w-12 sm:h-14 sm:w-14 rounded-lg hover:scale-105 transition cursor-pointer shadow-md"
           />
         </motion.div>
 

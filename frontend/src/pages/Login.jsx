@@ -65,10 +65,10 @@ export default function Login() {
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`w-full max-w-md backdrop-blur-xl rounded-3xl p-8 sm:p-10 relative overflow-hidden border shadow-2xl z-10 ${
+        className={`w-full max-w-md backdrop-blur-xl rounded-3xl p-8 sm:p-10 relative overflow-hidden z-10 ${
           theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-            ? "bg-white/8 border-white/10"
-            : "bg-white/90 border-white/20"
+            ? "bg-white/8"
+            : "bg-white/90"
         }`}
       >
         {/* Gradient accent */}
@@ -78,35 +78,26 @@ export default function Login() {
           transition={{ duration: 3, repeat: Infinity }}
         />
 
-        {/* Logo with animation */}
+        {/* Logo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 120 }}
-          className="flex justify-center mb-6 relative z-10"
+          className="flex justify-center mb-8 relative z-10"
         >
-          <motion.div
-            className="relative"
-            whileHover={{ scale: 1.05 }}
-          >
-            <motion.div
-              animate={{
-                boxShadow: [
-                  "0 0 20px rgba(66, 133, 244, 0.3)",
-                  "0 0 40px rgba(244, 180, 0, 0.3)",
-                  "0 0 20px rgba(15, 157, 88, 0.3)"
-                ]
-              }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="h-16 w-16 rounded-2xl overflow-hidden"
-            >
-              <img
-                src="/main.png"
-                alt="Gemini Logo"
-                className="h-full w-full object-cover"
-              />
-            </motion.div>
-          </motion.div>
+          <motion.img
+            src="/main.png"
+            alt="Gemini Logo"
+            className="h-20 w-20 sm:h-24 sm:w-24 rounded-xl"
+            animate={{
+              boxShadow: [
+                "0 0 20px rgba(66, 133, 244, 0.4)",
+                "0 0 40px rgba(244, 180, 0, 0.4)",
+                "0 0 20px rgba(15, 157, 88, 0.4)"
+              ]
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+          />
         </motion.div>
 
         {/* Title with gradient */}
