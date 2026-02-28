@@ -66,12 +66,51 @@ export default function Navbar() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 backdrop-blur-xl border rounded-2xl px-6 py-4 transition-colors duration-500 ${
-        isDark
-          ? "bg-gradient-to-br from-[#0a0f14]/90 to-[#151b23]/90 border-white/10 shadow-[0_0_25px_rgba(255,255,255,0.1)] text-white"
-          : "bg-gradient-to-br from-white/90 to-[#f8f9fa]/90 border-gray-300 shadow-[0_0_25px_rgba(0,0,0,0.1)] text-gray-800"
-      }`}
+      className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 transition-colors duration-500"
     >
+      {/* Outer container for animated border */}
+      <div className="relative rounded-2xl p-[2px] overflow-hidden">
+        {/* Top animated gradient sweep */}
+        <motion.div
+          className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
+          style={{
+            background: isDark
+              ? 'linear-gradient(90deg, transparent, rgba(66, 133, 244, 1), rgba(244, 180, 0, 1), transparent)'
+              : 'linear-gradient(90deg, transparent, rgba(66, 133, 244, 0.9), rgba(244, 180, 0, 1), transparent)',
+            filter: 'blur(0)',
+          }}
+          animate={{x: ['-100%', '100%']}}
+          transition={{duration: 2.5, repeat: Infinity, ease: 'linear'}}
+        />
+        
+        {/* Bottom animated gradient sweep */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none"
+          style={{
+            background: isDark
+              ? 'linear-gradient(90deg, transparent, rgba(15, 157, 88, 1), rgba(244, 180, 0, 0.9), transparent)'
+              : 'linear-gradient(90deg, transparent, rgba(15, 157, 88, 0.9), rgba(244, 180, 0, 0.9), transparent)',
+          }}
+          animate={{x: ['100%', '-100%']}}
+          transition={{duration: 2.5, repeat: Infinity, ease: 'linear'}}
+        />
+        
+        {/* Vibrant surrounding glow */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{
+            boxShadow: isDark
+              ? ['0 0 25px rgba(66, 133, 244, 0.5), inset 0 0 25px rgba(244, 180, 0, 0.2)', '0 0 35px rgba(244, 180, 0, 0.6), inset 0 0 35px rgba(15, 157, 88, 0.2)', '0 0 25px rgba(66, 133, 244, 0.5), inset 0 0 25px rgba(244, 180, 0, 0.2)']
+              : ['0 0 20px rgba(66, 133, 244, 0.6), inset 0 0 20px rgba(244, 180, 0, 0.3)', '0 0 30px rgba(244, 180, 0, 0.7), inset 0 0 30px rgba(15, 157, 88, 0.3)', '0 0 20px rgba(66, 133, 244, 0.6), inset 0 0 20px rgba(244, 180, 0, 0.3)']
+          }}
+          transition={{duration: 3, repeat: Infinity, ease: 'easeInOut'}}
+        />
+        
+        {/* Main navbar content */}
+        <div className={`relative backdrop-blur-xl rounded-2xl px-6 py-4 border ${isDark
+            ? "bg-gradient-to-br from-[#0a0f14]/95 to-[#151b23]/95 border-white/10 shadow-2xl text-white"
+            : "bg-gradient-to-br from-white/95 to-[#f8f9fa]/95 border-gray-200/50 shadow-xl text-gray-800"
+        }`}>
       {/* Top Row */}
       <div className="flex items-center justify-between">
         {/* Logo */}
@@ -319,6 +358,8 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+        </div>
+      </div>
     </motion.nav>
   );
 }

@@ -13,11 +13,35 @@ export default function Footer() {
       window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   return (
-    <footer className={`mt-0 px-4 py-8 pb-16 md:pb-8 backdrop-blur-xl border-t shadow-lg relative transition-colors duration-500 ${
+    <footer className={`mt-0 px-4 py-8 pb-16 md:pb-8 backdrop-blur-xl shadow-lg relative transition-colors duration-500 overflow-hidden border-t ${
       isDark
-        ? "bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] border-white/20 text-white"
-        : "bg-gradient-to-br from-[#f8f9fa] via-[#f1f3f5] to-[#e9ecef] border-gray-300 text-gray-900"
+        ? "bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] border-white/10 text-white"
+        : "bg-gradient-to-br from-[#f8f9fa] via-[#f1f3f5] to-[#e9ecef] border-gray-200 text-gray-900"
     }`}>
+      {/* Animated Light Effect at Top - Sweeping Light */}
+      <motion.div
+        className="absolute top-0 left-0 h-[3px] pointer-events-none z-20"
+        style={{
+          width: '50%',
+          background: isDark
+            ? 'linear-gradient(90deg, transparent 0%, rgba(66, 133, 244, 0.6) 20%, rgba(244, 180, 0, 0.8) 50%, rgba(15, 157, 88, 0.6) 80%, transparent 100%)'
+            : 'linear-gradient(90deg, transparent 0%, rgba(66, 133, 244, 0.7) 20%, rgba(244, 180, 0, 0.9) 50%, rgba(15, 157, 88, 0.7) 80%, transparent 100%)',
+          filter: 'blur(1px)',
+          boxShadow: isDark
+            ? '0 0 15px rgba(244, 180, 0, 0.5), 0 0 30px rgba(66, 133, 244, 0.3)'
+            : '0 0 12px rgba(244, 180, 0, 0.6), 0 0 25px rgba(66, 133, 244, 0.4)',
+        }}
+        animate={{
+          x: ['0%', '150%'],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          repeatDelay: 0.5,
+        }}
+      />
+
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
         
         {/* Left: Logos + Title */}
