@@ -25,6 +25,9 @@ export default defineConfig({
           // HTTP and real-time libraries
           'network-vendor': ['axios', 'socket.io-client'],
 
+          // 3D graphics
+          '3d-vendor': ['three'],
+
           // Styling (TailwindCSS v4 handles this differently)
           // 'styling-vendor': ['tailwindcss'],
         },
