@@ -13,7 +13,7 @@ export default function Footer() {
       window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   return (
-    <footer className={`mt-0 px-4 py-8 pb-16 md:pb-8 backdrop-blur-xl shadow-lg relative transition-colors duration-500 overflow-hidden border-t ${
+    <footer className={`mt-0 px-4 py-8 pb-16 md:pb-8 backdrop-blur-xl shadow-lg relative transition-colors duration-500 overflow-hidden border-t rounded-t-3xl ${
       isDark
         ? "bg-gradient-to-br from-[#0a0f14] via-[#151b23] to-[#1e2530] border-white/10 text-white"
         : "bg-gradient-to-br from-[#f8f9fa] via-[#f1f3f5] to-[#e9ecef] border-gray-200 text-gray-900"
