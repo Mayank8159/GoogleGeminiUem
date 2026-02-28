@@ -170,9 +170,16 @@ const EventCard = ({ event, index }) => {
           </div>
 
           <motion.div 
-            className={`mt-6 pt-4 border-t font-medium text-xs tracking-wide uppercase ${isExpanded ? "text-white/50" : "text-white/60"}`}
+            className={`mt-6 pt-4 border-t font-medium text-xs tracking-wide uppercase ${
+              theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? isExpanded ? "text-white/50" : "text-white/60"
+                : isExpanded ? "text-black/50" : "text-black/60"
+            }`}
             style={{ borderTopColor: `${accentColor}20` }}
-            animate={{ opacity: isExpanded ? 0.6 : 0.7, color: isExpanded ? `${accentColor}80` : "rgba(255,255,255,0.6)" }}
+            animate={{ 
+              opacity: isExpanded ? 0.6 : 0.7, 
+              color: isExpanded ? `${accentColor}80` : (theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)") 
+            }}
           >
             {isExpanded ? "Click to collapse ↑" : "Click for details ↓"}
           </motion.div>
@@ -184,6 +191,7 @@ const EventCard = ({ event, index }) => {
 
 export default function Events() {
   const { theme } = useTheme();
+  const isDarkMode = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
   const [upcoming, setUpcoming] = useState([]);
   const [completed, setCompleted] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -266,8 +274,6 @@ export default function Events() {
       </main>
     );
   }
-
-  const isDarkMode = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   return (
     <main className={`px-4 pt-36 pb-20 min-h-screen overflow-hidden relative transition-colors duration-500
