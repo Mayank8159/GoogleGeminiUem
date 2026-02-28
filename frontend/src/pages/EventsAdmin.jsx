@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -147,16 +148,26 @@ export default function EventAdmin() {
 
   return (
     <main
-      className={`min-h-screen transition-colors duration-500 pt-28 ${
+      className={`min-h-screen transition-colors duration-500 pt-36 relative overflow-hidden ${
         isDark
-          ? "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white"
-          : "bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 text-slate-900"
+          ? "bg-gradient-to-br from-[#0B1519] via-[#1A2F37] to-[#25424D] text-white"
+          : "bg-gradient-to-br from-[#f0f3f6] via-[#e3e6ea] to-[#cfd8dc] text-slate-900"
       }`}
     >
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
+      {/* Animated radial gradient background */}
+      <div className="absolute inset-0 z-0 opacity-50 pointer-events-none">
+        <motion.div
+          animate={{
+            background: [
+              "radial-gradient(800px at 20% 50%, rgba(66, 133, 244, 0.15) 0%, transparent 50%)",
+              "radial-gradient(800px at 50% 30%, rgba(244, 180, 0, 0.12) 0%, transparent 50%)",
+              "radial-gradient(800px at 80% 70%, rgba(15, 157, 88, 0.12) 0%, transparent 50%)",
+              "radial-gradient(800px at 20% 50%, rgba(66, 133, 244, 0.15) 0%, transparent 50%)"
+            ]
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute inset-0"
+        />
       </div>
 
       {/* Content */}
@@ -164,12 +175,17 @@ export default function EventAdmin() {
         {/* Header */}
         <div className="max-w-6xl mx-auto mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <Calendar className="w-8 h-8 text-indigo-500" />
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+            <motion.div
+              whileHover={{ scale: 1.1, rotate: 10 }}
+              className="bg-gradient-to-br from-[#4285F4] to-[#F4B400] p-3 rounded-full"
+            >
+              <Calendar className="w-8 h-8 text-white" />
+            </motion.div>
+            <h1 className="text-5xl sm:text-6xl font-extrabold bg-gradient-to-r from-[#4285F4] via-[#F4B400] to-[#0F9D58] bg-clip-text text-transparent">
               Event Management
             </h1>
           </div>
-          <p className={isDark ? "text-slate-400" : "text-slate-600"}>
+          <p className={isDark ? "text-white/70" : "text-black/70"}>
             Create and manage events for your community
           </p>
         </div>
@@ -177,18 +193,30 @@ export default function EventAdmin() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Create Event Form */}
           <div className="lg:col-span-1">
-            <div
-              className={`rounded-2xl backdrop-blur-xl transition-all duration-300 h-fit sticky top-8 ${
-                isDark
-                  ? "bg-slate-800/50 border border-slate-700/50 shadow-2xl"
-                  : "bg-white/50 border border-white/80 shadow-xl"
-              }`}
-            >
-              <div className="p-6">
-                <div className="flex items-center gap-2 mb-6">
-                  <Plus className="w-5 h-5 text-indigo-500" />
-                  <h2 className="text-2xl font-bold">New Event</h2>
-                </div>
+          <div
+            className={`rounded-3xl backdrop-blur-xl transition-all duration-300 h-fit sticky top-8 border-t border-l relative overflow-hidden ${
+              isDark
+                ? "bg-white/8 border-[#4285F4]/30 shadow-2xl"
+                : "bg-white/90 border-[#4285F4]/40 shadow-xl"
+            }`}
+          >
+            {/* Gradient accent on hover */}
+            <motion.div
+              className="absolute -top-1 -left-1 w-32 h-32 bg-gradient-to-r from-[#4285F4]/20 to-[#F4B400]/20 rounded-full blur-3xl pointer-events-none"
+              initial={{ opacity: 0 }}
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+            <div className="p-6 relative z-10">
+              <div className="flex items-center gap-2 mb-6">
+                <motion.div
+                  className="bg-gradient-to-br from-[#0F9D58] to-[#4285F4] p-2 rounded-full"
+                  whileHover={{ scale: 1.1 }}
+                >
+                  <Plus className="w-5 h-5 text-white" />
+                </motion.div>
+                <h2 className="text-2xl font-bold">New Event</h2>
+              </div>
 
                 <div className="space-y-4">
                   {/* Title */}
@@ -200,8 +228,8 @@ export default function EventAdmin() {
                     onChange={handleChange}
                     className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 focus:outline-none text-sm ${
                       isDark
-                        ? "bg-slate-700/50 border-slate-600 focus:border-indigo-500 text-white"
-                        : "bg-white/50 border-slate-200 focus:border-indigo-500"
+                        ? "bg-white/5 border-[#4285F4]/30 focus:border-[#4285F4] text-white"
+                        : "bg-white/50 border-[#4285F4]/40 focus:border-[#4285F4]"
                     }`}
                   />
 
@@ -214,14 +242,14 @@ export default function EventAdmin() {
                     rows={3}
                     className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 focus:outline-none text-sm resize-none ${
                       isDark
-                        ? "bg-slate-700/50 border-slate-600 focus:border-indigo-500 text-white"
-                        : "bg-white/50 border-slate-200 focus:border-indigo-500"
+                        ? "bg-white/5 border-[#4285F4]/30 focus:border-[#4285F4] text-white"
+                        : "bg-white/50 border-[#4285F4]/40 focus:border-[#4285F4]"
                     }`}
                   />
 
                   {/* Date & Time */}
                   <div className="flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-slate-400" />
+                    <Clock className="w-5 h-5 text-[#4285F4]" />
                     <input
                       type="datetime-local"
                       name="eventDate"
@@ -229,8 +257,8 @@ export default function EventAdmin() {
                       onChange={handleChange}
                       className={`flex-1 px-4 py-3 rounded-lg border-2 transition-all duration-200 focus:outline-none text-sm ${
                         isDark
-                          ? "bg-slate-700/50 border-slate-600 focus:border-indigo-500 text-white"
-                          : "bg-white/50 border-slate-200 focus:border-indigo-500"
+                          ? "bg-white/5 border-[#4285F4]/30 focus:border-[#4285F4] text-white"
+                          : "bg-white/50 border-[#4285F4]/40 focus:border-[#4285F4]"
                       }`}
                     />
                   </div>
@@ -240,19 +268,19 @@ export default function EventAdmin() {
                     htmlFor="imageUpload"
                     className={`block w-full p-4 border-2 border-dashed rounded-lg cursor-pointer transition-all duration-200 ${
                       isDark
-                        ? "border-indigo-500/50 bg-indigo-500/5 hover:bg-indigo-500/10"
-                        : "border-indigo-300 bg-indigo-50 hover:bg-indigo-100"
+                        ? "border-[#4285F4]/50 bg-[#4285F4]/5 hover:bg-[#4285F4]/10"
+                        : "border-[#4285F4]/40 bg-[#4285F4]/5 hover:bg-[#4285F4]/10"
                     }`}
                   >
                     <div className="flex flex-col items-center gap-2">
                       {imageFile ? (
                         <>
-                          <ImageIcon className="w-6 h-6 text-green-500" />
-                          <p className="text-sm font-medium text-green-600">Image selected ✓</p>
+                          <ImageIcon className="w-6 h-6 text-[#0F9D58]" />
+                          <p className="text-sm font-medium text-[#0F9D58]">Image selected ✓</p>
                         </>
                       ) : (
                         <>
-                          <Upload className="w-6 h-6 text-indigo-500" />
+                          <Upload className="w-6 h-6 text-[#4285F4]" />
                           <p className="text-xs font-medium text-center">Click or drag to upload</p>
                         </>
                       )}
@@ -268,7 +296,7 @@ export default function EventAdmin() {
 
                   {/* Image Preview */}
                   {imageFile && (
-                    <div className="w-full rounded-lg overflow-hidden border-2 border-indigo-500/30">
+                    <div className="w-full rounded-lg overflow-hidden border-2 border-[#4285F4]/30">
                       <img
                         src={URL.createObjectURL(imageFile)}
                         alt="Preview"
@@ -281,10 +309,10 @@ export default function EventAdmin() {
                   <button
                     onClick={submitEvent}
                     disabled={isSubmitting || !imageFile}
-                    className={`w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
+                    className={`w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-200 border-2 ${
                       isSubmitting || !imageFile
                         ? "opacity-50 cursor-not-allowed"
-                        : "bg-gradient-to-r from-indigo-500 to-purple-500 hover:shadow-lg"
+                        : "bg-gradient-to-r from-[#4285F4] to-[#F4B400] hover:shadow-xl hover:shadow-[#4285F4]/50 border-[#4285F4]"
                     } text-white`}
                   >
                     {isSubmitting ? (
@@ -309,10 +337,15 @@ export default function EventAdmin() {
             {/* Upcoming Events */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Calendar className="w-5 h-5 text-blue-500" />
+                <motion.div
+                  className="bg-gradient-to-br from-[#4285F4] to-[#F4B400] p-2 rounded-full"
+                  whileHover={{ scale: 1.1 }}
+                >
+                  <Calendar className="w-5 h-5 text-white" />
+                </motion.div>
                 <h3 className="text-xl font-bold">
                   Upcoming Events
-                  <span className={`ml-2 px-3 py-1 rounded-full text-sm font-semibold ${isDark ? "bg-blue-500/20 text-blue-300" : "bg-blue-100 text-blue-700"}`}>
+                  <span className={`ml-2 px-3 py-1 rounded-full text-sm font-semibold ${isDark ? "bg-[#4285F4]/20 text-[#4285F4]" : "bg-[#4285F4]/10 text-[#4285F4]"}`}>
                     {upcomingEvents.length}
                   </span>
                 </h3>
@@ -320,16 +353,16 @@ export default function EventAdmin() {
 
               {loadingEvents ? (
                 <div className="flex items-center justify-center p-8">
-                  <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
+                  <Loader2 className="w-6 h-6 animate-spin text-[#4285F4]" />
                 </div>
               ) : upcomingEvents.length === 0 ? (
                 <div
                   className={`rounded-xl p-8 text-center border-2 border-dashed ${
-                    isDark ? "border-slate-700/50 bg-slate-800/30" : "border-slate-200 bg-slate-50/50"
+                    isDark ? "border-white/20 bg-white/5" : "border-gray-200 bg-gray-50/50"
                   }`}
                 >
-                  <AlertCircle className="w-8 h-8 mx-auto mb-2 text-slate-400" />
-                  <p className={isDark ? "text-slate-400" : "text-slate-600"}>
+                  <AlertCircle className="w-8 h-8 mx-auto mb-2 text-[#4285F4]" />
+                  <p className={isDark ? "text-white/70" : "text-black/70"}>
                     No upcoming events yet
                   </p>
                 </div>
@@ -340,16 +373,16 @@ export default function EventAdmin() {
                       key={event._id}
                       className={`rounded-xl p-4 border-2 transition-all duration-200 ${
                         isDark
-                          ? "bg-slate-800/40 border-blue-500/20 hover:border-blue-500/40"
-                          : "bg-white/40 border-blue-200 hover:border-blue-400"
+                          ? "bg-white/5 border-[#4285F4]/30 hover:border-[#4285F4]/60"
+                          : "bg-white/40 border-[#4285F4]/30 hover:border-[#4285F4]/60"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
                           <h4 className="font-semibold truncate mb-1">{event.title}</h4>
                           <div className="flex items-center gap-2 text-sm">
-                            <Calendar className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                            <span className={isDark ? "text-slate-400" : "text-slate-600"}>
+                            <Calendar className="w-4 h-4 text-[#4285F4] flex-shrink-0" />
+                            <span className={isDark ? "text-white/70" : "text-black/70"}>
                               {new Date(event.eventDate).toLocaleDateString("en-US", {
                                 month: "short",
                                 day: "numeric",
@@ -365,8 +398,8 @@ export default function EventAdmin() {
                           className={`p-2 rounded-lg transition-all duration-200 ${
                             deletingId === event._id
                               ? "opacity-50 cursor-not-allowed"
-                              : "hover:bg-red-500/20"
-                          } text-red-500 hover:text-red-600`}
+                              : "hover:bg-[#DB4437]/20"
+                          } text-[#DB4437] hover:text-[#DB4437]/80`}
                         >
                           {deletingId === event._id ? (
                             <Loader2 className="w-5 h-5 animate-spin" />
@@ -384,10 +417,15 @@ export default function EventAdmin() {
             {/* Completed Events */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <motion.div
+                  className="bg-gradient-to-br from-[#0F9D58] to-[#4285F4] p-2 rounded-full"
+                  whileHover={{ scale: 1.1 }}
+                >
+                  <CheckCircle2 className="w-5 h-5 text-white" />
+                </motion.div>
                 <h3 className="text-xl font-bold">
                   Completed Events
-                  <span className={`ml-2 px-3 py-1 rounded-full text-sm font-semibold ${isDark ? "bg-green-500/20 text-green-300" : "bg-green-100 text-green-700"}`}>
+                  <span className={`ml-2 px-3 py-1 rounded-full text-sm font-semibold ${isDark ? "bg-[#0F9D58]/20 text-[#0F9D58]" : "bg-[#0F9D58]/10 text-[#0F9D58]"}`}>
                     {completedEvents.length}
                   </span>
                 </h3>
@@ -396,11 +434,11 @@ export default function EventAdmin() {
               {completedEvents.length === 0 ? (
                 <div
                   className={`rounded-xl p-8 text-center border-2 border-dashed ${
-                    isDark ? "border-slate-700/50 bg-slate-800/30" : "border-slate-200 bg-slate-50/50"
+                    isDark ? "border-white/20 bg-white/5" : "border-gray-200 bg-gray-50/50"
                   }`}
                 >
-                  <AlertCircle className="w-8 h-8 mx-auto mb-2 text-slate-400" />
-                  <p className={isDark ? "text-slate-400" : "text-slate-600"}>
+                  <AlertCircle className="w-8 h-8 mx-auto mb-2 text-[#0F9D58]" />
+                  <p className={isDark ? "text-white/70" : "text-black/70"}>
                     No completed events
                   </p>
                 </div>
@@ -411,8 +449,8 @@ export default function EventAdmin() {
                       key={event._id}
                       className={`rounded-xl p-4 border-2 opacity-75 transition-all duration-200 ${
                         isDark
-                          ? "bg-slate-800/40 border-green-500/20 hover:border-green-500/40"
-                          : "bg-white/40 border-green-200 hover:border-green-400"
+                          ? "bg-white/5 border-[#0F9D58]/30 hover:border-[#0F9D58]/60"
+                          : "bg-white/40 border-[#0F9D58]/30 hover:border-[#0F9D58]/60"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-4">

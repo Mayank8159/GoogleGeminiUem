@@ -210,11 +210,24 @@ export default function Events() {
 
   if (loading) {
     return (
-      <main className={`px-4 pt-28 pb-20 min-h-screen flex items-center justify-center transition-colors duration-500
+      <main className={`px-4 pt-36 pb-20 min-h-screen flex items-center justify-center transition-colors duration-500 relative overflow-hidden
         ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-          ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
-          : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+          ? "bg-gradient-to-br from-[#0B1519] via-[#1A2F37] to-[#25424D] text-white"
+          : "bg-gradient-to-br from-[#f0f3f6] via-[#e3e6ea] to-[#cfd8dc] text-black"}
       `}>
+        {/* Animated radial gradient background */}
+        <motion.div
+          className="absolute inset-0 opacity-30"
+          animate={{
+            background: [
+              "radial-gradient(800px at 20% 50%, rgba(66, 133, 244, 0.15) 0%, transparent 50%)",
+              "radial-gradient(800px at 80% 50%, rgba(244, 180, 0, 0.15) 0%, transparent 50%)",
+              "radial-gradient(800px at 20% 50%, rgba(66, 133, 244, 0.15) 0%, transparent 50%)"
+            ]
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <div className="relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -236,135 +249,60 @@ export default function Events() {
             Loading amazing events...
           </motion.p>
         </motion.div>
+        </div>
       </main>
     );
   }
 
   return (
-    <main className={`px-4 pt-28 pb-20 min-h-screen overflow-hidden relative transition-colors duration-500
+    <main className={`px-4 pt-36 pb-20 min-h-screen overflow-hidden relative transition-colors duration-500
       ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-        ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
-        : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
+        ? "bg-gradient-to-br from-[#0B1519] via-[#1A2F37] to-[#25424D] text-white"
+        : "bg-gradient-to-br from-[#f0f3f6] via-[#e3e6ea] to-[#cfd8dc] text-black"}
     `}>
-      {/* Enhanced Glowing background orbs */}
-      <div className="absolute inset-0 z-0 opacity-20">
-        <motion.div
-          animate={{ 
-            scale: [1, 1.3, 1], 
-            rotate: [0, 180, 360], 
-            opacity: [0.1, 0.4, 0.1],
-            x: [0, 50, 0]
-          }}
-          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-96 w-96 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 blur-3xl -top-20 -left-20"
-        />
-        <motion.div
-          animate={{ 
-            scale: [1, 1.2, 1], 
-            rotate: [0, -180, -360], 
-            opacity: [0.1, 0.3, 0.1],
-            x: [0, -30, 0]
-          }}
-          transition={{ duration: 25, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-80 w-80 rounded-full bg-gradient-to-r from-indigo-500 to-pink-500 blur-3xl -bottom-20 -right-20"
-        />
-        <motion.div
-          animate={{ 
-            scale: [1, 1.4, 1], 
-            rotate: [0, 90, 180, 270, 360], 
-            opacity: [0.05, 0.2, 0.05]
-          }}
-          transition={{ duration: 30, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute h-64 w-64 rounded-full bg-gradient-to-r from-green-400 to-blue-500 blur-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-        />
-      </div>
+      {/* Animated radial gradient background */}
+      <motion.div
+        className="absolute inset-0 opacity-50 pointer-events-none"
+        animate={{
+          background: [
+            "radial-gradient(800px at 20% 50%, rgba(66, 133, 244, 0.15) 0%, transparent 50%)",
+            "radial-gradient(800px at 50% 30%, rgba(244, 180, 0, 0.12) 0%, transparent 50%)",
+            "radial-gradient(800px at 80% 70%, rgba(15, 157, 88, 0.12) 0%, transparent 50%)",
+            "radial-gradient(800px at 20% 50%, rgba(66, 133, 244, 0.15) 0%, transparent 50%)"
+          ]
+        }}
+        transition={{ duration: 8, repeat: Infinity }}
+      />
 
-      {/* Floating particles */}
-      <div className="absolute inset-0 z-0">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 3,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10 space-y-24">
+      <div className="max-w-6xl mx-auto relative z-10 space-y-24">
         {/* Upcoming Events Section */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, type: "spring" }}
-          className={`backdrop-blur-md rounded-2xl p-8 shadow-2xl relative overflow-hidden
+          className={`rounded-3xl p-10 shadow-xl relative overflow-hidden
             ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-              ? "bg-white/5 border border-white/10"
-              : "bg-white/80 border border-gray-300"}
+              ? "bg-white/8 border border-white/15"
+              : "bg-white/90 border border-gray-200"}
           `}
         >
-          {/* Section background animation */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10"
-            animate={{ 
-              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-            }}
-            transition={{ duration: 8, repeat: Infinity }}
-          />
-
           <div className="relative z-10">
             <motion.div 
               className="flex flex-col items-center justify-center mb-12"
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.3, type: "spring" }}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
             >
-              <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-                <motion.div
-                  className="h-16 w-16 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg"
-                  whileHover={{ scale: 1.1, rotate: 10 }}
-                  animate={{ 
-                    boxShadow: [
-                      "0 0 0 rgba(59, 130, 246, 0)",
-                      "0 0 30px rgba(59, 130, 246, 0.5)",
-                      "0 0 0 rgba(59, 130, 246, 0)"
-                    ]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  <AnimatedIcon icon={Calendar} color="white" size={32} />
-                </motion.div>
-                <div>
-                  <motion.h2
-                    className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent tracking-wide leading-tight"
-                    animate={{ 
-                      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                    }}
-                    transition={{ duration: 5, repeat: Infinity }}
-                  >
-                    Upcoming Events
-                  </motion.h2>
-                  <motion.p 
-                    className={`mt-2 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                  >
-                    Discover what's coming next in our community
-                  </motion.p>
-                </div>
-              </div>
+              <motion.h2
+                className={`text-5xl sm:text-6xl font-extrabold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
+              >
+                Upcoming Events
+              </motion.h2>
+              <motion.p 
+                className={`text-lg ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
+              >
+                Discover what's coming next in our community
+              </motion.p>
             </motion.div>
 
             <motion.div 
@@ -408,63 +346,29 @@ export default function Events() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, type: "spring", delay: 0.2 }}
-          className={`backdrop-blur-md rounded-2xl p-8 shadow-2xl relative overflow-hidden
+          className={`rounded-3xl p-10 shadow-xl relative overflow-hidden
             ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-              ? "bg-white/5 border border-white/10"
-              : "bg-white/80 border border-gray-300"}
+              ? "bg-white/8 border border-white/15"
+              : "bg-white/90 border border-gray-200"}
           `}
         >
-          {/* Section background animation */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-teal-500/10"
-            animate={{ 
-              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-            }}
-            transition={{ duration: 8, repeat: Infinity, delay: 2 }}
-          />
-
           <div className="relative z-10">
             <motion.div 
               className="flex flex-col items-center justify-center mb-12"
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.5, type: "spring" }}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
             >
-              <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-                <motion.div
-                  className="h-16 w-16 flex items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-teal-600 shadow-lg"
-                  whileHover={{ scale: 1.1, rotate: -10 }}
-                  animate={{ 
-                    boxShadow: [
-                      "0 0 0 rgba(34, 197, 94, 0)",
-                      "0 0 30px rgba(34, 197, 94, 0.5)",
-                      "0 0 0 rgba(34, 197, 94, 0)"
-                    ]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-                >
-                  <AnimatedIcon icon={CheckCircle} color="white" size={32} />
-                </motion.div>
-                <div>
-                  <motion.h2
-                    className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-green-400 to-teal-300 bg-clip-text text-transparent tracking-wide leading-tight"
-                    animate={{ 
-                      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                    }}
-                    transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-                  >
-                    Completed Events
-                  </motion.h2>
-                  <motion.p 
-                    className={`mt-2 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                  >
-                    Celebrating our past achievements
-                  </motion.p>
-                </div>
-              </div>
+              <motion.h2
+                className={`text-5xl sm:text-6xl font-extrabold mb-3 ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white" : "text-black"}`}
+              >
+                Completed Events
+              </motion.h2>
+              <motion.p 
+                className={`text-lg ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "text-white/70" : "text-black/70"}`}
+              >
+                Celebrating our past achievements
+              </motion.p>
             </motion.div>
 
             <motion.div 
