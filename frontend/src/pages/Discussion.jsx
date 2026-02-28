@@ -212,9 +212,9 @@ export default function Discussion() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           disabled={!newMessage.trim()}
-          className={`px-5 py-3 rounded-xl font-semibold transition flex items-center gap-2 shadow-lg ${
+          className={`btn-pattern px-5 py-3 rounded-xl transition flex items-center gap-2 shadow-lg ${
             newMessage.trim()
-              ? "bg-gradient-to-r from-[#4285F4] to-[#F4B400] text-white hover:shadow-xl"
+              ? "btn-primary text-white border-white/20"
               : isDark
               ? "bg-white/10 text-gray-500 cursor-not-allowed"
               : "bg-gray-200 text-gray-400 cursor-not-allowed"
@@ -270,7 +270,7 @@ export default function Discussion() {
                   onClick={() => setShowLoginModal(false)}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`flex-1 px-6 py-3 rounded-xl font-medium transition ${
+                  className={`btn-pattern btn-secondary flex-1 px-6 py-3 rounded-xl font-medium transition ${
                     isDark
                       ? "bg-white/10 hover:bg-white/20 text-white"
                       : "bg-gray-200 hover:bg-gray-300 text-gray-900"
@@ -282,7 +282,7 @@ export default function Discussion() {
                   onClick={() => navigate('/login')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-[#4285F4] to-[#F4B400] hover:shadow-xl rounded-xl font-semibold text-white transition"
+                  className="btn-pattern btn-primary flex-1 px-6 py-3 hover:shadow-xl rounded-xl font-semibold text-white transition"
                 >
                   Go to Login
                 </motion.button>

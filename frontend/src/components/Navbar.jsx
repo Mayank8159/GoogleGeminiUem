@@ -149,7 +149,7 @@ export default function Navbar() {
                   backgroundColor: "#DB4437",
                   boxShadow: "0 0 10px #DB4437",
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${isDark ? "bg-white/10" : "bg-gray-200/80"}`}
+                className="btn-pattern btn-danger flex items-center gap-2 px-4 py-2 rounded-lg transition text-white"
               >
                 <LogOut size={16} />
                 Logout
@@ -167,7 +167,7 @@ export default function Navbar() {
                     color: "#fff",
                   }}
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="bg-[#F4B400] text-black px-5 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
+                  className="btn-pattern btn-primary text-white px-5 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
                 >
                   Get Started
                   <motion.div animate={{ rotate: dropdownOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
@@ -254,7 +254,7 @@ export default function Navbar() {
                 </div>
                 <button
                   onClick={handleLogout}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${isDark ? "bg-white/10" : "bg-gray-200/80"}`}
+                  className="btn-pattern btn-danger flex items-center gap-2 px-4 py-2 rounded-lg transition text-white"
                 >
                   <LogOut size={16} />
                   Logout
@@ -271,7 +271,7 @@ export default function Navbar() {
                       color: "#fff",
                     }}
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="bg-[#F4B400] text-black px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
+                    className="btn-pattern btn-primary text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition"
                   >
                     Get Started
                     <motion.div animate={{ rotate: dropdownOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>

@@ -65,10 +65,10 @@ export default function Login() {
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`w-full max-w-md backdrop-blur-xl rounded-3xl p-8 sm:p-10 relative overflow-hidden border-t border-l shadow-2xl ${
+        className={`w-full max-w-md backdrop-blur-xl rounded-3xl p-8 sm:p-10 relative overflow-hidden border shadow-2xl z-10 ${
           theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-            ? "bg-white/8 border-[#4285F4]/30"
-            : "bg-white/90 border-[#4285F4]/40"
+            ? "bg-white/8 border-white/10"
+            : "bg-white/90 border-white/20"
         }`}
       >
         {/* Gradient accent */}
@@ -129,9 +129,12 @@ export default function Login() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#DB4437]/10 border border-[#DB4437]/30 text-[#DB4437] px-4 py-3 rounded-lg text-sm mb-6 flex items-center gap-2"
+            className={`px-4 py-3 rounded-xl border text-sm mb-6 text-center relative z-10 ${
+              theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                ? "bg-red-500/10 border-red-500/30 text-red-400"
+                : "bg-red-50 border-red-200 text-red-600"
+            }`}
           >
-            <Sparkles className="w-4 h-4" />
             {errorMsg}
           </motion.div>
         )}
@@ -145,71 +148,87 @@ export default function Login() {
         >
           {/* Email Input */}
           <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4285F4]">
-              <Mail className="w-5 h-5" />
+            <div className="absolute left-4 inset-y-0 flex items-center pointer-events-none">
+              <Mail className="w-5 h-5 text-[#4285F4]" />
             </div>
             <input
               type="email"
               placeholder="Email address"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className={`w-full pl-12 pr-4 py-3 rounded-xl outline-none border-2 transition-all duration-200 ${
+              className={`w-full pl-12 pr-4 py-4 rounded-xl outline-none border transition-all duration-200 ${
                 theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-                  ? "bg-white/5 border-[#4285F4]/30 focus:border-[#4285F4] text-white placeholder-white/50"
-                  : "bg-white/50 border-[#4285F4]/40 focus:border-[#4285F4] text-black placeholder-black/50"
+                  ? "bg-white/5 border-white/10 focus:border-[#4285F4] focus:ring-2 focus:ring-[#4285F4]/20 text-white placeholder-white/50"
+                  : "bg-white/80 border-gray-200 focus:border-[#4285F4] focus:ring-2 focus:ring-[#4285F4]/20 text-gray-900 placeholder-gray-500"
               }`}
             />
           </div>
 
           {/* Password Input */}
           <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#DB4437]">
-              <Lock className="w-5 h-5" />
+            <div className="absolute left-4 inset-y-0 flex items-center pointer-events-none">
+              <Lock className="w-5 h-5 text-[#DB4437]" />
             </div>
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className={`w-full pl-12 pr-12 py-3 rounded-xl outline-none border-2 transition-all duration-200 ${
+              className={`w-full pl-12 pr-14 py-4 rounded-xl outline-none border transition-all duration-200 ${
                 theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-                  ? "bg-white/5 border-[#DB4437]/30 focus:border-[#DB4437] text-white placeholder-white/50"
-                  : "bg-white/50 border-[#DB4437]/40 focus:border-[#DB4437] text-black placeholder-black/50"
+                  ? "bg-white/5 border-white/10 focus:border-[#4285F4] focus:ring-2 focus:ring-[#4285F4]/20 text-white placeholder-white/50"
+                  : "bg-white/80 border-gray-200 focus:border-[#4285F4] focus:ring-2 focus:ring-[#4285F4]/20 text-gray-900 placeholder-gray-500"
               }`}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
-            >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
+            <div className="absolute right-3 inset-y-0 flex items-center">
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className={`p-1 rounded transition ${
+                  theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                    ? "text-gray-400 hover:text-gray-200"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
 
           {/* Login Button */}
           <motion.button
             onClick={handleLogin}
             disabled={loading}
-            whileHover={{
-              scale: loading ? 1 : 1.02,
-              boxShadow: loading ? "none" : "0 0 20px rgba(66, 133, 244, 0.5)",
-            }}
+            whileHover={{ scale: loading ? 1 : 1.02 }}
             whileTap={{ scale: loading ? 1 : 0.98 }}
-            className={`w-full py-3 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 border-2 ${
-              loading
-                ? "opacity-50 cursor-not-allowed"
-                : "bg-gradient-to-r from-[#4285F4] to-[#F4B400] text-white border-[#4285F4] hover:shadow-xl"
+            className={`btn-pattern btn-primary w-full py-4 rounded-xl transition-all flex items-center justify-center gap-2 ${
+              loading ? "opacity-70 cursor-not-allowed" : "hover:shadow-[0_0_24px_rgba(30,41,59,0.35)]"
             }`}
           >
             {loading ? (
-              <>
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
-                />
+              <span className="flex items-center justify-center gap-2">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
                 Signing in...
-              </>
+              </span>
             ) : (
               'Sign In'
             )}

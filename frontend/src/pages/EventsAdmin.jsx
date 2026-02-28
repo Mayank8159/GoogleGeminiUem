@@ -309,11 +309,11 @@ export default function EventAdmin() {
                   <button
                     onClick={submitEvent}
                     disabled={isSubmitting || !imageFile}
-                    className={`w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-200 border-2 ${
+                    className={`btn-pattern btn-primary w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-200 border ${
                       isSubmitting || !imageFile
                         ? "opacity-50 cursor-not-allowed"
-                        : "bg-gradient-to-r from-[#4285F4] to-[#F4B400] hover:shadow-xl hover:shadow-[#4285F4]/50 border-[#4285F4]"
-                    } text-white`}
+                        : "text-white border-white/20 hover:shadow-[0_0_22px_rgba(30,41,59,0.35)]"
+                    }`}
                   >
                     {isSubmitting ? (
                       <>

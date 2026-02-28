@@ -74,8 +74,8 @@ export default function Register() {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={`w-full max-w-md backdrop-blur-xl rounded-3xl p-8 sm:p-10 relative overflow-hidden border shadow-2xl z-10 ${
           isDark
-            ? 'bg-white/8 border-[#4285F4]/30'
-            : 'bg-white/90 border-[#4285F4]/40'
+            ? 'bg-white/8 border-white/10'
+            : 'bg-white/90 border-white/20'
         }`}
       >
         <motion.div
@@ -127,55 +127,65 @@ export default function Register() {
 
         <div className="space-y-4 relative z-10">
           <div className="relative">
-            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#F4B400' }} />
+            <div className="absolute left-4 inset-y-0 flex items-center pointer-events-none">
+              <User className="w-5 h-5 text-[#F4B400]" />
+            </div>
             <input
               type="text"
               placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className={`w-full pl-12 pr-4 py-4 rounded-xl border-2 border-[#F4B400] focus:border-[#F4B400] focus:ring-2 focus:ring-[#F4B400]/20 outline-none transition-all ${
+              className={`w-full pl-12 pr-4 py-4 rounded-xl border focus:ring-2 focus:ring-[#4285F4]/20 outline-none transition-all ${
                 isDark
-                  ? 'bg-white/5 text-white placeholder-gray-400'
-                  : 'bg-white/80 text-gray-900 placeholder-gray-500'
+                  ? 'bg-white/5 border-white/10 focus:border-[#4285F4] text-white placeholder-white/50'
+                  : 'bg-white/80 border-gray-200 focus:border-[#4285F4] text-gray-900 placeholder-gray-500'
               }`}
             />
           </div>
 
           <div className="relative">
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#4285F4' }} />
+            <div className="absolute left-4 inset-y-0 flex items-center pointer-events-none">
+              <Mail className="w-5 h-5 text-[#4285F4]" />
+            </div>
             <input
               type="email"
               placeholder="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`w-full pl-12 pr-4 py-4 rounded-xl border-2 border-[#4285F4] focus:border-[#4285F4] focus:ring-2 focus:ring-[#4285F4]/20 outline-none transition-all ${
+              className={`w-full pl-12 pr-4 py-4 rounded-xl border focus:ring-2 focus:ring-[#4285F4]/20 outline-none transition-all ${
                 isDark
-                  ? 'bg-white/5 text-white placeholder-gray-400'
-                  : 'bg-white/80 text-gray-900 placeholder-gray-500'
+                  ? 'bg-white/5 border-white/10 focus:border-[#4285F4] text-white placeholder-white/50'
+                  : 'bg-white/80 border-gray-200 focus:border-[#4285F4] text-gray-900 placeholder-gray-500'
               }`}
             />
           </div>
 
           <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#DB4437' }} />
+            <div className="absolute left-4 inset-y-0 flex items-center pointer-events-none">
+              <Lock className="w-5 h-5 text-[#DB4437]" />
+            </div>
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full pl-12 pr-12 py-4 rounded-xl border-2 border-[#DB4437] focus:border-[#DB4437] focus:ring-2 focus:ring-[#DB4437]/20 outline-none transition-all ${
+              className={`w-full pl-12 pr-14 py-4 rounded-xl border focus:ring-2 focus:ring-[#4285F4]/20 outline-none transition-all ${
                 isDark
-                  ? 'bg-white/5 text-white placeholder-gray-400'
-                  : 'bg-white/80 text-gray-900 placeholder-gray-500'
+                  ? 'bg-white/5 border-white/10 focus:border-[#4285F4] text-white placeholder-white/50'
+                  : 'bg-white/80 border-gray-200 focus:border-[#4285F4] text-gray-900 placeholder-gray-500'
               }`}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
+            <div className="absolute right-3 inset-y-0 flex items-center">
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className={`p-1 rounded transition-colors ${
+                  isDark ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
 
           <motion.button
@@ -183,12 +193,11 @@ export default function Register() {
             disabled={loading}
             whileHover={{ scale: loading ? 1 : 1.02 }}
             whileTap={{ scale: loading ? 1 : 0.98 }}
-            className={`w-full py-4 rounded-xl font-semibold text-white shadow-lg transition-all ${
+            className={`btn-pattern btn-primary w-full py-4 rounded-xl text-white shadow-lg transition-all ${
               loading
                 ? 'opacity-70 cursor-not-allowed'
-                : 'hover:shadow-[0_0_30px_rgba(66,133,244,0.5)]'
+                : 'hover:shadow-[0_0_24px_rgba(30,41,59,0.35)]'
             }`}
-            style={{ background: 'linear-gradient(135deg, #4285F4, #F4B400)' }}
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">

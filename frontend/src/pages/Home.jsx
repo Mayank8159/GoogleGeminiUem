@@ -3,30 +3,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { useTheme } from "../context/ThemeContext";
 import Sections from "../components/ActionSection";
-
-// A simple component to render inline SVG icons.
-const Icon = ({ name, color = "currentColor", size = 24, strokeWidth = 2 }) => {
-  const icons = {
-    info: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke={color}
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <line x1="12" y1="16" x2="12" y2="12" />
-        <line x1="12" y1="8" x2="12.01" y2="8" />
-      </svg>
-    ),
-  };
-  return icons[name] || null;
-};
+import { ArrowRight, Sparkles, Info } from "lucide-react";
 
 export default function Home() {
   const { theme } = useTheme();
@@ -83,7 +60,7 @@ export default function Home() {
       </div>
 
       <motion.div
-        className="max-w-6xl mx-auto text-center flex flex-col items-center gap-20 relative z-10"
+        className="max-w-6xl mx-auto text-center flex flex-col items-center gap-16 relative z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -91,7 +68,9 @@ export default function Home() {
         {/* Hero Section */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-col items-center gap-6 w-full"
+          className={`flex flex-col items-center gap-6 w-full rounded-3xl border p-8 sm:p-10 backdrop-blur-xl ${
+            isDark ? "bg-white/5 border-white/10" : "bg-white/70 border-gray-200"
+          }`}
         >
           {/* Logo with Professional Animation */}
           <motion.div
@@ -111,7 +90,7 @@ export default function Home() {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gray-400 to-gray-500 blur-xl"
+              className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#4285F4] to-[#F4B400] blur-xl"
             />
 
             {/* Main Logo */}
@@ -138,18 +117,16 @@ export default function Home() {
           <motion.h1
             variants={itemVariants}
             className={`text-5xl sm:text-6xl lg:text-7xl font-extrabold font-space-grotesk tracking-wide leading-tight max-w-4xl ${
-              isDark ? "" : "text-black"
+              isDark ? "" : "text-gray-900"
             }`}
             style={
-              isDark
-                ? {
-                    background:
-                      "linear-gradient(45deg, #4285F4, #F4B400, #0F9D58, #DB4437)",
-                    backgroundClip: "text",
-                    WebkitBackgroundClip: "text",
-                    color: "transparent",
-                  }
-                : { color: "#222" }
+              {
+                background:
+                  "linear-gradient(45deg, #4285F4, #F4B400, #0F9D58, #DB4437)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+              }
             }
           >
             Google Gemini Student Community
@@ -159,12 +136,22 @@ export default function Home() {
           <motion.p
             variants={itemVariants}
             className={`max-w-3xl text-lg sm:text-xl leading-relaxed font-inter ${
-              isDark ? "text-white/80" : "text-black/80"
+              isDark ? "text-white/80" : "text-gray-700"
             }`}
           >
             A student-led initiative at UEM Kolkata, empowering learners through
             innovation, collaboration, and cosmic curiosity.
           </motion.p>
+
+          <motion.div
+            variants={itemVariants}
+            className={`inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border ${
+              isDark ? "bg-white/5 border-white/15 text-white/80" : "bg-white border-gray-200 text-gray-700"
+            }`}
+          >
+            <Sparkles className="h-4 w-4 text-[#F4B400]" />
+            Building AI-first student leadership at UEM Kolkata
+          </motion.div>
 
           {/* CTA Buttons */}
           <motion.div
@@ -173,22 +160,25 @@ export default function Home() {
           >
             <Link to="/events">
               <motion.button
-                className={`px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition-all duration-300 border-2 bg-gradient-to-r from-gray-300 to-gray-500 text-gray-900 border-gray-400 hover:shadow-lg hover:shadow-gray-500/50`}
+                className="btn-pattern btn-primary group px-8 py-3.5 text-lg rounded-xl shadow-lg transition-all duration-300 border border-white/20 text-white inline-flex items-center gap-2"
                 whileHover={{
                   scale: 1.05,
                   y: -2,
                 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Explore Events
+                <span>Explore Events</span>
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 group-hover:bg-white/30 transition-colors">
+                  <ArrowRight className="h-4 w-4" />
+                </span>
               </motion.button>
             </Link>
             <Link to="/discussion">
               <motion.button
-                className={`px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition-all duration-300 border-2 ${
+                className={`btn-pattern btn-secondary group px-8 py-3.5 text-lg rounded-xl shadow-lg transition-all duration-300 border inline-flex items-center gap-2 ${
                   isDark
-                    ? "bg-transparent text-white border-white/50 hover:border-white hover:bg-white/10"
-                    : "bg-white text-black border-gray-400 hover:border-black hover:bg-gray-100"
+                    ? "bg-white/5 text-white border-white/25 hover:border-white/40"
+                    : "bg-white text-gray-900 border-gray-300 hover:border-gray-400"
                 }`}
                 whileHover={{
                   scale: 1.05,
@@ -196,7 +186,12 @@ export default function Home() {
                 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Join Discussion
+                <span>Visit Discussion</span>
+                <span className={`flex h-7 w-7 items-center justify-center rounded-full transition-colors ${
+                  isDark ? "bg-white/15 group-hover:bg-white/25" : "bg-gray-100 group-hover:bg-gray-200"
+                }`}>
+                  <ArrowRight className="h-4 w-4" />
+                </span>
               </motion.button>
             </Link>
           </motion.div>
@@ -232,7 +227,7 @@ export default function Home() {
               variants={itemVariants}
             >
               <div className="h-32 w-32 flex items-center justify-center rounded-full bg-gradient-to-br from-[#4285F4] via-[#F4B400] to-[#0F9D58] shadow-2xl">
-                <Icon name="info" color="white" size={48} strokeWidth={2} />
+                <Info color="white" size={48} strokeWidth={2} />
               </div>
             </motion.div>
 
@@ -248,7 +243,7 @@ export default function Home() {
               </motion.h2>
               <motion.p
                 className={`text-base sm:text-lg leading-relaxed ${
-                  isDark ? "text-white/70" : "text-black/80"
+                  isDark ? "text-white/75" : "text-gray-700"
                 }`}
                 variants={itemVariants}
               >
@@ -257,9 +252,9 @@ export default function Home() {
                 meaningful experiences, foster leadership, and spark innovation
                 across campus. <br />
                 <br />
-                🌌 Together, we aim to empower students with skills, creativity,
-                and collaboration — pushing the boundaries of what’s possible
-                with AI.
+                Together, we empower students with practical skills, creativity,
+                and collaboration while pushing the boundaries of what’s possible
+                with AI-driven innovation.
               </motion.p>
             </div>
           </motion.div>
@@ -273,6 +268,14 @@ export default function Home() {
           viewport={{ once: true, amount: 0.3 }}
           variants={containerVariants}
         >
+          <motion.div variants={itemVariants} className="mb-6 text-center">
+            <h3 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[#4285F4] via-[#F4B400] to-[#0F9D58] bg-clip-text text-transparent">
+              Explore Key Sections
+            </h3>
+            <p className={`mt-2 text-base ${isDark ? "text-white/70" : "text-gray-600"}`}>
+              Quick access to discussions, events, teams, and core community activities.
+            </p>
+          </motion.div>
           <motion.div variants={itemVariants}>
             <Sections />
           </motion.div>

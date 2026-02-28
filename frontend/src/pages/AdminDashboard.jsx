@@ -168,11 +168,7 @@ export default function AdminDashboard() {
               localStorage.removeItem("adminToken");
               navigate("/admin/login");
             }}
-            className={`w-full backdrop-blur-md rounded-xl p-4 border-2 font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
-              isDark
-                ? "bg-white/10 text-white border-white/30 hover:bg-white/20 hover:border-white/50"
-                : "bg-white/70 text-gray-900 border-gray-300 hover:bg-white hover:border-gray-400"
-            }`}
+            className="btn-pattern btn-danger w-full rounded-xl p-4 font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-white"
           >
             <LogOut size={20} />
             Logout
