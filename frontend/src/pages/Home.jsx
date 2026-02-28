@@ -144,7 +144,7 @@ export default function Home() {
 
   return (
     <main
-      className={`px-4 sm:px-6 py-20 sm:py-32 overflow-hidden relative transition-colors duration-500 min-h-screen
+      className={`px-4 sm:px-6 pt-28 pb-20 sm:pb-32 overflow-hidden relative transition-colors duration-500 min-h-screen
         ${
           isDark
             ? "bg-gradient-to-br from-[#0B1519] via-[#1A2F37] to-[#25424D] text-white"

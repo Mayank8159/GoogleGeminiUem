@@ -57,7 +57,7 @@ export default function AdminLogin() {
 
   return (
     <main
-      className={`px-4 pt-36 pb-20 min-h-screen relative transition-colors duration-500
+      className={`px-4 pt-28 pb-20 min-h-screen relative transition-colors duration-500
       ${
         isDark
           ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"

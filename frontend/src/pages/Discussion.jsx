@@ -57,7 +57,7 @@ export default function Discussion() {
   const googleColors = ['#4285F4', '#DB4437', '#F4B400', '#0F9D58'];
 
   return (
-    <main className={`flex flex-col h-screen pt-24 font-inter transition-colors duration-500
+    <main className={`flex flex-col h-screen pt-28 font-inter transition-colors duration-500
       ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
         ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
         : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}

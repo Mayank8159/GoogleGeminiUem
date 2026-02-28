@@ -196,7 +196,7 @@ const Team = () => {
 
   return (
     <main
-      className={`min-h-screen pt-32 pb-20 px-4 sm:px-6 transition-colors duration-500 ${
+      className={`min-h-screen pt-28 pb-20 px-4 sm:px-6 transition-colors duration-500 ${
         isDark
           ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
           : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"

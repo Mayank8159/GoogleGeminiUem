@@ -210,7 +210,7 @@ export default function Events() {
 
   if (loading) {
     return (
-      <main className={`px-4 pt-36 pb-20 min-h-screen flex items-center justify-center transition-colors duration-500
+      <main className={`px-4 pt-28 pb-20 min-h-screen flex items-center justify-center transition-colors duration-500
         ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
           ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
           : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
@@ -241,7 +241,7 @@ export default function Events() {
   }
 
   return (
-    <main className={`px-4 pt-36 pb-20 min-h-screen overflow-hidden relative transition-colors duration-500
+    <main className={`px-4 pt-28 pb-20 min-h-screen overflow-hidden relative transition-colors duration-500
       ${theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
         ? "bg-gradient-to-br from-[#0F2027] via-[#203A43] to-[#2C5364] text-white"
         : "bg-gradient-to-br from-[#f8fafc] via-[#e3e6ea] to-[#cfd8dc] text-black"}
