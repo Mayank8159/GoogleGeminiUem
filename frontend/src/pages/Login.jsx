@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
 export default function Login() {
   const { theme } = useTheme();
   const [email, setEmail] = useState('');
@@ -21,7 +23,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const res = await axios.post('https://googlegeminiuem.onrender.com/api/auth/login', {
+      const res = await axios.post(`${BACKEND_URL}/api/auth/login`, {
         email,
         password,
       });

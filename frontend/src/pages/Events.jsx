@@ -17,7 +17,8 @@ const AnimatedIcon = ({ icon: Icon, color = "currentColor", size = 24, className
 );
 
 // Connect to backend socket server
-const socket = io("https://googlegeminiuem.onrender.com");
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const socket = io(BACKEND_URL);
 
 const EventCard = ({ event, index }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -165,8 +166,8 @@ export default function Events() {
   const fetchEvents = async () => {
     try {
       const [up, comp] = await Promise.all([
-        axios.get("https://googlegeminiuem.onrender.com/api/events/events/upcoming"),
-        axios.get("https://googlegeminiuem.onrender.com/api/events/events/completed"),
+        axios.get(`${BACKEND_URL}/api/events/upcoming`),
+        axios.get(`${BACKEND_URL}/api/events/completed`),
       ]);
       setUpcoming(Array.isArray(up.data) ? up.data : []);
       setCompleted(Array.isArray(comp.data) ? comp.data : []);

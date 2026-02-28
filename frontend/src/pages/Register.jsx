@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
 export default function Register() {
   const { theme } = useTheme();
   const [name, setName] = useState('');
@@ -22,7 +24,7 @@ export default function Register() {
 
     setLoading(true);
     try {
-      const res = await axios.post('https://googlegeminiuem.onrender.com/api/auth/register', {
+      const res = await axios.post(`${BACKEND_URL}/api/auth/register`, {
         name,
         email,
         password,
