@@ -26,17 +26,16 @@ export default function Sections() {
       >
         {/* Section Header */}
         <div
-          className={`backdrop-blur-md rounded-2xl shadow-lg p-8 sm:p-12 text-center transition
-      ${
-        theme === "dark" ||
-        (theme === "system" &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-          ? "bg-white/5 border border-white/10"
-          : "bg-white/80 border border-gray-300"
-      }`}
+          className={`backdrop-blur-md rounded-3xl shadow-2xl p-10 sm:p-14 text-center transition-all duration-300 border-t border-l ${
+            theme === "dark" ||
+            (theme === "system" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches)
+              ? "bg-gradient-to-br from-white/8 to-white/3 border-white/20"
+              : "bg-gradient-to-br from-white/90 to-white/70 border-gray-200/60"
+          }`}
         >
           <motion.h2
-            className={`text-3xl font-extrabold mb-4 ${
+            className={`text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight ${
               theme === "dark" ||
               (theme === "system" &&
                 window.matchMedia("(prefers-color-scheme: dark)").matches)
@@ -48,27 +47,25 @@ export default function Sections() {
                 theme === "dark" ||
                 (theme === "system" &&
                   window.matchMedia("(prefers-color-scheme: dark)").matches)
-                  ? "0 0 15px rgba(219, 68, 55, 0.6)"
+                  ? "0 0 12px rgba(219, 68, 55, 0.5)"
                   : "none",
             }}
           >
             Meet the Team
           </motion.h2>
           <p
-            className={`max-w-2xl mx-auto text-sm sm:text-base leading-relaxed ${
+            className={`max-w-3xl mx-auto text-base sm:text-lg leading-relaxed ${
               theme === "dark" ||
               (theme === "system" &&
                 window.matchMedia("(prefers-color-scheme: dark)").matches)
-                ? "text-white/70"
-                : "text-black/80"
+                ? "text-white/80"
+                : "text-black/85"
             }`}
           >
             Led by passionate innovators from{" "}
             <span className="font-semibold text-[#F4B400]">UEM Kolkata</span>,
-            our team blends{" "}
-            <span className="text-[#56eda9]">technical mastery</span> with{" "}
-            <span className="text-[#1befdd]">emotional design</span> to build
-            community-driven experiences.
+            our team combines vision, dedication, and expertise to drive the future of AI
+            and community engagement.
           </p>
         </div>
 
@@ -98,39 +95,46 @@ export default function Sections() {
           ].map((member, index) => (
             <motion.div
               key={index}
-              whileHover={{ scale: 1.05, y: -5 }}
-              transition={{ type: "spring", stiffness: 250 }}
-              className={`rounded-2xl p-6 flex flex-col items-center text-center shadow-lg backdrop-blur-md transition-all duration-300 ${
+              whileHover={{ scale: 1.08, y: -8 }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
+              className={`rounded-3xl p-8 flex flex-col items-center text-center shadow-xl backdrop-blur-md transition-all duration-300 border hover:shadow-2xl ${
                 theme === "dark" ||
                 (theme === "system" &&
                   window.matchMedia("(prefers-color-scheme: dark)").matches)
-                  ? "bg-white/5 border border-white/10"
-                  : "bg-white/80 border border-gray-300"
+                  ? "bg-gradient-to-br from-white/8 to-white/3 border-white/20"
+                  : "bg-gradient-to-br from-white/90 to-white/70 border-gray-200/60"
               }`}
             >
-              <img
-                src={member.img}
-                alt={member.name}
-                className="w-32 h-32 rounded-full object-cover shadow-md mb-4"
-              />
+              <div className="relative mb-4">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="h-40 w-40 rounded-full overflow-hidden shadow-lg ring-4 ring-[#DB4437]/30"
+                >
+                  <img
+                    src={member.img}
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
+                </motion.div>
+              </div>
               <h3
-                className={`text-lg font-semibold ${
+                className={`text-xl font-bold tracking-tight ${
                   theme === "dark" ||
                   (theme === "system" &&
                     window.matchMedia("(prefers-color-scheme: dark)").matches)
                     ? "text-white"
-                    : "text-gray-800"
+                    : "text-gray-900"
                 }`}
               >
                 {member.name}
               </h3>
               <p
-                className={`text-sm mt-2 ${
+                className={`text-sm font-semibold mt-2 ${
                   theme === "dark" ||
                   (theme === "system" &&
                     window.matchMedia("(prefers-color-scheme: dark)").matches)
-                    ? "text-white/70"
-                    : "text-gray-600"
+                    ? "text-[#F4B400]"
+                    : "text-[#DB4437]"
                 }`}
               >
                 {member.role}
