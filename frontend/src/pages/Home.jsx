@@ -264,8 +264,7 @@ export default function Home() {
         <motion.section
           className="max-w-6xl w-full"
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          animate="visible"
           variants={containerVariants}
         >
           <motion.div variants={itemVariants} className="mb-6 text-center">

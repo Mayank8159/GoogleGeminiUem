@@ -22,8 +22,7 @@ export default function Sections() {
       <motion.section
         variants={itemVariants}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
+        animate="visible"
         className="w-full"
       >
         {/* Section Header */}
@@ -133,8 +132,7 @@ export default function Sections() {
       <motion.section
         variants={itemVariants}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
+        animate="visible"
         className="w-full"
       >
         <div

@@ -69,7 +69,7 @@ export default function Navbar() {
       className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 transition-colors duration-500"
     >
       {/* Outer container for animated border */}
-      <div className="relative rounded-2xl p-[2px] overflow-hidden sm:overflow-visible">
+      <div className="relative rounded-2xl p-[2px] overflow-hidden sm:overflow-x-hidden sm:overflow-y-visible">
         {/* Top animated gradient sweep */}
         <motion.div
           className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
