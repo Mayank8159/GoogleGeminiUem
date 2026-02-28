@@ -4,7 +4,8 @@ import path from 'path';
 import {
   createEvent,
   getUpcomingEvents,
-  getCompletedEvents
+  getCompletedEvents,
+  deleteEvent
 } from '../controllers/eventController.js';
 import { verifyAdmin } from '../middleware/verifyAdmin.js';
 
@@ -25,6 +26,9 @@ const upload = multer({ storage });
 // Routes
 // Admin creates an event (with image)
 router.post('/admin/events', verifyAdmin, upload.single('image'), createEvent);
+
+// Admin deletes an event
+router.delete('/admin/events/:id', verifyAdmin, deleteEvent);
 
 // Get events
 router.get('/upcoming', getUpcomingEvents);

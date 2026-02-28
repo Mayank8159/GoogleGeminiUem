@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CloudArrowUpIcon } from "@heroicons/react/24/solid";
+import { CloudArrowUpIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 export default function EventAdmin() {
   const { theme } = useTheme();
@@ -13,8 +13,50 @@ export default function EventAdmin() {
     eventDate: "",
   });
   const [imageFile, setImageFile] = useState(null);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [completedEvents, setCompletedEvents] = useState([]);
+  const [loadingEvents, setLoadingEvents] = useState(false);
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      setLoadingEvents(true);
+      const [upRes, compRes] = await Promise.all([
+        axios.get(`${BACKEND_URL}/api/events/upcoming`),
+        axios.get(`${BACKEND_URL}/api/events/completed`),
+      ]);
+      setUpcomingEvents(Array.isArray(upRes.data) ? upRes.data : []);
+      setCompletedEvents(Array.isArray(compRes.data) ? compRes.data : []);
+    } catch (err) {
+      console.error("Error fetching events:", err);
+      toast.error("⚠️ Failed to load events");
+    } finally {
+      setLoadingEvents(false);
+    }
+  };
+
+  const deleteEvent = async (eventId) => {
+    if (!window.confirm("Are you sure you want to delete this event?")) return;
+
+    try {
+      const token = localStorage.getItem("adminToken");
+      await axios.delete(`${BACKEND_URL}/api/events/admin/events/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success("✅ Event deleted successfully!");
+      fetchEvents();
+    } catch (err) {
+      console.error(err);
+      toast.error("❌ Failed to delete event");
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -74,6 +116,7 @@ export default function EventAdmin() {
       toast.success("✅ Event published successfully!");
       setForm({ title: "", description: "", eventDate: "" });
       setImageFile(null);
+      fetchEvents();
     } catch (err) {
       console.error(err);
       toast.error("❌ Failed to publish event");
@@ -189,6 +232,103 @@ export default function EventAdmin() {
               Publish Event
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Events Management Section */}
+      <div className="max-w-4xl w-full mx-auto mt-12 relative z-10">
+        <div
+          className={`backdrop-blur-md rounded-2xl p-5 sm:p-8 shadow-xl ${
+            isDark ? "bg-white/5 border border-white/10" : "bg-white/80 border border-gray-300"
+          }`}
+        >
+          <h2
+            className={`text-xl sm:text-2xl font-bold mb-6 ${
+              isDark ? "text-indigo-300" : "text-indigo-700"
+            }`}
+          >
+            📋 Manage Events
+          </h2>
+
+          {loadingEvents ? (
+            <p className={isDark ? "text-white/60" : "text-black/60"}>Loading events...</p>
+          ) : (
+            <div className="space-y-8">
+              {/* Upcoming Events */}
+              <div>
+                <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-green-300" : "text-green-700"}`}>
+                  📅 Upcoming Events ({upcomingEvents.length})
+                </h3>
+                {upcomingEvents.length === 0 ? (
+                  <p className={isDark ? "text-white/40" : "text-black/40"}>No upcoming events</p>
+                ) : (
+                  <div className="space-y-3">
+                    {upcomingEvents.map((event) => (
+                      <div
+                        key={event._id}
+                        className={`flex items-center justify-between p-4 rounded-lg ${
+                          isDark ? "bg-white/5 border border-white/10" : "bg-white/50 border border-gray-200"
+                        }`}
+                      >
+                        <div className="flex-1">
+                          <h4 className={`font-semibold ${isDark ? "text-white" : "text-black"}`}>
+                            {event.title}
+                          </h4>
+                          <p className={`text-sm ${isDark ? "text-white/60" : "text-black/60"}`}>
+                            {new Date(event.eventDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => deleteEvent(event._id)}
+                          className="ml-4 p-2 bg-red-500 hover:bg-red-600 text-white rounded transition"
+                          title="Delete event"
+                        >
+                          <TrashIcon className="h-5 w-5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Completed Events */}
+              <div>
+                <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-blue-300" : "text-blue-700"}`}>
+                  ✅ Completed Events ({completedEvents.length})
+                </h3>
+                {completedEvents.length === 0 ? (
+                  <p className={isDark ? "text-white/40" : "text-black/40"}>No completed events</p>
+                ) : (
+                  <div className="space-y-3">
+                    {completedEvents.map((event) => (
+                      <div
+                        key={event._id}
+                        className={`flex items-center justify-between p-4 rounded-lg ${
+                          isDark ? "bg-white/5 border border-white/10" : "bg-white/50 border border-gray-200"
+                        }`}
+                      >
+                        <div className="flex-1">
+                          <h4 className={`font-semibold ${isDark ? "text-white" : "text-black"}`}>
+                            {event.title}
+                          </h4>
+                          <p className={`text-sm ${isDark ? "text-white/60" : "text-black/60"}`}>
+                            {new Date(event.eventDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => deleteEvent(event._id)}
+                          className="ml-4 p-2 bg-red-500 hover:bg-red-600 text-white rounded transition"
+                          title="Delete event"
+                        >
+                          <TrashIcon className="h-5 w-5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

@@ -43,3 +43,21 @@ export const getCompletedEvents = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const deleteEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const event = await Event.findByIdAndDelete(id);
+    
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    const io = req.app.get('io');
+    io.emit('eventDeleted', { id });
+
+    res.json({ message: 'Event deleted successfully', event });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
