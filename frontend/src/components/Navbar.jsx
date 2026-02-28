@@ -8,6 +8,7 @@ import {
   X,
   LogOut,
   ChevronDown,
+  LayoutDashboard,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -110,6 +111,28 @@ export default function Navbar() {
             </Link>
           ))}
 
+          {/* Admin Links - Only show for logged in admins */}
+          {user?.role === "admin" && (
+            <>
+              <Link
+                to="/admin/dashboard"
+                className={`flex items-center gap-1 transition ${isDark ? "text-white" : "text-gray-800"}`}
+                style={location.pathname === "/admin/dashboard" ? { color: "#4285F4" } : {}}
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                Dashboard
+              </Link>
+              <Link
+                to="/admin/events"
+                className={`flex items-center gap-1 transition ${isDark ? "text-white" : "text-gray-800"}`}
+                style={location.pathname === "/admin/events" ? { color: "#F4B400" } : {}}
+              >
+                <CalendarDays className="h-4 w-4" />
+                Manage Events
+              </Link>
+            </>
+          )}
+
           {/* Auth Section */}
           {user ? (
             <div className="flex items-center gap-4">
@@ -199,6 +222,30 @@ export default function Navbar() {
                 {name}
               </Link>
             ))}
+
+            {/* Admin Links - Only show for logged in admins */}
+            {user?.role === "admin" && (
+              <>
+                <Link
+                  to="/admin/dashboard"
+                  className={`flex items-center gap-2 transition ${isDark ? "text-white" : "text-gray-800"}`}
+                  style={location.pathname === "/admin/dashboard" ? { color: "#4285F4" } : {}}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  Dashboard
+                </Link>
+                <Link
+                  to="/admin/events"
+                  className={`flex items-center gap-2 transition ${isDark ? "text-white" : "text-gray-800"}`}
+                  style={location.pathname === "/admin/events" ? { color: "#F4B400" } : {}}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <CalendarDays className="h-4 w-4" />
+                  Manage Events
+                </Link>
+              </>
+            )}
 
             {user ? (
               <div className="flex items-center gap-4 mt-2">
