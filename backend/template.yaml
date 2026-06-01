@@ -1,0 +1,169 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Google Gemini Student Community backend on Lambda, DynamoDB, and S3
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 30
+    MemorySize: 512
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        AWS_REGION: !Ref AWS::Region
+
+Parameters:
+  JwtSecret:
+    Type: String
+    NoEcho: true
+    Description: JWT secret for signing auth tokens
+  AssetsBucketName:
+    Type: String
+    Description: Globally unique public bucket name for uploaded images
+
+Resources:
+  GeminiAssetsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref AssetsBucketName
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+  GeminiAssetsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref GeminiAssetsBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: PublicReadForObjects
+            Effect: Allow
+            Principal: '*'
+            Action: s3:GetObject
+            Resource: !Sub '${GeminiAssetsBucket.Arn}/*'
+
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: gemini-users
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: email
+          KeyType: HASH
+
+  AdminsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: gemini-admins
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: email
+          KeyType: HASH
+
+  MessagesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: gemini-messages
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: conversation
+          AttributeType: S
+        - AttributeName: sortKey
+          AttributeType: S
+      KeySchema:
+        - AttributeName: conversation
+          KeyType: HASH
+        - AttributeName: sortKey
+          KeyType: RANGE
+
+  EventsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: gemini-events
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: eventId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: eventId
+          KeyType: HASH
+
+  TeamsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: gemini-teams
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: teamId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: teamId
+          KeyType: HASH
+
+  BackendFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: lambda.handler
+      Environment:
+        Variables:
+          JWT_SECRET: !Ref JwtSecret
+          AWS_S3_BUCKET: !Ref GeminiAssetsBucket
+          DYNAMODB_USERS_TABLE: !Ref UsersTable
+          DYNAMODB_ADMINS_TABLE: !Ref AdminsTable
+          DYNAMODB_MESSAGES_TABLE: !Ref MessagesTable
+          DYNAMODB_EVENTS_TABLE: !Ref EventsTable
+          DYNAMODB_TEAMS_TABLE: !Ref TeamsTable
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+                - dynamodb:UpdateItem
+                - dynamodb:DeleteItem
+                - dynamodb:BatchWriteItem
+                - dynamodb:Scan
+                - dynamodb:Query
+              Resource:
+                - !GetAtt UsersTable.Arn
+                - !GetAtt AdminsTable.Arn
+                - !GetAtt MessagesTable.Arn
+                - !GetAtt EventsTable.Arn
+                - !GetAtt TeamsTable.Arn
+            - Effect: Allow
+              Action:
+                - s3:PutObject
+                - s3:GetObject
+                - s3:DeleteObject
+              Resource: !Sub '${GeminiAssetsBucket.Arn}/*'
+      Events:
+        ProxyApi:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        RootApi:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: ANY
+
+Outputs:
+  ApiUrl:
+    Description: HTTP API endpoint
+    Value: !Sub 'https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com'
+  AssetsBucket:
+    Description: Public S3 bucket for uploaded images
+    Value: !Ref GeminiAssetsBucket

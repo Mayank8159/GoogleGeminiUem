@@ -1,23 +1,43 @@
-import Message from '../models/Message.js';
+import { randomUUID } from 'crypto';
+import { PutCommand, QueryCommand, getDocumentClient, tableNames } from '../utils/dynamo.js';
+
+const client = getDocumentClient();
+const CONVERSATION_ID = 'GLOBAL';
 
 export const getRecentMessages = async () => {
-  const messages = await Message.find().sort({ timestamp: -1 }).limit(100);
-  return messages.reverse();
+  const response = await client.send(
+    new QueryCommand({
+      TableName: tableNames.messages,
+      KeyConditionExpression: 'conversation = :conversation',
+      ExpressionAttributeValues: {
+        ':conversation': CONVERSATION_ID,
+      },
+      ScanIndexForward: false,
+      Limit: 100,
+    })
+  );
+
+  return (response.Items || []).reverse();
 };
 
 export const saveMessage = async (msg) => {
-  const message = await Message.create({
+  const timestamp = new Date().toISOString();
+  const message = {
+    messageId: randomUUID(),
+    _id: randomUUID(),
+    conversation: CONVERSATION_ID,
     author: msg.author,
     content: msg.content,
-    timestamp: new Date(),
-  });
+    timestamp,
+    sortKey: `${timestamp}#${randomUUID()}`,
+  };
 
-  const count = await Message.countDocuments();
-  if (count > 100) {
-    const excess = await Message.find().sort({ timestamp: 1 }).limit(count - 100);
-    const ids = excess.map(m => m._id);
-    await Message.deleteMany({ _id: { $in: ids } });
-  }
+  await client.send(
+    new PutCommand({
+      TableName: tableNames.messages,
+      Item: message,
+    })
+  );
 
   return message;
 };

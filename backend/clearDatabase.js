@@ -1,24 +1,53 @@
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Message from './models/Message.js';
-import User from './models/User.js';
+import { BatchWriteCommand, ScanCommand, getDocumentClient, tableNames } from './utils/dynamo.js';
 
-dotenv.config(); // Load MONGO_URI from .env
+dotenv.config();
 
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/gemini', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const client = getDocumentClient();
+
+const keyFields = {
+  [tableNames.users]: ['email'],
+  [tableNames.admins]: ['email'],
+  [tableNames.messages]: ['conversation', 'sortKey'],
+  [tableNames.events]: ['eventId'],
+  [tableNames.teams]: ['teamId'],
+};
+
+const deleteAllItems = async (tableName) => {
+  const keyAttributes = keyFields[tableName];
+  const response = await client.send(new ScanCommand({ TableName: tableName }));
+  const items = response.Items || [];
+
+  for (let index = 0; index < items.length; index += 25) {
+    const batch = items.slice(index, index + 25);
+    await client.send(
+      new BatchWriteCommand({
+        RequestItems: {
+          [tableName]: batch.map((item) => ({
+            DeleteRequest: {
+              Key: keyAttributes.reduce((key, field) => {
+                key[field] = item[field];
+                return key;
+              }, {}),
+            },
+          })),
+        },
+      })
+    );
+  }
+};
 
 const clearDatabase = async () => {
   try {
-    await Message.deleteMany({});
-    await User.deleteMany({});
-    console.log('✅ Messages and Users cleared');
+    await deleteAllItems(tableNames.messages);
+    await deleteAllItems(tableNames.events);
+    await deleteAllItems(tableNames.teams);
+    await deleteAllItems(tableNames.users);
+    await deleteAllItems(tableNames.admins);
+
+    console.log('✅ DynamoDB tables cleared');
   } catch (err) {
-    console.error('❌ Error clearing database:', err.message);
-  } finally {
-    mongoose.disconnect();
+    console.error('❌ Error clearing DynamoDB tables:', err.message);
   }
 };
 

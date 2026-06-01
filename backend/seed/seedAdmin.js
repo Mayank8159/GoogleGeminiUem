@@ -1,25 +1,42 @@
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-import Admin from "../models/Admin.js";
-import connectDB from "../config/db.js";
+import { randomUUID } from "crypto";
+import { GetCommand, PutCommand, getDocumentClient, tableNames } from "../utils/dynamo.js";
 
 dotenv.config();
-await connectDB();
+
+const client = getDocumentClient();
 
 const seedAdmin = async () => {
   const email = "admin@gemini.ggsc";
   const plainPassword = "SuperSecurePassword123";
 
-  const existing = await Admin.findOne({ email });
-  if (existing) {
+  const existing = await client.send(
+    new GetCommand({
+      TableName: tableNames.admins,
+      Key: { email },
+    })
+  );
+
+  if (existing.Item) {
     console.log("Admin already exists.");
     process.exit();
   }
 
   const hashedPassword = await bcrypt.hash(plainPassword, 12);
-  const admin = new Admin({ email, password: hashedPassword });
-  await admin.save();
+  const admin = {
+    email,
+    adminId: randomUUID(),
+    password: hashedPassword,
+    createdAt: new Date().toISOString(),
+  };
+
+  await client.send(
+    new PutCommand({
+      TableName: tableNames.admins,
+      Item: admin,
+    })
+  );
 
   console.log("✅ Admin seeded successfully.");
   process.exit();
