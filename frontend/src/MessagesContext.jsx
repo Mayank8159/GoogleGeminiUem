@@ -1,28 +1,47 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import socket from './socket';
+import axios from 'axios';
 
 const MessagesContext = createContext();
 
 export const useMessages = () => useContext(MessagesContext);
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+
 export const MessagesProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
 
+  const loadMessages = async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      setMessages([]);
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/messages`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setMessages(Array.isArray(response.data) ? response.data : []);
+    } catch {
+      setMessages([]);
+    }
+  };
+
   useEffect(() => {
-    socket.connect();
-    socket.on('initMessages', (msgs) => setMessages(msgs));
-    socket.on('messageBroadcast', (msg) => {
-      setMessages(prev => [...prev.slice(-99), msg]);
-    });
+    loadMessages();
+    const refreshTimer = window.setInterval(loadMessages, 15000);
 
     return () => {
-      socket.off('initMessages');
-      socket.off('messageBroadcast');
+      window.clearInterval(refreshTimer);
     };
   }, []);
 
   return (
-    <MessagesContext.Provider value={{ messages, setMessages }}>
+    <MessagesContext.Provider value={{ messages, setMessages, refreshMessages: loadMessages }}>
       {children}
     </MessagesContext.Provider>
   );

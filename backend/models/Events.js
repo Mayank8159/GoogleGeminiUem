@@ -5,6 +5,7 @@ const eventSchema = new mongoose.Schema({
   description: String,
   eventDate: { type: Date, required: true },
   imageUrl: String,
+  imageKey: String,
   createdAt: { type: Date, default: Date.now }
 });
 

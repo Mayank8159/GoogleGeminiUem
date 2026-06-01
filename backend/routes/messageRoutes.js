@@ -1,6 +1,7 @@
 import express from 'express';
-import Message from '../models/Message.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
+import { createMessage } from '../controllers/messageController.js';
+import Message from '../models/Message.js';
 
 const router = express.Router();
 
@@ -13,5 +14,7 @@ router.get('/', verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch messages' });
   }
 });
+
+router.post('/', verifyToken, createMessage);
 
 export default router;

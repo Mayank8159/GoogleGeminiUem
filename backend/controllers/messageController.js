@@ -21,3 +21,22 @@ export const saveMessage = async (msg) => {
 
   return message;
 };
+
+export const createMessage = async (req, res) => {
+  try {
+    const { author, content } = req.body;
+
+    if (!content?.trim()) {
+      return res.status(400).json({ error: 'Message content is required' });
+    }
+
+    const message = await saveMessage({
+      author: author || 'Anonymous',
+      content: content.trim(),
+    });
+
+    res.status(201).json(message);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to create message' });
+  }
+};

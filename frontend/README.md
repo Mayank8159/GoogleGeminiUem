@@ -78,7 +78,6 @@ npm run lint
 - Tailwind CSS 4
 - Framer Motion
 - GSAP
-- Socket.io-client
 - Lucide React
 - Axios
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { motion } from "framer-motion";
 import { ChevronDown, Mail, Phone, MapPin, Users, Sparkles } from "lucide-react";
-import socket from "../socket";
 
 const Team = () => {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -180,12 +179,9 @@ const Team = () => {
       },
     ];
 
-    socket.emit("getTeamData");
-    socket.on("teamData", (data) => setTeamMembers(data));
     setTeamMembers(dummyTeam);
 
     return () => {
-      socket.off("teamData");
     };
   }, []);
 

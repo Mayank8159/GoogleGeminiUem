@@ -6,6 +6,7 @@ const teamSchema = new mongoose.Schema(
     role: { type: String, required: true },
     about: { type: String, required: true },
     image: { type: String }, // image URL or file path
+    imageKey: { type: String },
     social: {
       linkedin: { type: String },
       github: { type: String },

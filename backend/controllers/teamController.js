@@ -1,4 +1,5 @@
 import Team from "../models/TeamModel.js";
+import { uploadImageToS3 } from "../utils/s3Upload.js";
 
 // @desc    Add new team member
 // @route   POST /api/team
@@ -7,12 +8,14 @@ export const addTeamMember = async (req, res) => {
     const { name, role, about, social } = req.body;
 
     const parsedSocial = social ? JSON.parse(social) : {};
+    const uploadedImage = req.file ? await uploadImageToS3(req.file, "team") : null;
 
     const newMember = new Team({
       name,
       role,
       about,
-      image: req.file ? `/uploads/${req.file.filename}` : "",
+      image: uploadedImage?.url || "",
+      imageKey: uploadedImage?.key || "",
       social: parsedSocial,
     });
 

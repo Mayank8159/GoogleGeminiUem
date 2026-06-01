@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
-import { io } from "socket.io-client";
 import { Calendar, CheckCircle, Clock, MapPin, Users, Sparkles } from "lucide-react";
 
 // Enhanced Icon component with animations
@@ -16,9 +15,15 @@ const AnimatedIcon = ({ icon: Icon, color = "currentColor", size = 24, className
   </motion.div>
 );
 
-// Connect to backend socket server
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-const socket = io(BACKEND_URL);
+
+const resolveImageSrc = (imageUrl) => {
+  if (!imageUrl) {
+    return "";
+  }
+
+  return imageUrl.startsWith("http") ? imageUrl : `${BACKEND_URL}/${imageUrl}`;
+};
 
 const EventCard = ({ event, index }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -114,7 +119,7 @@ const EventCard = ({ event, index }) => {
                 className="mb-4 rounded-lg overflow-hidden"
               >
                 <img 
-                  src={`${BACKEND_URL}/${event.imageUrl}`}
+                    src={resolveImageSrc(event.imageUrl)}
                   alt={event.title}
                   className="w-full h-auto object-cover rounded-lg shadow-md"
                   onError={(e) => {
@@ -215,8 +220,9 @@ export default function Events() {
 
   useEffect(() => {
     fetchEvents();
-    socket.on("eventBroadcast", () => fetchEvents());
-    return () => socket.disconnect();
+    const refreshTimer = window.setInterval(fetchEvents, 30000);
+
+    return () => window.clearInterval(refreshTimer);
   }, []);
 
   if (loading) {

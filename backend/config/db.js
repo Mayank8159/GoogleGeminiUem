@@ -1,15 +1,24 @@
 import mongoose from 'mongoose';
 
+let connectionPromise;
+
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/gemini', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    if (mongoose.connection.readyState === 1) {
+      return mongoose.connection;
+    }
+
+    if (!connectionPromise) {
+      connectionPromise = mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/gemini');
+    }
+
+    const connection = await connectionPromise;
     console.log('✅ MongoDB connected');
+    return connection;
   } catch (err) {
     console.error('❌ MongoDB connection failed:', err.message);
-    process.exit(1);
+    connectionPromise = undefined;
+    throw err;
   }
 };
 

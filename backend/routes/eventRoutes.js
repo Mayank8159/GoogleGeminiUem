@@ -1,6 +1,5 @@
 import express from 'express';
 import multer from 'multer';
-import path from 'path';
 import {
   createEvent,
   getUpcomingEvents,
@@ -11,17 +10,10 @@ import { verifyAdmin } from '../middleware/verifyAdmin.js';
 
 const router = express.Router();
 
-// Configure Multer for image uploads
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, 'uploads/'); // make sure this folder exists
-  },
-  filename(req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
-
-const upload = multer({ storage });
 
 // Routes
 // Admin creates an event (with image)

@@ -1,7 +1,7 @@
 # Google Gemini Student Community Backend
 
 ## Project Overview
-This is the backend for the Google Gemini Student Community web app, built with Node.js, Express, MongoDB, and Socket.io. It provides RESTful APIs and real-time messaging for the frontend.
+This is the backend for the Google Gemini Student Community web app, built with Node.js, Express, MongoDB, and AWS S3-backed uploads. It provides RESTful APIs for the frontend and can run as a traditional local server or an AWS Lambda handler via `lambda.js`.
 
 ---
 
@@ -22,6 +22,8 @@ Create a `.env` file in the backend folder with:
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 PORT=5000
+AWS_REGION=your_aws_region
+AWS_S3_BUCKET=your_public_s3_bucket
 ```
 
 ### 4. Seed Admin User (optional)
@@ -35,13 +37,23 @@ npm start
 ```
 Server runs on `http://localhost:5000` by default.
 
+### 6. Run as Lambda Handler
+The Lambda-compatible handler is exported from `lambda.js`.
+```
+node lambda.js
+```
+For AWS deployment, point your function handler to `handler` in that file.
+
+### 7. Serverless Uploads
+Event and team images are stored in S3. The bucket must allow public reads for the generated image URLs to render in the frontend.
+
 ---
 
 ## 🛠️ Tech Stack
 - Node.js
 - Express
 - MongoDB (Mongoose)
-- Socket.io
+- AWS S3
 - JWT Authentication
 
 ---
@@ -84,11 +96,7 @@ backend/
 ---
 
 ## 🔌 Real-Time Features
-- **Socket.io** powers the real-time discussion board
-- Events:
-  - `initMessages` — Sends initial message list
-  - `messageBroadcast` — Broadcasts new messages to all clients
-  - `newMessage` — Client emits to send a new message
+- Event lists now refresh via polling on the frontend, which keeps the app compatible with Lambda and other serverless runtimes.
 
 ---
 

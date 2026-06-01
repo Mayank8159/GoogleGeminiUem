@@ -3,7 +3,6 @@ import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
 import { Eye, EyeOff, Mail, Lock, Sparkles } from 'lucide-react';
 
 export default function AdminLogin() {
@@ -33,19 +32,6 @@ export default function AdminLogin() {
       localStorage.setItem("user", JSON.stringify({ name: "Admin", role: "admin" }));
 
       setError("");
-
-      // ✅ Connect to WebSocket using token
-      const socket = io(BACKEND_URL, {
-        auth: { token },
-      });
-
-      socket.on("connect", () => {
-        console.log("🟢 Admin socket connected:", socket.id);
-      });
-
-      socket.on("connect_error", (err) => {
-        console.error("⚠️ Socket connection failed:", err.message);
-      });
 
       // ✅ Redirect to dashboard
       navigate("/admin/dashboard");

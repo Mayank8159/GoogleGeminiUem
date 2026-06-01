@@ -22,8 +22,8 @@ export default defineConfig({
           // Animation libraries
           'animation-vendor': ['gsap'],
 
-          // HTTP and real-time libraries
-          'network-vendor': ['axios', 'socket.io-client'],
+          // HTTP libraries
+          'network-vendor': ['axios'],
 
           // 3D graphics
           '3d-vendor': ['three'],

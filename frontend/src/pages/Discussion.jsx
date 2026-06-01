@@ -1,11 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import socket from '../socket';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 import { Send, MessageCircle, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { useMessages } from '../MessagesContext';
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 export default function Discussion() {
   const { theme } = useTheme();
@@ -18,7 +20,7 @@ export default function Discussion() {
 
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user')) || null;
-  const { messages } = useMessages();
+  const { messages, setMessages, refreshMessages } = useMessages();
 
   useEffect(() => {
     const handleViewportChange = () => {
@@ -43,11 +45,31 @@ export default function Discussion() {
     }
     if (!newMessage.trim()) return;
 
-    socket.emit('newMessage', {
-      author: user.name,
-      content: newMessage,
-    });
-    setNewMessage('');
+    const sendMessage = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.post(
+          `${BACKEND_URL}/api/messages`,
+          {
+            author: user.name,
+            content: newMessage,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setMessages((prev) => [...prev.slice(-99), response.data]);
+        setNewMessage('');
+        refreshMessages();
+      } catch {
+        setShowLoginModal(true);
+      }
+    };
+
+    sendMessage();
   };
 
   const handleKeyDown = (e) => {
