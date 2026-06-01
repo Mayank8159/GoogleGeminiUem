@@ -8,6 +8,7 @@
         "cloudformation:DeleteStack",
         "cloudformation:DescribeStacks",
         "cloudformation:DescribeStackEvents",
+        "cloudformation:GetTemplateSummary",
         "cloudformation:CreateChangeSet",
         "cloudformation:ExecuteChangeSet",
         "cloudformation:DescribeChangeSet",
@@ -47,7 +48,10 @@
       "Action": [
         "iam:PassRole",
         "iam:CreateRole",
+        "iam:TagRole",
+        "iam:UntagRole",
         "iam:AttachRolePolicy",
+        "iam:DeleteRolePolicy",
         "iam:PutRolePolicy",
         "iam:GetRole",
         "iam:DeleteRole",

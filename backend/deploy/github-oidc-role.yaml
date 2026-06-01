@@ -48,6 +48,7 @@ Resources:
                   - cloudformation:DeleteStack
                   - cloudformation:DescribeStacks
                   - cloudformation:DescribeStackEvents
+                  - cloudformation:GetTemplateSummary
                   - cloudformation:CreateChangeSet
                   - cloudformation:ExecuteChangeSet
                   - cloudformation:DescribeChangeSet
@@ -90,7 +91,10 @@ Resources:
               - Effect: Allow
                 Action:
                   - iam:CreateRole
+                  - iam:TagRole
+                  - iam:UntagRole
                   - iam:AttachRolePolicy
+                  - iam:DeleteRolePolicy
                   - iam:PutRolePolicy
                   - iam:DeleteRole
                   - iam:DetachRolePolicy
